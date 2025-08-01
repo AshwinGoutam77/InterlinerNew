@@ -44,7 +44,7 @@ const WalkthroughScreen = () => {
             flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
         } else {
             await AsyncStorage.setItem('hasSeenWalkthrough', 'true');
-            navigation.replace('Dashboard'); // Replace with your screen name
+            navigation.replace('MainApp'); // Replace with your screen name
         }
     };
 
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+        padding: 0
     },
     slide: {
         width,
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width,
-        height: height * 0.6,
+        height: height * 0.7,
     },
     textContainer: {
         alignItems: 'center',
@@ -128,11 +129,11 @@ const styles = StyleSheet.create({
         width: 8,
         height: 8,
         borderRadius: 4,
-        backgroundColor: '#555',
+        backgroundColor: '#000000',
         marginHorizontal: 4,
     },
     activeDot: {
-        backgroundColor: '#fff',
+        backgroundColor: '#1E3A8A',
         width: 24,
     },
     button: {
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#ffff',
         fontSize: 16,
-        fontWeight: '600',
+        fontWeight: '800',
     },
 });
 

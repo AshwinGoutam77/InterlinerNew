@@ -14,26 +14,31 @@ const RootStack = createNativeStackNavigator();
 function App(): React.JSX.Element {
   const [showWalkthrough, setShowWalkthrough] = useState(true);
 
-  useEffect(() => {
-    const checkWalkthrough = async () => {
-      const value = await AsyncStorage.getItem('hasSeenWalkthrough');
-      if (value === 'true') {
-        setShowWalkthrough(false);
-      }
-    };
-    checkWalkthrough();
-  }, []);
+  // useEffect(() => {
+  //   const checkWalkthrough = async () => {
+  //     const value = await AsyncStorage.getItem('hasSeenWalkthrough');
+  //     if (value === 'true') {
+  //       setShowWalkthrough(false);
+  //     }
+  //   };
+  //   checkWalkthrough();
+  // }, []);
 
   return (
     <NavigationContainer>
       <PaperProvider>
-        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        {/* <RootStack.Navigator screenOptions={{ headerShown: false }}>
           {showWalkthrough ? (
             <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
           ) : (
             <RootStack.Screen name="MainApp" component={Logged} />
           )}
+        </RootStack.Navigator> */}
+        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+          <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
+          <RootStack.Screen name="MainApp" component={Logged} />
         </RootStack.Navigator>
+
       </PaperProvider>
     </NavigationContainer>
   );
