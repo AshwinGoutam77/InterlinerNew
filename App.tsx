@@ -1,28 +1,41 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { PaperProvider } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import Logged from './application/navigations/Logged';
+import WalkthroughScreen from './application/screens/WalkthroughScreen'; // Adjust path as needed
+import './application/src/i18n/i18n';
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+
+const RootStack = createNativeStackNavigator();
+
+function App(): React.JSX.Element {
+  const [showWalkthrough, setShowWalkthrough] = useState(true);
+
+  useEffect(() => {
+    const checkWalkthrough = async () => {
+      const value = await AsyncStorage.getItem('hasSeenWalkthrough');
+      if (value === 'true') {
+        setShowWalkthrough(false);
+      }
+    };
+    checkWalkthrough();
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
-    </View>
+    <NavigationContainer>
+      <PaperProvider>
+        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+          {showWalkthrough ? (
+            <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
+          ) : (
+            <RootStack.Screen name="MainApp" component={Logged} />
+          )}
+        </RootStack.Navigator>
+      </PaperProvider>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
-
 export default App;
