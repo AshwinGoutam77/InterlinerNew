@@ -25,12 +25,13 @@ const CustomHeader = ({ title, canGoBack }) => {
                     onPress={() => route?.name == 'TrackOrderScreen' ? navigation.navigate('Dashboard') : navigation.goBack()}
                     style={styles.backButton}
                 >
-                    
+
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                         <Icon name="chevron-left" size={32} color="#1E3A8A" style={{ marginRight: 4 }} />
                         <Text style={{
                             color: '#1E3A8A',
                             fontSize: 24,
+                            
                             paddingTop: 0,
                             fontWeight: '800',
                             fontFamily: 'Poppins-Regular'
