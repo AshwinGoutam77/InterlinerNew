@@ -17,7 +17,6 @@ const CustomHeader = ({ title, canGoBack }) => {
         i18n.changeLanguage(lang);
     };
     const currentLang = i18n.language;
-
     return (
         <SafeAreaView style={{ backgroundColor: '#ffffffff' }}>
             <View style={styles.header}>
