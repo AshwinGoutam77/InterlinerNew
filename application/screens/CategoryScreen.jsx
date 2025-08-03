@@ -91,7 +91,6 @@ const CategoryScreen = () => {
     const navigation = useNavigation();
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.heading}>Categories</Text>
             <View style={styles.searchBox}>
                 <TextInput
                     placeholder="Search Products..."
@@ -127,7 +126,7 @@ const CategoryScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 0,
+        paddingTop: 20,
         padding: 20,
         paddingBottom: 100,
         backgroundColor: '#fff',

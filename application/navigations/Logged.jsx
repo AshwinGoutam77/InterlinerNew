@@ -3,8 +3,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import Ionicons from 'react-native-vector-icons/Ionicons';
-import Ionicons from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import HomeScreen from "../screens/Home";
 import PsA5YearRiskCalculator from "../screens/PsA5YearRiskCalculator";
 import PsA1YearRiskCalculator from "../screens/PsA1YearRiskCalculator";
@@ -19,6 +18,19 @@ import CategoryScreen from "../screens/CategoryScreen";
 import ProductsPage from "../screens/Products";
 import ProductDetailScreen from "../screens/ProductDetailScreen";
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import CartScreen from "../screens/Cart";
+import CheckoutScreen from "../screens/CategoryScreen";
+import Checkout from "../screens/Checkout";
+import ShippingScreen from "../screens/ShippingScreen";
+import AddNewAddressScreen from "../screens/AddNewAddressScreen ";
+import AddShippingScreen from "../screens/AddShippingScreen";
+import PromoCodeScreen from "../screens/PromoCode";
+import PaymentMethodScreen from "../screens/PaymentMethodScreen";
+import TrackOrderScreen from "../screens/TrackOrderScreen";
+import HistoryScreen from "../screens/HistoryScreen";
+import RaiseComplainScreen from "../screens/RaiseComplain";
+import PaymentScreen from "../screens/PaymentScreen";
+import ProfilePage from "../screens/ProfileScreen";
 
 var styles = require("../../assets/files/Styles");
 
@@ -49,42 +61,120 @@ function HomeStack() {
                 name="Dashboard"
                 component={DashboardScreen}
                 options={{
-                    header: () => <CustomHeader title="PRESTO-PsA" />,
+                    header: () => <CustomHeader title="Interliner" />,
                 }}
             />
             <Stack.Screen
                 name="CategoryScreen"
                 component={CategoryScreen}
                 options={{
-                    header: () => <CustomHeader title="PRESTO-PsA" />,
+                    header: () => <CustomHeader title="Categories" />,
                 }}
             />
             <Stack.Screen
                 name="ProductsPage"
                 component={ProductsPage}
                 options={{
-                    header: () => <CustomHeader title="PRESTO-PsA" />,
+                    header: () => <CustomHeader title="Products" />,
                 }}
             />
             <Stack.Screen
                 name="ProductDetailScreen"
                 component={ProductDetailScreen}
+                options={({ route }) => ({
+                    header: () => <CustomHeader title={route.params?.productName || 'Product Detail'} />,
+                })}
+            />
+
+            <Stack.Screen
+                name="CartScreen"
+                component={CartScreen}
                 options={{
-                    header: () => <CustomHeader title="PRESTO-PsA" />,
+                    header: () => <CustomHeader title="Cart" />,
+                }}
+            />
+            <Stack.Screen
+                name="CheckoutScreen"
+                component={Checkout}
+                options={{
+                    header: () => <CustomHeader title="Checkout" />,
+                }}
+            />
+            <Stack.Screen
+                name="ShippingScreen"
+                component={ShippingScreen}
+                options={{
+                    header: () => <CustomHeader title="Shipping Address" />,
+                }}
+            />
+            <Stack.Screen
+                name="AddNewAddressScreen"
+                component={AddNewAddressScreen}
+                options={{
+                    header: () => <CustomHeader title="Shipping Address" />,
+                }}
+            />
+            <Stack.Screen
+                name="AddShippingScreen"
+                component={AddShippingScreen}
+                options={{
+                    header: () => <CustomHeader title="Choose Shipping" />,
+                }}
+            />
+            <Stack.Screen
+                name="PromoCodeScreen"
+                component={PromoCodeScreen}
+                options={{
+                    header: () => <CustomHeader title="Promo Code" />,
+                }}
+            />
+            <Stack.Screen
+                name="PaymentMethodScreen"
+                component={PaymentMethodScreen}
+                options={{
+                    header: () => <CustomHeader title="Payment" />,
+                }}
+            />
+            <Stack.Screen
+                name="TrackOrderScreen"
+                component={TrackOrderScreen}
+                options={{
+                    header: () => <CustomHeader title="Track Order" />,
+                }}
+            />
+            <Stack.Screen
+                name="HistoryScreen"
+                component={HistoryScreen}
+                options={{
+                    header: () => <CustomHeader title="Previous Orders" />,
+                }}
+            />
+            <Stack.Screen
+                name="RaiseComplainScreen"
+                component={RaiseComplainScreen}
+                options={{
+                    header: () => <CustomHeader title="Raise Complain" />,
+                }}
+            />
+            <Stack.Screen
+                name="PaymentScreen"
+                component={PaymentScreen}
+                options={{
+                    header: () => <CustomHeader title="Payment" />,
                 }}
             />
         </Stack.Navigator>
     );
 }
 
-function AboutStack() {
+function ProfileTab() {
     return (
         <Stack.Navigator screenOptions={navigationOptions}>
             <Stack.Screen
-                name="AboutUs"
-                component={AboutUs}
+                name="ProfileScreen"
+                component={ProfilePage}
                 options={{
-                    header: () => <CustomHeader title="PRESTO-PsA" />,
+                    header: () => <CustomHeader title="Profile" />,
                 }}
             />
         </Stack.Navigator>
@@ -105,14 +195,33 @@ function ProfileScreen() {
     )
 }
 
-const tabBarIcon = (route) => ({ color, size }) => {
-    let iconName = route.name === 'Home'
-        ? 'dashboard'
-        : route?.name === 'profile'
-            ? 'person-outline' : route?.name === 'payment' ? 'payment'
-                : 'file-copy';
-    return <Ionicons name={iconName} size={size} color={color} />;
+const tabBarIcon = (route) => ({ color, size, focused }) => {
+    let iconName;
+
+    switch (route.name) {
+        case 'Home':
+            iconName = focused ? 'home' : 'home-outline';
+            break;
+        case 'profile':
+            iconName = focused ? 'person' : 'person-outline';
+            break;
+        case 'payment':
+            iconName = focused ? 'card' : 'card-outline';
+            break;
+        case 'orders':
+            iconName = focused ? 'receipt' : 'receipt-outline';
+            break;
+        case 'raise-complaint':
+            iconName = focused ? 'alert-circle' : 'alert-circle-outline';
+            break;
+        default:
+            iconName = focused ? 'ellipse' : 'ellipse-outline';
+            break;
+    }
+
+    return <Icon name={iconName} size={size} color={color} />;
 };
+
 
 export default function Logged() {
     const { t } = useTranslation();
@@ -122,9 +231,9 @@ export default function Logged() {
         const routeName = getFocusedRouteNameFromRoute(route) ?? 'Dashboard';
 
         if ([
-            'ProductDetailScreen',
+            'ProductDetailScreen', 'CartScreen', 'CheckoutScreen', 'ShippingScreen', 'AddNewAddressScreen', 'AddShippingScreen', 'InquiryForm', 'AboutUs', 'PromoCodeScreen', 'PaymentMethodScreen', 'TrackOrderScreen','HistoryScreen', 'RaiseComplainScreen', 'PaymentScreen','ProfileScreen'
         ].includes(routeName)) {
-            return 'none'; // Hide tab bar
+            return 'none';
         }
 
         return 'flex'; // Show tab bar
@@ -133,6 +242,7 @@ export default function Logged() {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
+                tabBarShowLabel: false,
                 headerShown: false,
                 tabBarActiveTintColor: '#1E3A8A',
                 tabBarInactiveTintColor: 'black',
@@ -159,7 +269,7 @@ export default function Logged() {
                                 alignItems: 'center',
                                 borderLeftWidth: pressed ? 2 : 0,
                                 borderRightWidth: pressed ? 2 : 0,
-                                borderColor: pressed ? '#cccccc2b' : 'transparent',
+                                borderColor: pressed ? '#0000' : 'transparent',
                                 backgroundColor: 'transparent',
                             },
                         ]}
@@ -170,10 +280,11 @@ export default function Logged() {
             })}
         >
 
-            <Tab.Screen name="Home" component={HomeStack} options={{ tabBarLabel: t('tabs.home') }} />
-            <Tab.Screen name="raise-complaint" component={HomeStack} options={{ tabBarLabel: t('tabs.raise-complaint') }} />
-            <Tab.Screen name="payment" component={HomeStack} options={{ tabBarLabel: t('tabs.payment') }} />
-            <Tab.Screen name="profile" component={HomeStack} options={{ tabBarLabel: t('tabs.profile') }} />
+            <Tab.Screen name="Home" component={HomeStack} />
+            <Tab.Screen name="raise-complaint" component={HomeStack} />
+            <Tab.Screen name="orders" component={HomeStack} />
+            <Tab.Screen name="payment" component={HomeStack} />
+            <Tab.Screen name="profile" component={ProfileTab} />
         </Tab.Navigator>
     );
 }

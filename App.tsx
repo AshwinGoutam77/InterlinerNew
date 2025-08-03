@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Logged from './application/navigations/Logged';
 import WalkthroughScreen from './application/screens/WalkthroughScreen'; // Adjust path as needed
 import './application/src/i18n/i18n';
-
+import { RTLProvider } from './application/context/RTLContext';
 
 const RootStack = createNativeStackNavigator();
 
@@ -27,18 +27,22 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <PaperProvider>
-        {/* <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        <RTLProvider>
+          {/* <RootStack.Navigator screenOptions={{ headerShown: false }}>
           {showWalkthrough ? (
             <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
           ) : (
             <RootStack.Screen name="MainApp" component={Logged} />
           )}
         </RootStack.Navigator> */}
-        <RootStack.Navigator screenOptions={{ headerShown: false }}>
-          <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
-          <RootStack.Screen name="MainApp" component={Logged} />
-        </RootStack.Navigator>
-
+          <RootStack.Navigator screenOptions={{ headerShown: false }}>
+            <RootStack.Screen
+              name="Walkthrough"
+              component={WalkthroughScreen}
+            />
+            <RootStack.Screen name="MainApp" component={Logged} />
+          </RootStack.Navigator>
+        </RTLProvider>
       </PaperProvider>
     </NavigationContainer>
   );

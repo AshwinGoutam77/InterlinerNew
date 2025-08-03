@@ -10,12 +10,14 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 
 const shades = ['White', 'Off White', 'Blue White', 'Cream'];
 const widths = ['36 Inch', '44 Inch', '60 Inch'];
 const lengths = ['25 Mtr', '50 Mtr', '100 Mtr'];
 
-export default function ProductDetailScreen({ navigation }) {
+export default function ProductDetailScreen() {
+    const navigation = useNavigation();
     const [selectedShade, setSelectedShade] = useState('White');
     const [isCut, setIsCut] = useState(false);
     const [selectedWidth, setSelectedWidth] = useState('36 Inch');
@@ -26,7 +28,7 @@ export default function ProductDetailScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+            <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
                 {/* Product Code Dropdown */}
                 <Text style={styles.label}>Choose Product Code</Text>
                 <View style={styles.pickerWrapper}>
@@ -150,7 +152,7 @@ export default function ProductDetailScreen({ navigation }) {
             </ScrollView>
 
             {/* Add to Cart */}
-            <TouchableOpacity style={styles.cartBtn}>
+            <TouchableOpacity style={styles.cartBtn} onPress={() => navigation.navigate('CartScreen')}>
                 <Text style={styles.cartText}>Add to Cart</Text>
             </TouchableOpacity>
         </View>
@@ -197,8 +199,8 @@ const styles = StyleSheet.create({
     },
     downloadBtn: {
         position: 'absolute',
-        top: 225,
-        right: 16,
+        top: 270,
+        right: 6,
         backgroundColor: '#fff',
         borderRadius: 6,
         paddingHorizontal: 8,
@@ -207,7 +209,7 @@ const styles = StyleSheet.create({
     },
     downloadText: {
         fontSize: 12,
-        color: '#007bff',
+        color: '#1E3A8A',
     },
     rowBetween: {
         flexDirection: 'row',
@@ -216,12 +218,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     code: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: '500',
     },
     price: {
-        fontSize: 16,
-        color: '#007bff',
+        fontSize: 18,
+        color: '#1E3A8A',
         fontWeight: '600',
     },
     optionsRow: {
@@ -263,6 +265,7 @@ const styles = StyleSheet.create({
     input: {
         borderWidth: 1,
         borderRadius: 8,
+        borderColor: '#ccc',
         padding: 10,
         marginTop: 6,
     },
@@ -271,6 +274,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderRadius: 8,
+        borderColor: '#ccc',
         paddingHorizontal: 10,
         marginTop: 6,
     },

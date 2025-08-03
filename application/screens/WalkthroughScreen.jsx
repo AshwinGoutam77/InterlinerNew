@@ -18,7 +18,7 @@ const { width, height } = Dimensions.get('window');
 const slides = [
     {
         id: '1',
-        image: { uri: 'https://interliners.net/wp-content/uploads/2021/04/permessheader.jpeg' },
+        image: { uri: 'https://interliners.net/wp-content/uploads/2021/03/Welcome_to_interliners.png' },
         title: 'Your satisfaction is our number one priority',
     },
     {
@@ -67,6 +67,8 @@ const WalkthroughScreen = () => {
                             source={item.image}
                             style={styles.image}
                             resizeMode="cover"
+                            alt={item.title}
+                            testID={`walkthrough-image-${item.id}`}
                         />
                         <View style={styles.textContainer}>
                             <Text style={styles.title}>{item.title}</Text>
@@ -105,6 +107,7 @@ const styles = StyleSheet.create({
     image: {
         width,
         height: height * 0.7,
+        justifyContent: 'start',
     },
     textContainer: {
         alignItems: 'center',

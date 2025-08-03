@@ -21,17 +21,27 @@ const CustomHeader = ({ title, canGoBack }) => {
     return (
         <SafeAreaView style={{ backgroundColor: '#ffffffff' }}>
             <View style={styles.header}>
-                {route.name == 'HomeScreen' && !canGoBack ? (<Text style={styles.title}>{title}</Text>) : <TouchableOpacity onPress={() => navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Home' }],
-                })} style={styles.backButton}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 1 }}>
-                        <Text style={{ color: '#1E3A8A', fontSize: 24, paddingTop: 4, fontWeight: '800', fontFamily: 'Poppins-Regular' }}>Interliner</Text>
+                {route.name == 'Dashboard' && !canGoBack ? (<Text style={{ color: '#1E3A8A', fontSize: 24, paddingTop: 4, fontWeight: '800', fontFamily: 'Poppins-Regular' }}>Interliner</Text>) : <TouchableOpacity
+                    onPress={() => route?.name == 'TrackOrderScreen' ? navigation.navigate('Dashboard') : navigation.goBack()}
+                    style={styles.backButton}
+                >
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Icon name="chevron-left" size={32} color="#1E3A8A" style={{ marginRight: 4 }} />
+                        <Text style={{
+                            color: '#1E3A8A',
+                            fontSize: 24,
+                            paddingTop: 0,
+                            fontWeight: '800',
+                            fontFamily: 'Poppins-Regular'
+                        }}>
+                            {title}
+                        </Text>
                     </View>
-                </TouchableOpacity>}
+                </TouchableOpacity>
+                }
                 <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                    <Icon name='notifications-active' size={30} color="#1E3A8A" />
-                    <Icon name='contact-support' size={32} color="#1E3A8A" />
+                    {/* <Icon name='notifications-active' size={30} color="#1E3A8A" />
+                    <Icon name='contact-support' size={32} color="#1E3A8A" /> */}
                     <TouchableOpacity>
                         <Image
                             source={require('../../assets/images/user.jpg')}
@@ -48,7 +58,7 @@ const CustomHeader = ({ title, canGoBack }) => {
 const styles = StyleSheet.create({
     header: {
         paddingTop: 30,
-        paddingBottom: 0,
+        paddingBottom: 20,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
