@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
 
 const { width, height } = Dimensions.get('window');
 
@@ -18,17 +19,17 @@ const { width, height } = Dimensions.get('window');
 const slides = [
     {
         id: '1',
-        image: { uri: 'https://interliners.net/wp-content/uploads/2021/03/Welcome_to_interliners.png' },
-        title: 'Your satisfaction is our number one priority',
+        image: require('../../assets/images/onbording-banner-1.jpg'),
+        title: 'Your satisfaction is our priority',
     },
     {
         id: '2',
-        image: { uri: 'https://interliners.net/wp-content/uploads/2021/03/Utmost_precision.jpg' },
+        image: require('../../assets/images/onbording-banner-2.jpg'),
         title: 'Get the best service experience',
     },
     {
         id: '3',
-        image: { uri: 'https://interliners.net/wp-content/uploads/2021/03/Style-is-essential-header-photo.jpeg' },
+        image: require('../../assets/images/onbording-banner-3.jpg'),
         title: 'We care about your feedback',
     },
 ];
@@ -44,12 +45,12 @@ const WalkthroughScreen = () => {
             flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
         } else {
             await AsyncStorage.setItem('hasSeenWalkthrough', 'true');
-            navigation.replace('MainApp'); // Replace with your screen name
+            navigation.replace('Login');
         }
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
             <FlatList
                 ref={flatListRef}
                 data={slides}
@@ -67,9 +68,8 @@ const WalkthroughScreen = () => {
                             source={item.image}
                             style={styles.image}
                             resizeMode="cover"
-                            alt={item.title}
-                            testID={`walkthrough-image-${item.id}`}
                         />
+
                         <View style={styles.textContainer}>
                             <Text style={styles.title}>{item.title}</Text>
                             <View style={styles.dots}>
@@ -97,18 +97,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        padding: 0
     },
+
     slide: {
-        width,
+        width: width,
+        height: height,
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
+
     image: {
-        width,
-        height: height * 0.7,
-        justifyContent: 'start',
+        width: width,
+        height: height,
     },
+
+
     textContainer: {
         alignItems: 'center',
         paddingHorizontal: 20,
@@ -132,21 +135,21 @@ const styles = StyleSheet.create({
         width: 8,
         height: 8,
         borderRadius: 4,
-        backgroundColor: '#000000',
+        backgroundColor: '#757575ff',
         marginHorizontal: 4,
     },
     activeDot: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         width: 24,
     },
     button: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         paddingVertical: 16,
         paddingHorizontal: 48,
-        borderRadius: 999,
+        borderRadius: 8,
     },
     buttonText: {
-        color: '#ffff',
+        color: Colors.textColor,
         fontSize: 16,
         fontWeight: '800',
     },

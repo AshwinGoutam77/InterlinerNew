@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Colors from "../src/constants/colors";
 
 const CustomHeader = ({ title, canGoBack }) => {
     const navigation = useNavigation();
@@ -18,16 +19,19 @@ const CustomHeader = ({ title, canGoBack }) => {
     };
     const currentLang = i18n.language;
     return (
-        <SafeAreaView style={{ backgroundColor: '#ffffffff' }}>
-            <View style={styles.header}>
-                {route.name == 'Dashboard' && !canGoBack ? (<Text style={{ color: '#1E3A8A', fontSize: 24, paddingTop: 4, fontWeight: '800', fontFamily: 'Poppins-Regular' }}>Interliner</Text>) : <TouchableOpacity
+        <SafeAreaView edges={['top']} style={{ backgroundColor: '#ffffffff' }}>
+            <View style={[
+                styles.header,
+                { paddingBottom: route.name === 'Dashboard' ? 0 : 20 }
+            ]}>
+                {route.name == 'Dashboard' && !canGoBack ? (<Text style={{ color: Colors.black, fontSize: 24, paddingTop: 4, fontWeight: '800', fontFamily: 'Poppins-Regular' }}>Interliner</Text>) : <TouchableOpacity
                     onPress={() => route?.name == 'TrackOrderScreen' ? navigation.navigate('Dashboard') : navigation.goBack()}
                     style={styles.backButton}
                 >
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                        <Icon name="chevron-left" size={32} color="#1E3A8A" style={{ marginRight: 4 }} />
+                        <Icon name="chevron-left" size={32} color='#000000' style={{ marginRight: 4 }} />
                         <Text style={{
-                            color: '#1E3A8A',
+                            color: Colors.black,
                             fontSize: 24,
 
                             paddingTop: 0,
@@ -51,7 +55,7 @@ const CustomHeader = ({ title, canGoBack }) => {
                 </View>
                 {/* )} */}
             </View>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 

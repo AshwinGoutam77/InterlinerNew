@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
 
 const shippingMethods = [
   { label: 'Economy', arrival: 'Dec 20-23', price: '$10', icon: 'cube-outline' },
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#1E3A8A',
+    backgroundColor: Colors.primary,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -104,11 +105,11 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#1E3A8A',
-    backgroundColor: selected ? '#1E3A8A' : 'transparent'
+    borderColor:  Colors.primary,
+    backgroundColor: selected ?  Colors.primary : 'transparent'
   }),
   applyBtn: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor:  Colors.primary,
     padding: 18,
     fontWeight: '800',
     alignItems: 'center',

@@ -1,0 +1,70 @@
+{
+    "dashboard": {
+        "quickActions": "إجراءات سريعة",
+        "startNewOrder": "بدء طلب جديد",
+        "previousOrders": "عرض الطلبات السابقة",
+        "trackOrder": "تتبع الطلب",
+        "creditInfo": "معلومات الائتمان",
+        "complain": "شكوى",
+        "payment": "الدفع",
+        "repeatOrder": "إعادة الطلب",
+        "support": "الدعم",
+        "creditLimit": "حد الائتمان",
+        "creditAvailable": "الائتمان المتاح",
+        "creditUsed": "المبلغ المستخدم",
+        "creditPeriod": "فترة الائتمان",
+        "dueDate": "تاريخ الاستحقاق"
+    },
+    "category": {
+        "search_placeholder": "ابحث عن المنتجات...",
+        "categories": {
+            "Shirts": "قمصان",
+            "Shirt collar": "ياقة القميص",
+            "Shirt cuffs": "أساور القميص",
+            "Shirt placket": "فتحة القميص الأمامية",
+            "Kandura": "كندورة",
+            "collar": "ياقة",
+            "cuffs": "أساور",
+            "placket": "فتحة أمامية",
+            "pocket": "جيب",
+            "faruka": "فروخة",
+            "Trousers": "بنطلونات",
+            "waist": "خصر",
+            "pocketing": "الجيوب",
+            "Jackets Blazer": "جاكيتات وبليزرات",
+            "Articles": "مقالات",
+            "essentials": "الأساسيات",
+            "Women’s Clothes": "ملابس نسائية",
+            "Dresses": "فساتين",
+            "Shirt": "قميص",
+            "Jackets": "جاكيتات",
+            "Skirts ": "تنانير",
+            "T-Shirt & Hoodies": "تيشيرتات وهوديز",
+            "Non-woven": "غير منسوجة"
+        }
+    },
+    "language": {
+        "title": "اختر اللغة",
+        "English (US)": "الإنجليزية (أمريكية)",
+        "Arabic": "العربية",
+        "Hindi": "الهندية",
+        "French": "الفرنسية",
+        "Spanish": "الإسبانية",
+        "Mandarin": "الماندرين",
+        "Bengali": "البنغالية",
+        "Russian": "الروسية",
+        "Indonesian": "الإندونيسية"
+    },
+    "profile": {
+        "editProfile": "تعديل الملف الشخصي",
+        "rtl": "من اليمين لليسار",
+        "language": "اللغة",
+        "currency": "العملة",
+        "address": "العنوان",
+        "notification": "الإشعارات",
+        "payment": "الدفع",
+        "privacy": "سياسة الخصوصية",
+        "help": "مركز المساعدة",
+        "logout": "تسجيل الخروج"
+    }
+}

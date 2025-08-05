@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
 
 const promoList = [
     { title: 'Special 25% Off', desc: 'Special promo only today!' },
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
         borderRadius: 20,
-        backgroundColor: '#000',
+        backgroundColor: Colors.black,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -101,21 +102,21 @@ const styles = StyleSheet.create({
     radio: (selected) => ({
         width: 20,
         height: 20,
-        borderRadius: 10,
+        borderRadius: 100,
         borderWidth: 2,
-        borderColor: '#000',
-        backgroundColor: selected ? '#000' : 'transparent',
+        borderColor: Colors.primary,
+        backgroundColor: selected ? Colors.primary : 'transparent',
         marginLeft: 10
     }),
     applyBtn: {
-        backgroundColor: '#000',
+        backgroundColor: Colors.primary,
         padding: 18,
         alignItems: 'center',
-        borderRadius: 12
+        borderRadius: 8
     },
     applyText: {
         color: '#fff',
-        fontWeight: 'bold',
+        fontWeight: '600',
         fontSize: 16
     }
 });

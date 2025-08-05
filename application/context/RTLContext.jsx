@@ -1,37 +1,50 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { I18nManager } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n from '../src/i18n/i18n';
 
-const RTLContext = createContext();
+const AppContext = createContext();
 
-export const RTLProvider = ({ children }) => {
+export const AppProvider = ({ children }) => {
+    const [language, setLanguage] = useState('en');
     const [isRTL, setIsRTL] = useState(I18nManager.isRTL);
 
     useEffect(() => {
-        AsyncStorage.getItem('appRTL').then(value => {
-            if (value !== null) {
-                const enabled = value === 'true';
-                setIsRTL(enabled);
-                I18nManager.allowRTL(true);
-                I18nManager.forceRTL(enabled);
+        (async () => {
+            const storedLang = await AsyncStorage.getItem('appLanguage');
+            const storedRTL = await AsyncStorage.getItem('appRTL');
+            if (storedLang) {
+                setLanguage(storedLang);
+                i18n.changeLanguage(storedLang);
             }
-        });
+            if (storedRTL !== null) {
+                setIsRTL(storedRTL === 'true');
+            }
+        })();
     }, []);
 
+    const changeLanguage = async (lang) => {
+        setLanguage(lang);
+        i18n.changeLanguage(lang);
+        await AsyncStorage.setItem('appLanguage', lang);
+
+        const rtlLanguages = ['ar', 'he', 'fa', 'ur'];
+        const shouldBeRTL = rtlLanguages.includes(lang);
+        setIsRTL(shouldBeRTL);
+        await AsyncStorage.setItem('appRTL', shouldBeRTL.toString());
+    };
+
     const toggleRTL = async () => {
-        const newValue = !isRTL;
-        setIsRTL(newValue);
-        I18nManager.allowRTL(true);
-        I18nManager.forceRTL(newValue);
-        await AsyncStorage.setItem('appRTL', newValue.toString());
-        // No app restart
+        const newRTL = !isRTL;
+        setIsRTL(newRTL);
+        await AsyncStorage.setItem('appRTL', newRTL.toString());
     };
 
     return (
-        <RTLContext.Provider value={{ isRTL, toggleRTL }}>
+        <AppContext.Provider value={{ language, changeLanguage, isRTL, toggleRTL }}>
             {children}
-        </RTLContext.Provider>
+        </AppContext.Provider>
     );
 };
 
-export const useRTL = () => useContext(RTLContext);
+export const useAppContext = () => useContext(AppContext);

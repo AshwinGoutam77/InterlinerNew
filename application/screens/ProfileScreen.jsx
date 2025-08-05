@@ -9,12 +9,17 @@ import {
     ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useRTL } from '../context/RTLContext';
+import { useAppContext } from '../context/RTLContext';
+import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
+import { useTranslation } from 'react-i18next';
 
 export default function ProfilePage() {
+    const { t } = useTranslation();
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
-    const { isRTL, toggleRTL } = useRTL();
+    const { isRTL, toggleRTL } = useAppContext();
+    const navigation = useNavigation();
 
     return (
         <View style={styles.container}>
@@ -26,7 +31,7 @@ export default function ProfilePage() {
                             source={require('../../assets/images/user.jpg')}
                             style={styles.avatar}
                         />
-                        <TouchableOpacity style={styles.editButton}>
+                        <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate('EditProfile')}>
                             <Icon name="edit" size={14} color="#fff" />
                         </TouchableOpacity>
                     </View>
@@ -34,53 +39,57 @@ export default function ProfilePage() {
                     <Text style={styles.phone}>+1 111 467 378 399</Text>
                 </View>
 
-                {/* Settings Options */}
                 <View style={styles.optionsList}>
-                    {renderOption('edit', 'Edit Profile', null, isRTL)}
-                    {renderOption('edit', 'RTL', <Switch value={isRTL} onValueChange={toggleRTL} />, isRTL)}
-                    {renderOption('pin', 'Address', null, isRTL)}
-                    {renderOption('notifications', 'Notification', null, isRTL)}
-                    {renderOption('credit-card', 'Payment', null, isRTL)}
-                    {renderOption('shield', 'Security', null, isRTL)}
-                    {renderOption('arrow-right', 'Language', 'English (US)', null, isRTL)}
-                    {renderOption('lock', 'Privacy Policy', null, isRTL)}
-                    {renderOption('info', 'Help Center', null, isRTL)}
+                    {renderOption('edit', t('profile.editProfile'), 'EditProfile', null, isRTL, navigation)}
+                    {renderOption('public', t('profile.rtl'), 'EditProfile', (
+                        <Switch
+                            value={isRTL}
+                            onValueChange={toggleRTL}
+                            trackColor={{ false: '#ccc', true: Colors.primary }}
+                            thumbColor={isRTL ? '#ffffff' : '#ffffff'}
+                            ios_backgroundColor="#ccc"
+                        />
+                    ), isRTL, navigation)}
+                    {renderOption('public', t('profile.language'), 'LanguageScreen', null, isRTL, navigation)}
+                    {renderOption('money', t('profile.currency'), 'CurrencyScreen', null, isRTL, navigation)}
+                    {renderOption('pin', t('profile.address'), 'ShippingScreen', null, isRTL, navigation)}
+                    {renderOption('notifications', t('profile.notification'), 'NotificationScreen', null, isRTL, navigation)}
+                    {renderOption('credit-card', t('profile.payment'), 'PaymentMethodScreen', null, isRTL, navigation)}
+                    {renderOption('lock', t('profile.privacy'), 'PrivacyScreen', null, isRTL, navigation)}
+                    {renderOption('info', t('profile.help'), 'HelpCenterScreen', null, isRTL, navigation)}
+                    {renderOption('logout', t('profile.logout'), 'LogoutScreen', null, isRTL, navigation)}
                 </View>
-
-                {/* Logout */}
-                <TouchableOpacity style={styles.logout}>
-                    <Icon name="log-out" size={20} color="#EF4444" />
-                    <Text style={styles.logoutText}>Logout</Text>
-                </TouchableOpacity>
-            </ScrollView>
-        </View>
+            </ScrollView >
+        </View >
     );
 }
 
-function renderOption(icon, title, value = null, isRTL = false) {
+function renderOption(icon, title, link, value = null, isRTL = false, navigation) {
     return (
         <TouchableOpacity
             style={[
                 styles.option,
                 isRTL && { flexDirection: 'row-reverse' }
             ]}
+            onPress={() => navigation.navigate(link)}
         >
             <View style={[styles.left, isRTL && { flexDirection: 'row-reverse' }]}>
                 <Icon
                     name={icon}
                     size={18}
-                    color="#111827"
+                    color="#ffffff"
                     style={[styles.optionIcon, isRTL && { marginLeft: 12, marginRight: 0 }]}
                 />
                 <Text style={styles.optionText}>{title}</Text>
             </View>
             <View style={[styles.right, isRTL && { flexDirection: 'row-reverse' }]}>
-                {value && <Text style={styles.optionValue}>{value}</Text>}
-                <Icon name="chevron-right" size={20} color="#9CA3AF" />
+                {value && <Text style={[styles.optionValue, { marginRight: title !== 'RTL' ? '8' : '0' }]}>{value}</Text>}
+                {title !== 'RTL' && title !== 'Logout' && <Icon name="chevron-right" size={20} color="#9CA3AF" />}
             </View>
         </TouchableOpacity>
     );
 }
+
 
 
 function renderDarkModeOption(enabled, toggle) {
@@ -111,19 +120,6 @@ function renderTab(icon, label, active = false) {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#fff' },
-    header: {
-        paddingHorizontal: 16,
-        paddingTop: 50,
-        paddingBottom: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: '#111827',
-    },
     scrollContent: {
         paddingBottom: 100,
     },
@@ -146,8 +142,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
         backgroundColor: '#111827',
-        padding: 6,
-        borderRadius: 12,
+        padding: 10,
+        borderRadius: 100,
     },
     name: {
         fontSize: 18,
@@ -176,10 +172,14 @@ const styles = StyleSheet.create({
     },
     optionIcon: {
         marginRight: 12,
+        backgroundColor: Colors.primary,
+        padding: 8,
+        borderRadius: 8,
     },
     optionText: {
-        fontSize: 15,
-        color: '#111827',
+        fontSize: 16,
+        color: '#000000',
+        fontWeight: '600',
     },
     right: {
         flexDirection: 'row',

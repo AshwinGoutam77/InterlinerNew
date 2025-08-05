@@ -11,24 +11,31 @@ import {
 import Swiper from 'react-native-swiper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import { Modal } from 'react-native-paper';
-import { useRTL } from '../context/RTLContext';
+import { Modal, Portal } from 'react-native-paper';
 import { I18nManager } from 'react-native';
+import { useAppContext } from '../context/RTLContext';
+import Colors from '../src/constants/colors';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
-const quickActions = [
-    { icon: 'add-circle-outline', label: 'Start New Orders', screen: 'CategoryScreen' },
-    { icon: 'file-tray-full-outline', label: 'View Previous Orders', screen: 'HistoryScreen' },
-    { icon: 'locate-outline', label: 'Track Order', screen: 'TrackOrderScreen' },
-    { icon: 'card-outline', label: 'Credit Info', screen: 'CategoryScreen' },
-    { icon: 'alert-circle-outline', label: 'Raise Complaint', screen: 'RaiseComplainScreen' },
-    { icon: 'cash-outline', label: 'Payment', screen: 'PaymentScreen' },
-];
+
 
 const DashboardScreen = () => {
     const navigation = useNavigation();
-    const { isRTL } = useRTL();
+    const { isRTL } = useAppContext();
+    const { t } = useTranslation();
+
+    const quickActions = [
+        { icon: 'add-circle-outline', label: t('dashboard.startNewOrder'), screen: 'CategoryScreen' },
+        { icon: 'file-tray-full-outline', label: t('dashboard.previousOrders'), screen: 'HistoryScreen' },
+        { icon: 'locate-outline', label: t('dashboard.trackOrder'), screen: 'TrackOrderListingScreen' },
+        { icon: 'repeat', label: t('dashboard.repeatOrder'), screen: 'RepeatOrderScreen' },
+        { icon: 'card-outline', label: t('dashboard.creditInfo'), screen: 'CategoryScreen' },
+        { icon: 'cash-outline', label: t('dashboard.payment'), screen: 'PaymentScreen' },
+        { icon: 'alert-circle-outline', label: t('dashboard.complain'), screen: 'RaiseComplainScreen' },
+        { icon: 'call-outline', label: t('dashboard.support'), screen: 'PaymentScreen' },
+    ];
 
     const [visible, setVisible] = React.useState(false);
     const showModal = () => setVisible(true);
@@ -41,7 +48,7 @@ const DashboardScreen = () => {
         { label: '#2346', value: '2346' },
     ]);
 
-    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center', flexDirection: 'column' };
+    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -75,7 +82,11 @@ const DashboardScreen = () => {
                 </View>
 
                 {/* Quick Actions */}
-                <Text style={[styles.quickActionHeading, { textAlign: isRTL ? 'right' : 'left' }]}>Quick Actions</Text>
+                {/* <Text style={[styles.quickActionHeading, { textAlign: isRTL ? 'right' : 'left' }]}>Quick Actions</Text> */}
+                <Text style={[styles.quickActionHeading, { textAlign: isRTL ? 'right' : 'left' }]}>
+                    {t('dashboard.quickActions')}
+                </Text>
+
                 <View
                     style={[
                         styles.quickGrid,
@@ -109,28 +120,35 @@ const DashboardScreen = () => {
                 </View>
 
             </ScrollView>
-            <Modal visible={visible} transparent animationType="slide" contentContainerStyle={containerStyle}>
-                {/* Close Button */}
-                <TouchableOpacity onPress={hideModal} style={styles.closeIcon}>
-                    <Icon name="close" size={24} color="#000" />
-                </TouchableOpacity>
+            <Portal>
+                <Modal visible={visible} transparent animationType="slide" contentContainerStyle={containerStyle}>
+                    {/* Close Button */}
+                    <TouchableOpacity onPress={hideModal} style={styles.closeIcon}>
+                        <Icon name="close" size={24} color="#000" />
+                    </TouchableOpacity>
 
-                <Text style={styles.title}>Credit Limit</Text>
+                    <Text style={styles.title}>{t('dashboard.creditLimit')}</Text>
 
-                <View>
-                    <View style={styles.orderRow}>
-                        <Text style={styles.label}>Credit</Text>
-                        <Text style={styles.value}>4000</Text>
+                    <View>
+                        <View style={styles.orderRow}>
+                            <Text style={styles.label}>{t('dashboard.creditAvailable')}</Text>
+                            <Text style={styles.value}>4000</Text>
+                        </View>
+                        <View style={styles.orderRow}>
+                            <Text style={styles.label}>{t('dashboard.creditUsed')}</Text>
+                            <Text style={styles.value}>2000</Text>
+                        </View>
+                        <View style={styles.orderRow}>
+                            <Text style={styles.label}>{t('dashboard.creditPeriod')}</Text>
+                            <Text style={styles.value}>10 Days</Text>
+                        </View>
+                        <View style={styles.orderRow}>
+                            <Text style={styles.label}>{t('dashboard.dueDate')}</Text>
+                            <Text style={styles.value}>24/8/2025</Text>
+                        </View>
                     </View>
-                    <View style={styles.orderRow}>
-                        <Text style={styles.label}>Credit Limit Upto</Text>
-                        <Text style={{
-                            fontSize: 15,
-                            fontWeight: 'bold',
-                        }}>2000</Text>
-                    </View>
-                </View>
-            </Modal>
+                </Modal>
+            </Portal>
         </View>
     );
 };
@@ -138,14 +156,14 @@ const DashboardScreen = () => {
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#fff', paddingTop: 20 },
     scrollContent: { paddingBottom: 10 },
-    logo: { fontSize: 20, fontWeight: '700', color: '#0051A2' },
+    logo: { fontSize: 20, fontWeight: '700', color: Colors.primary },
     headerIcons: { flexDirection: 'row', alignItems: 'center' },
     icon: { marginRight: 12 },
     lang: { fontSize: 16, marginRight: 12 },
     profile: { width: 32, height: 32, borderRadius: 16 },
     swiperContainer: { marginTop: 0, height: 180 },
     slide: {
-        backgroundColor: '#1B3C85',
+        backgroundColor: Colors.primary,
         borderRadius: 12,
         marginHorizontal: 16,
         height: 180,
@@ -177,7 +195,7 @@ const styles = StyleSheet.create({
     },
     quickItem: {
         width: '47%',
-        backgroundColor: '#1B3C85',
+        backgroundColor: Colors.primary,
         borderRadius: 12,
         padding: 26,
         marginBottom: 16,
@@ -312,24 +330,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: '600',
-    },
-    overlay: {
-        flex: 1,
-        justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.3)',
-        paddingHorizontal: 20,
-    },
-    closeIcon: {
-        position: 'absolute',
-        right: 15,
-        top: 15,
-        zIndex: 1,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'left',
     },
 });
 

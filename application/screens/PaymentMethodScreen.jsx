@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import { Modal } from 'react-native-paper';
+import { Modal, Portal } from 'react-native-paper';
 import { t } from 'i18next';
+import Colors from '../src/constants/colors';
 
 
 const paymentMethods = [
@@ -43,7 +44,16 @@ export default function PaymentMethodScreen() {
     const [visible, setVisible] = React.useState(false);
 
     const showModal = () => setVisible(true);
-    const hideModal = () => setVisible(false);
+    const hideModal = () => {
+        setVisible(false);
+        navigation.navigate('Dashboard');
+    };
+
+    const TrackOrder = () => {
+        setVisible(false);
+        navigation.navigate('TrackOrderScreen');
+    };
+
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'center', gap: 10, justifyContent: 'center' };
 
 
@@ -78,27 +88,29 @@ export default function PaymentMethodScreen() {
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                <Image
-                    source={require('../../assets/images/check.png')}
-                    style={{ width: 100, height: 100, resizeMode: 'contain', margin: 'auto' }}
-                />
-                <Text style={{ textAlign: 'center', fontSize: 18 }}>Order Successfull</Text>
-                <TouchableOpacity
-                    style={styles.confirmBtn}
-                    onPress={() => navigation.navigate('CategoryScreen')}
+            <Portal>
+                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                    <Image
+                        source={require('../../assets/images/check.png')}
+                        style={{ width: 100, height: 100, resizeMode: 'contain', margin: 'auto' }}
+                    />
+                    <Text style={{ textAlign: 'center', fontSize: 18 }}>Order placed Thank you for shopping with us.</Text>
+                    <TouchableOpacity
+                        style={styles.confirmBtn}
+                        onPress={() => navigation.navigate('CategoryScreen')}
                     // onPress={showModal}
-                >
-                    <Text style={styles.confirmText}>Continue Shopping</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.confirmBtn}
-                    onPress={() => navigation.navigate('TrackOrderScreen')}
+                    >
+                        <Text style={styles.confirmText}>Continue Shopping</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.confirmBtn}
+                        onPress={TrackOrder}
                     // onPress={showModal}
-                >
-                    <Text style={styles.confirmText}>Track Order</Text>
-                </TouchableOpacity>
-            </Modal>
+                    >
+                        <Text style={styles.confirmText}>Track Order</Text>
+                    </TouchableOpacity>
+                </Modal>
+            </Portal>
 
 
             <TouchableOpacity
@@ -172,7 +184,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     }),
     confirmBtn: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         padding: 18,
         alignItems: 'center',
         borderRadius: 12,

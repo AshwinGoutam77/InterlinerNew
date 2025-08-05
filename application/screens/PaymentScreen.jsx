@@ -11,10 +11,11 @@ import {
     SafeAreaView
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Modal } from 'react-native-paper';
+import { Modal, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Colors from '../src/constants/colors';
 
-const tabs = ['Transaction', 'Due By Order', 'Direct Payment'];
+const tabs = ['Transaction', 'Due By Order', 'Direct Payment',];
 
 const transactionData = [
     {
@@ -52,7 +53,7 @@ export default function PaymentScreen() {
         { label: '#2346', value: '2346' },
     ]);
 
-    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center', flexDirection: 'column' };
+    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
 
     const renderTab = (tab) => (
         <TouchableOpacity
@@ -158,64 +159,66 @@ export default function PaymentScreen() {
             <View style={styles.tabContainer}>{tabs.map(renderTab)}</View>
             <View style={styles.contentContainer}>{getContentForTab()}</View>
 
-            <Modal visible={visible} transparent animationType="slide" contentContainerStyle={containerStyle}>
-                {/* Close Button */}
-                <TouchableOpacity onPress={hideModal} style={styles.closeIcon}>
-                    <Icon name="close" size={24} color="#000" />
-                </TouchableOpacity>
+            <Portal>
+                <Modal visible={visible} transparent animationType="slide" contentContainerStyle={containerStyle}>
+                    {/* Close Button */}
+                    <TouchableOpacity onPress={hideModal} style={styles.closeIcon}>
+                        <Icon name="close" size={24} color="#000" />
+                    </TouchableOpacity>
 
-                <Text style={styles.title}>Pay Due By Orders</Text>
+                    <Text style={styles.title}>Pay Due By Orders</Text>
 
-                {/* Order ID Dropdown */}
-                <Text style={styles.label}>Payment Via</Text>
-                <View style={styles.pickerWrapper}>
-                    <Picker
-                        selectedValue={orderOptions}
-                        onValueChange={(itemValue) => setOrderOptions(itemValue)}
-                        style={styles.picker}
-                        dropdownIconColor="#666"
-                    >
-                        <Picker.Item label="Choose Method" value="" />
-                        <Picker.Item label="Cash" value="Cash" />
-                        <Picker.Item label="Cheque" value="Cheque" />
-                        <Picker.Item label="Card" value="Card" />
-                        {/* Add more as needed */}
-                    </Picker>
-                </View>
+                    {/* Order ID Dropdown */}
+                    <Text style={styles.label}>Payment Via</Text>
+                    <View style={styles.pickerWrapper}>
+                        <Picker
+                            selectedValue={orderOptions}
+                            onValueChange={(itemValue) => setOrderOptions(itemValue)}
+                            style={styles.picker}
+                            dropdownIconColor="#666"
+                        >
+                            <Picker.Item label="Choose Method" value="" />
+                            <Picker.Item label="Cash" value="Cash" />
+                            <Picker.Item label="Cheque" value="Cheque" />
+                            <Picker.Item label="Card" value="Card" />
+                            {/* Add more as needed */}
+                        </Picker>
+                    </View>
 
 
-                {/* Complaint Textarea */}
-                <Text style={styles.label}>Amount</Text>
-                <TextInput
-                    style={styles.input}
-                    value={complaint}
-                    onChangeText={setComplaint}
-                    multiline
-                    numberOfLines={1}
-                    placeholder="Enter Amount"
-                    textAlignVertical="center"
-                />
+                    {/* Complaint Textarea */}
+                    <Text style={styles.label}>Amount</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={complaint}
+                        onChangeText={setComplaint}
+                        multiline
+                        numberOfLines={1}
+                        placeholder="Enter Amount"
+                        textAlignVertical="center"
+                    />
 
-                <Text style={styles.label}>Remark</Text>
-                <TextInput
-                    style={styles.textarea}
-                    value={complaint}
-                    onChangeText={setComplaint}
-                    multiline
-                    numberOfLines={1}
-                    placeholder="Enter Your Remark"
-                    textAlignVertical="top"
-                />
+                    <Text style={styles.label}>Remark</Text>
+                    <TextInput
+                        style={styles.textarea}
+                        value={complaint}
+                        onChangeText={setComplaint}
+                        multiline
+                        numberOfLines={1}
+                        placeholder="Enter Your Remark"
+                        textAlignVertical="top"
+                    />
 
-                {/* Submit Button */}
-                <TouchableOpacity style={styles.submitBtn} onPress={() => {
-                    // Handle complaint submission logic here
-                    console.log('Complaint submitted:', { orderId, complaint });
-                    hideModal();
-                }}>
-                    <Text style={styles.submitText}>Submit</Text>
-                </TouchableOpacity>
-            </Modal>
+                    {/* Submit Button */}
+                    <TouchableOpacity style={styles.submitBtn} onPress={() => {
+                        // Handle complaint submission logic here
+                        console.log('Complaint submitted:', { orderId, complaint });
+                        hideModal();
+                    }}>
+                        <Text style={styles.submitText}>Submit</Text>
+                    </TouchableOpacity>
+                </Modal>
+            </Portal>
         </View>
     );
 }
@@ -236,7 +239,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     activeTabButton: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
     },
     tabText: {
         fontSize: 14,
@@ -342,7 +345,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '48%',
-        backgroundColor: '#002F87',
+        backgroundColor: Colors.primary,
         paddingVertical: 10,
         borderRadius: 6,
         marginTop: 20,
@@ -391,7 +394,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f9f9f9',
     },
     submitBtn: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         borderRadius: 8,
         paddingVertical: 12,
         alignItems: 'center',
@@ -413,12 +416,6 @@ const styles = StyleSheet.create({
         right: 15,
         top: 15,
         zIndex: 1,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'left',
     },
     pickerWrapper: {
         borderWidth: 1,

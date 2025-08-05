@@ -12,6 +12,7 @@ import {
 
 const { width } = Dimensions.get('window');
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
 
 const categories = [
     { label: 'Collar', icon: require('../../assets/images/shirt-collar.png') },
@@ -24,24 +25,28 @@ const products = [
     {
         id: '1',
         name: '23666',
+        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
         price: '$28',
         image: require('../../assets/images/product-1.png'),
     },
     {
         id: '2',
         name: '3223H',
+        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
         price: '$12',
         image: require('../../assets/images/product-1.png'),
     },
     {
         id: '3',
         name: '2777',
+        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
         price: '$20',
         image: require('../../assets/images/product-1.png'),
     },
     {
         id: '4',
         name: '3093',
+        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
         price: '$15',
         image: require('../../assets/images/product-1.png'),
     },
@@ -60,8 +65,11 @@ const ProductsPage = () => {
         <TouchableOpacity onPress={() => navigation.navigate('ProductDetailScreen')}>
             <View style={styles.productCard}>
                 <Image source={item.image} style={styles.productImage} />
-                <Text style={styles.productName}>{item.name}</Text>
-                <Text style={styles.productPrice}>{item.price}</Text>
+                <View style={styles.productDescription}>
+                    <Text style={styles.productName}>{item.name}</Text>
+                    <Text style={styles.productPrice}>{item.price}</Text>
+                </View>
+                {/* <Text style={styles.productDescription}>{item.description}</Text> */}
             </View>
         </TouchableOpacity>
     );
@@ -140,27 +148,35 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     productCard: {
-        width: (width - 60) / 2,
+        width: (width - 50) / 2,
         backgroundColor: '#fff',
         borderRadius: 12,
-        paddingTop: 8,
+        padding: 10,
+        paddingVertical: 12,
+        elevation: 1
     },
     productImage: {
         width: '100%',
         height: 160,
         borderRadius: 10,
         resizeMode: 'cover',
+        marginBottom: 10
     },
     productName: {
-        fontSize: 18,
-        marginTop: 8,
+        fontSize: 16,
         color: '#000',
         fontWeight: '600',
+    },
+    productDescription: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 5
     },
     productPrice: {
         fontSize: 16,
         fontWeight: '800',
-        color: '#1E3A8A',
+        color: Colors.primary,
     },
 });
 

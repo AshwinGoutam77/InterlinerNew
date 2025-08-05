@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
 
 const addresses = [
     { label: 'Home', address: '61480 Sunbrook Park, PC 5679', default: true },
@@ -98,8 +99,8 @@ const styles = StyleSheet.create({
     iconCircle: {
         width: 40,
         height: 40,
-        borderRadius: 20,
-        backgroundColor: '#1E3A8A',
+        borderRadius: 200,
+        backgroundColor: Colors.black,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     defaultTag: {
         fontSize: 12,
         backgroundColor: '#F2F2F2',
-        color: '#1E3A8A',
+        color: Colors.black,
         paddingHorizontal: 8,
         paddingVertical: 2,
         borderRadius: 6,
@@ -125,12 +126,12 @@ const styles = StyleSheet.create({
         height: 20,
         borderRadius: 10,
         borderWidth: 2,
-        borderColor: '#1E3A8A',
+        borderColor: Colors.primary,
         marginLeft: 8,
-        backgroundColor: selected ? '#1E3A8A' : 'transparent'
+        backgroundColor: selected ? Colors.primary : 'transparent'
     }),
     addNewBtn: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         borderRadius: 8,
         padding: 16,
         alignItems: 'center',
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
         color: '#fff'
     },
     applyBtn: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         padding: 18,
         fontWeight: '800',
         alignItems: 'center',
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     saveBtn: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         padding: 16,
         borderRadius: 10,
         alignItems: 'center'

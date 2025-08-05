@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
 
 const Checkout = () => {
     const navigation = useNavigation();
@@ -215,7 +216,6 @@ const styles = StyleSheet.create({
         paddingVertical: 26,
         marginVertical: 10,
         marginHorizontal: 1,
-        alignItems: 'center',
         shadowColor: '#ccc',
         shadowOpacity: 1,
         shadowRadius: 5,
@@ -255,9 +255,6 @@ const styles = StyleSheet.create({
     editButton: {
         padding: 5,
     },
-    editIcon: {
-        fontSize: 20,
-    },
     orderItem: {
         flexDirection: 'row',
         backgroundColor: '#fff',
@@ -267,7 +264,6 @@ const styles = StyleSheet.create({
         paddingVertical: 26,
         marginVertical: 10,
         marginHorizontal: 1,
-        alignItems: 'center',
         shadowColor: '#ccc',
         shadowOpacity: 1,
         shadowRadius: 5,
@@ -411,7 +407,6 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         borderRadius: 8,
         padding: 16,
-        paddingVertical: 26,
         marginVertical: 10,
         marginHorizontal: 1,
         // alignItems: 'center',
@@ -461,7 +456,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         paddingVertical: 18,
         borderRadius: 8,
     },

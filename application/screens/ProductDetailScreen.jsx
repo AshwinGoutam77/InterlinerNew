@@ -6,11 +6,15 @@ import {
     TouchableOpacity,
     TextInput,
     Image,
-    ScrollView
+    ScrollView,
+    TouchableWithoutFeedback,
+    KeyboardAvoidingView,
+    Keyboard
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
 
 const shades = ['White', 'Off White', 'Blue White', 'Cream'];
 const widths = ['36 Inch', '44 Inch', '60 Inch'];
@@ -26,136 +30,181 @@ export default function ProductDetailScreen() {
     const [remark, setRemark] = useState('');
     const [selectedProductCode, setSelectedProductCode] = useState('23666');
 
+    const getShadeColor = (shade) => {
+        switch (shade) {
+            case 'White':
+                return '#F3F4F6';
+            case 'Off White':
+                return '#F9F7F1';
+            case 'Blue White':
+                return '#D6E9FF';
+            case 'Cream':
+                return '#F1E9D3';
+            default:
+                return '#eee';
+        }
+    };
+
+
     return (
-        <View style={styles.container}>
-            <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-                {/* Product Code Dropdown */}
-                <Text style={styles.label}>Choose Product Code</Text>
-                <View style={styles.pickerWrapper}>
-                    <Picker
-                        selectedValue={selectedProductCode}
-                        onValueChange={(itemValue) => setSelectedProductCode(itemValue)}
-                        style={styles.picker}
-                        dropdownIconColor="#666"
-                    >
-                        <Picker.Item label="23666" value="23666" />
-                        <Picker.Item label="23667" value="23667" />
-                        <Picker.Item label="23668" value="23668" />
-                        {/* Add more product codes as needed */}
-                    </Picker>
-                </View>
+        <KeyboardAvoidingView
+            behavior={'height'}
+            style={{ flex: 1 }}
+            keyboardVerticalOffset={100} // Adjust if needed
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={styles.container}>
+                    <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
+                        {/* Product Code Dropdown */}
+                        <Text style={styles.label}>Choose Product Code</Text>
+                        <View style={styles.pickerWrapper}>
+                            <Picker
+                                selectedValue={selectedProductCode}
+                                onValueChange={(itemValue) => setSelectedProductCode(itemValue)}
+                                style={styles.picker}
+                                dropdownIconColor="#666"
+                            >
+                                <Picker.Item label="23666" value="23666" />
+                                <Picker.Item label="23667" value="23667" />
+                                <Picker.Item label="23668" value="23668" />
+                                {/* Add more product codes as needed */}
+                            </Picker>
+                        </View>
 
 
-                {/* Image */}
-                <Image
-                    source={require('../../assets/images/shirt-banner.png')}
-                    style={styles.image}
-                    resizeMode="cover"
-                />
-                <TouchableOpacity style={styles.downloadBtn}>
-                    <Text style={styles.downloadText}>Download Specs</Text>
-                </TouchableOpacity>
+                        {/* Image */}
+                        <Image
+                            source={require('../../assets/images/shirt-banner.png')}
+                            style={styles.image}
+                            resizeMode="cover"
+                        />
+                        <TouchableOpacity style={styles.downloadBtn}>
+                            <Text style={styles.downloadText}>Download Specs</Text>
+                        </TouchableOpacity>
 
-                {/* Price */}
-                <View style={styles.rowBetween}>
-                    <Text style={styles.code}>23666</Text>
-                    <Text style={styles.price}>$28</Text>
-                </View>
+                        {/* Price */}
+                        <View style={styles.rowBetween}>
+                            <Text style={styles.code}>23666</Text>
+                            <Text style={styles.price}>$28</Text>
+                        </View>
+                        <View style={styles.label}>
+                            <Text>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
+                        </View>
 
-                {/* Shade Selector */}
-                <Text style={styles.label}>Shade Selector</Text>
-                <View style={styles.optionsRow}>
-                    {shades.map((shade) => (
-                        <TouchableOpacity
-                            key={shade}
-                            style={[
-                                styles.optionBox,
-                                selectedShade === shade && styles.selectedOption,
-                            ]}
-                            onPress={() => setSelectedShade(shade)}
+                        {/* Shade Selector */}
+                        {/* Shade Selector */}
+                        <Text style={styles.label}>Shade Selector</Text>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={styles.shadeRow}
                         >
-                            <Text style={[selectedShade === shade && styles.selectedOptionText,]}>{shade}</Text>
-                        </TouchableOpacity>
-                    ))}
+                            {shades.map((shade) => (
+                                <TouchableOpacity
+                                    key={shade}
+                                    style={[
+                                        styles.shadeBox,
+                                        selectedShade === shade && styles.shadeBoxSelected,
+                                    ]}
+                                    onPress={() => setSelectedShade(shade)}
+                                >
+                                    <View style={[
+                                        styles.shadeSwatch,
+                                        { backgroundColor: getShadeColor(shade) }
+                                    ]} />
+                                    <Text
+                                        style={[
+                                            styles.shadeText,
+                                            selectedShade === shade && styles.shadeTextSelected,
+                                        ]}
+                                    >
+                                        {shade}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+
+
+                        {/* Cut / Un-Cut */}
+                        <View style={styles.rowBetween}>
+                            <Text style={styles.label}> </Text>
+                            <View style={styles.cutGroup}>
+                                <TouchableOpacity onPress={() => setIsCut(true)}>
+                                    <Text style={[styles.radioText, isCut && styles.boldText]}>Cut</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setIsCut(false)}>
+                                    <Text style={[styles.radioText, !isCut && styles.boldText]}>Un-Cut</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                        {/* Width Selector */}
+                        <Text style={styles.label}>Select Width</Text>
+                        <View style={styles.optionsRow}>
+                            {widths.map((width) => (
+                                <TouchableOpacity
+                                    key={width}
+                                    style={[
+                                        styles.optionBox,
+                                        selectedWidth === width && styles.selectedOption,
+                                    ]}
+                                    onPress={() => setSelectedWidth(width)}
+                                >
+                                    <Text style={[selectedWidth === width && styles.selectedOptionText,]}>{width}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+
+                        {/* Length Selector */}
+                        <Text style={styles.label}>Select Length</Text>
+                        <View style={styles.optionsRow}>
+                            {lengths.map((length) => (
+                                <TouchableOpacity
+                                    key={length}
+                                    style={[
+                                        styles.optionBox,
+                                        selectedLength === length && styles.selectedOption,
+                                    ]}
+                                    onPress={() => setSelectedLength(length)}
+                                >
+                                    <Text
+                                        style={[selectedLength === length && styles.selectedOptionText,]}>
+                                        {length}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+
+                        {/* Number of Rolls */}
+                        <Text style={styles.label}>Enter Number of Rolls</Text>
+                        <TextInput
+                            style={styles.input}
+                            keyboardType="numeric"
+                            value={rolls}
+                            onChangeText={setRolls}
+                        />
+
+                        {/* Remark */}
+                        <Text style={styles.label}>Remark</Text>
+                        <View style={styles.remarkRow}>
+                            <TextInput
+                                style={[styles.remarkInput, { height: 100, textAlignVertical: 'top' }]}
+                                placeholder="Enter your remark"
+                                value={remark}
+                                onChangeText={setRemark}
+                                multiline={true}
+                            />
+                            <Icon name="mic-outline" size={20} color="#888" style={{ paddingTop: '12' }} />
+                        </View>
+                    </ScrollView>
+
+                    {/* Add to Cart */}
+                    <TouchableOpacity style={styles.cartBtn} onPress={() => navigation.navigate('CartScreen')}>
+                        <Text style={styles.cartText}>Add to Cart</Text>
+                    </TouchableOpacity>
                 </View>
-
-                {/* Cut / Un-Cut */}
-                <View style={styles.rowBetween}>
-                    <Text style={styles.label}> </Text>
-                    <View style={styles.cutGroup}>
-                        <TouchableOpacity onPress={() => setIsCut(true)}>
-                            <Text style={[styles.radioText, isCut && styles.boldText]}>Cut</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setIsCut(false)}>
-                            <Text style={[styles.radioText, !isCut && styles.boldText]}>Un-Cut</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                {/* Width Selector */}
-                <Text style={styles.label}>Select Width</Text>
-                <View style={styles.optionsRow}>
-                    {widths.map((width) => (
-                        <TouchableOpacity
-                            key={width}
-                            style={[
-                                styles.optionBox,
-                                selectedWidth === width && styles.selectedOption,
-                            ]}
-                            onPress={() => setSelectedWidth(width)}
-                        >
-                            <Text style={[selectedWidth === width && styles.selectedOptionText,]}>{width}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-
-                {/* Length Selector */}
-                <Text style={styles.label}>Select Length</Text>
-                <View style={styles.optionsRow}>
-                    {lengths.map((length) => (
-                        <TouchableOpacity
-                            key={length}
-                            style={[
-                                styles.optionBox,
-                                selectedLength === length && styles.selectedOption,
-                            ]}
-                            onPress={() => setSelectedLength(length)}
-                        >
-                            <Text
-                                style={[selectedLength === length && styles.selectedOptionText,]}>
-                                {length}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-
-                {/* Number of Rolls */}
-                <Text style={styles.label}>Enter Number of Rolls</Text>
-                <TextInput
-                    style={styles.input}
-                    keyboardType="numeric"
-                    value={rolls}
-                    onChangeText={setRolls}
-                />
-
-                {/* Remark */}
-                <Text style={styles.label}>Remark</Text>
-                <View style={styles.remarkRow}>
-                    <TextInput
-                        style={styles.remarkInput}
-                        placeholder="Enter your remark"
-                        value={remark}
-                        onChangeText={setRemark}
-                    />
-                    <Icon name="mic-outline" size={20} color="#888" />
-                </View>
-            </ScrollView>
-
-            {/* Add to Cart */}
-            <TouchableOpacity style={styles.cartBtn} onPress={() => navigation.navigate('CartScreen')}>
-                <Text style={styles.cartText}>Add to Cart</Text>
-            </TouchableOpacity>
-        </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 }
 const styles = StyleSheet.create({
@@ -163,6 +212,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         paddingHorizontal: 20,
+        paddingTop: 10
     },
     header: {
         flexDirection: 'row',
@@ -209,7 +259,7 @@ const styles = StyleSheet.create({
     },
     downloadText: {
         fontSize: 12,
-        color: '#1E3A8A',
+        color: Colors.black,
     },
     rowBetween: {
         flexDirection: 'row',
@@ -223,7 +273,7 @@ const styles = StyleSheet.create({
     },
     price: {
         fontSize: 18,
-        color: '#1E3A8A',
+        color: Colors.primary,
         fontWeight: '600',
     },
     optionsRow: {
@@ -241,8 +291,8 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     selectedOption: {
-        backgroundColor: '#1E3A8A',
-        borderColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
+        borderColor: Colors.primary,
         borderWidth: 1,
         color: 'white',
     },
@@ -271,7 +321,7 @@ const styles = StyleSheet.create({
     },
     remarkRow: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'top',
         borderWidth: 1,
         borderRadius: 8,
         borderColor: '#ccc',
@@ -287,14 +337,14 @@ const styles = StyleSheet.create({
         bottom: 20,
         left: 16,
         right: 16,
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         borderRadius: 8,
         paddingVertical: 14,
         alignItems: 'center',
     },
     cartText: {
         color: '#fff',
-        fontWeight: '600',
+        fontWeight: '800',
         fontSize: 16,
     },
     pickerWrapper: {
@@ -308,6 +358,42 @@ const styles = StyleSheet.create({
     picker: {
         height: 50,
         width: '100%',
+    },
+    shadeRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 12,
+        gap: '12'
+    },
+
+    shadeBox: {
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 8,
+        width: 90,
+    },
+
+    shadeBoxSelected: {
+        borderColor: Colors.primary,
+    },
+
+    shadeSwatch: {
+        width: 70,
+        height: 50,
+        borderRadius: 6,
+        marginBottom: 6,
+    },
+
+    shadeText: {
+        fontSize: 12,
+        color: '#333',
+    },
+
+    shadeTextSelected: {
+        fontWeight: '600',
+        color: '#000',
     },
 
 });

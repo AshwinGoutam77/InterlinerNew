@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
 
 const AddNewAddressScreen = () => {
     const navigation = useNavigation();
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top',
     },
     saveBtn: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         paddingVertical: 16,
         borderRadius: 8,
         alignItems: 'center',

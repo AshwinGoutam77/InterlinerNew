@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import Colors from '../src/constants/colors';
 
 const initialCartItems = [  // ✅ Made constant for default
     {
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
     price: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#1E3A8A',
+        color: Colors.black,
     },
     rightControls: {
         alignItems: 'flex-end',
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     },
     counterText: {
         fontSize: 16,
-        color: '#1E3A8A',
+        color: Colors.black,
         fontWeight: '600',
     },
     footer: {
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     checkoutBtn: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         borderRadius: 5,
         paddingVertical: 16,
         paddingHorizontal: 48,

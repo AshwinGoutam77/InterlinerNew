@@ -9,8 +9,9 @@ import {
     Image,
     TextInput
 } from 'react-native';
-import { Modal } from 'react-native-paper';
+import { Modal, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Colors from '../src/constants/colors';
 
 const orderData = [
     { id: '#2344', status: 'Pending', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' },
@@ -31,13 +32,13 @@ export default function RaiseComplainScreen({ navigation }) {
         { label: '#2346', value: '2346' },
     ]);
 
-    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center', flexDirection: 'column' };
+    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={showModal}>
-                <Text style={styles.buttonText}>Raise a Complain</Text>
+                <Text style={styles.buttonText}>Make complain</Text>
             </TouchableOpacity>
-            <ScrollView style={styles.scroll}>
+            <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
                 {orderData.map((order, index) => (
                     <View key={index} style={styles.card}>
                         <View style={styles.orderRow}>
@@ -59,53 +60,55 @@ export default function RaiseComplainScreen({ navigation }) {
                     </View>
                 ))}
             </ScrollView>
-            <Modal visible={visible} transparent animationType="slide" contentContainerStyle={containerStyle}>
-                {/* Close Button */}
-                <TouchableOpacity onPress={hideModal} style={styles.closeIcon}>
-                    <Icon name="close" size={24} color="#000" />
-                </TouchableOpacity>
+            <Portal>
+                <Modal visible={visible} transparent animationType="slide" contentContainerStyle={containerStyle}>
+                    {/* Close Button */}
+                    <TouchableOpacity onPress={hideModal} style={styles.closeIcon}>
+                        <Icon name="close" size={24} color="#000" />
+                    </TouchableOpacity>
 
-                <Text style={styles.title}>Raise a Complaint</Text>
+                    <Text style={styles.title}>Make complain</Text>
 
-                {/* Order ID Dropdown */}
-                <Text style={styles.label}>Select Order ID</Text>
-                <View style={styles.pickerWrapper}>
-                    <Picker
-                        selectedValue={orderOptions}
-                        onValueChange={(itemValue) => setOrderOptions(itemValue)}
-                        style={styles.picker}
-                        dropdownIconColor="#666"
-                    >
-                        <Picker.Item label="Choose Order" value="" />
-                        <Picker.Item label="23666" value="23666" />
-                        <Picker.Item label="23667" value="23667" />
-                        <Picker.Item label="23668" value="23668" />
-                        {/* Add more as needed */}
-                    </Picker>
-                </View>
+                    {/* Order ID Dropdown */}
+                    <Text style={styles.label}>Select Order ID</Text>
+                    <View style={styles.pickerWrapper}>
+                        <Picker
+                            selectedValue={orderOptions}
+                            onValueChange={(itemValue) => setOrderOptions(itemValue)}
+                            style={styles.picker}
+                            dropdownIconColor="#666"
+                        >
+                            <Picker.Item label="Choose Order" value="" />
+                            <Picker.Item label="23666" value="23666" />
+                            <Picker.Item label="23667" value="23667" />
+                            <Picker.Item label="23668" value="23668" />
+                            {/* Add more as needed */}
+                        </Picker>
+                    </View>
 
 
-                {/* Complaint Textarea */}
-                <Text style={styles.label}>Your Complaint</Text>
-                <TextInput
-                    style={styles.textarea}
-                    value={complaint}
-                    onChangeText={setComplaint}
-                    multiline
-                    numberOfLines={5}
-                    placeholder="Describe your issue..."
-                    textAlignVertical="top"
-                />
+                    {/* Complaint Textarea */}
+                    <Text style={styles.label}>Your Complaint</Text>
+                    <TextInput
+                        style={styles.textarea}
+                        value={complaint}
+                        onChangeText={setComplaint}
+                        multiline
+                        numberOfLines={5}
+                        placeholder="Describe your issue..."
+                        textAlignVertical="top"
+                    />
 
-                {/* Submit Button */}
-                <TouchableOpacity style={styles.submitBtn} onPress={() => {
-                    // Handle complaint submission logic here
-                    console.log('Complaint submitted:', { orderId, complaint });
-                    hideModal();
-                }}>
-                    <Text style={styles.submitText}>Submit Complaint</Text>
-                </TouchableOpacity>
-            </Modal>
+                    {/* Submit Button */}
+                    <TouchableOpacity style={styles.submitBtn} onPress={() => {
+                        // Handle complaint submission logic here
+                        console.log('Complaint submitted:', { orderId, complaint });
+                        hideModal();
+                    }}>
+                        <Text style={styles.submitText}>Submit Complaint</Text>
+                    </TouchableOpacity>
+                </Modal>
+            </Portal>
         </View>
     );
 }
@@ -114,7 +117,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: 20,
+        // paddingTop: 20,
         paddingHorizontal: 20
     },
     header: {
@@ -177,7 +180,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '48%',
-        backgroundColor: '#002F87',
+        backgroundColor: Colors.primary,
         paddingVertical: 10,
         borderRadius: 6,
         marginVertical: 4,
@@ -186,7 +189,8 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         textAlign: 'center',
-        fontSize: 13
+        fontSize: 16,
+        fontWeight: '600'
     },
     bottomNav: {
         position: 'absolute',
@@ -217,7 +221,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f9f9f9',
     },
     submitBtn: {
-        backgroundColor: '#1E3A8A',
+        backgroundColor: Colors.primary,
         borderRadius: 8,
         paddingVertical: 12,
         alignItems: 'center',
