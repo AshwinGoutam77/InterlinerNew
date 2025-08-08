@@ -7,8 +7,10 @@ import {
     FlatList,
     StyleSheet,
     ScrollView,
+    Linking,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Colors from '../src/constants/colors';
 
 const categories = ['General', 'Account', 'Service', 'Payment'];
 const faqs = [
@@ -26,6 +28,15 @@ export default function HelpCenterScreen() {
     const [activeTab, setActiveTab] = useState('FAQ');
     const [selectedCategory, setSelectedCategory] = useState('General');
     const [expanded, setExpanded] = useState(null);
+
+    const openWhatsApp = () => {
+        Linking.openURL('https://wa.me/+971504775180');
+    };
+
+    const makeCall = () => {
+        Linking.openURL(`tel:+971504775180`);
+    };
+
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -83,6 +94,19 @@ export default function HelpCenterScreen() {
                     </View>
                 ))}
             </View>
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={openWhatsApp}>
+                    <Icon name="logo-whatsapp" size={20} color="#fff" />
+                    <Text style={styles.buttonText}>WhatsApp</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} onPress={makeCall}>
+                    <Icon name="call" size={20} color="#fff" />
+                    <Text style={styles.buttonText}>Phone</Text>
+                </TouchableOpacity>
+            </View>
+
         </ScrollView>
     );
 }
@@ -92,7 +116,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingBottom: 60,
         backgroundColor: '#fff',
-        height:'100%'
+        height: '100%'
     },
     header: {
         flexDirection: 'row',
@@ -179,5 +203,26 @@ const styles = StyleSheet.create({
         color: '#555',
         fontSize: 14,
         lineHeight: 20,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    button: {
+        flexDirection: 'row',
+        backgroundColor: Colors.primary,
+        borderRadius: 8,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 10,
+        gap: 8,
+        width: '49%'
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
     },
 });

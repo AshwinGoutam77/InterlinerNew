@@ -20,10 +20,18 @@ const orderData = [
 
 export default function HistoryScreen({ navigation }) {
     const [visible, setVisible] = React.useState(false);
+    const [visiblePay, setVisiblePay] = React.useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
+
+
+    const showModalPay = () => setVisiblePay(true);
+    const hideModalPay = () => setVisiblePay(false);
+
     const [orderId, setOrderId] = useState(null);
     const [complaint, setComplaint] = useState('');
+    const [Amount, setAmount] = useState("")
+    const [Remark, setRemark] = useState('')
     const [open, setOpen] = useState(false);
     const [orderOptions, setOrderOptions] = useState([
         { label: '#2344', value: '2344' },
@@ -39,19 +47,23 @@ export default function HistoryScreen({ navigation }) {
                 {orderData.map((order, index) => (
                     <View key={index} style={styles.card}>
                         <View style={styles.orderRow}>
-                            <Text style={styles.label}>Order</Text>
+                            <Text style={styles.label}>Order Date</Text>
+                            <Text style={styles.value}>{order.date}</Text>
+                        </View>
+                        <View style={styles.orderRow}>
+                            <Text style={styles.label}>Order ID</Text>
                             <Text style={styles.value}>{order.id}</Text>
                         </View>
                         <View style={styles.orderRow}>
-                            <Text style={styles.label}>Amount Paid</Text>
+                            <Text style={styles.label}>Total Amount</Text>
                             <Text style={styles.value}>${order.paid.toFixed(2)}</Text>
                         </View>
                         <View style={styles.orderRow}>
-                            <Text style={styles.label}>Amount Due</Text>
+                            <Text style={styles.label}>Paid Amount</Text>
                             <Text style={styles.value}>${order.due.toFixed(2)}</Text>
                         </View>
                         <View style={styles.orderRow}>
-                            <Text style={styles.label}>Total Amount</Text>
+                            <Text style={styles.label}>Balance Due</Text>
                             <Text style={styles.value}>${order.total.toFixed(2)}</Text>
                         </View>
 
@@ -62,7 +74,7 @@ export default function HistoryScreen({ navigation }) {
                             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TrackOrderScreen')}>
                                 <Text style={styles.buttonText}>Track Order</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.button}>
+                            <TouchableOpacity style={styles.button} onPress={showModalPay}>
                                 <Text style={styles.buttonText}>Pay Due Payments</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OrderDetailsScreen')}>
@@ -72,6 +84,8 @@ export default function HistoryScreen({ navigation }) {
                     </View>
                 ))}
             </ScrollView>
+
+            {/* Direct pay */}
             <Portal>
                 <Modal visible={visible} transparent animationType="slide" contentContainerStyle={containerStyle}>
                     {/* Close Button */}
@@ -117,6 +131,68 @@ export default function HistoryScreen({ navigation }) {
                         hideModal();
                     }}>
                         <Text style={styles.submitText}>Submit Complaint</Text>
+                    </TouchableOpacity>
+                </Modal>
+            </Portal>
+
+            {/* pay due modal */}
+            <Portal>
+                <Modal visible={visiblePay} transparent animationType="slide" contentContainerStyle={containerStyle}>
+                    {/* Close Button */}
+                    <TouchableOpacity onPress={hideModalPay} style={styles.closeIcon}>
+                        <Icon name="close" size={24} color="#000" />
+                    </TouchableOpacity>
+
+                    <Text style={styles.title}>Pay Due By Orders</Text>
+
+                    {/* Order ID Dropdown */}
+                    <Text style={styles.label}>Payment Via</Text>
+                    <View style={styles.pickerWrapper}>
+                        <Picker
+                            selectedValue={orderOptions}
+                            onValueChange={(itemValue) => setOrderOptions(itemValue)}
+                            style={styles.picker}
+                            dropdownIconColor="#666"
+                        >
+                            <Picker.Item label="Choose Method" value="" />
+                            <Picker.Item label="Cash" value="Cash" />
+                            <Picker.Item label="Cheque" value="Cheque" />
+                            <Picker.Item label="Card" value="Card" />
+                            {/* Add more as needed */}
+                        </Picker>
+                    </View>
+
+
+                    {/* Complaint Textarea */}
+                    <Text style={styles.label}>Amount</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={Amount}
+                        onChangeText={setAmount}
+                        multiline
+                        numberOfLines={1}
+                        placeholder="Enter Amount"
+                        textAlignVertical="center"
+                    />
+
+                    <Text style={styles.label}>Remark</Text>
+                    <TextInput
+                        style={styles.textarea}
+                        value={Remark}
+                        onChangeText={setRemark}
+                        multiline
+                        numberOfLines={1}
+                        placeholder="Enter Your Remark"
+                        textAlignVertical="top"
+                    />
+
+                    {/* Submit Button */}
+                    <TouchableOpacity style={styles.submitBtn} onPress={() => {
+                        // Handle complaint submission logic here
+                        console.log('Complaint submitted:', { orderId, complaint });
+                        hideModalPay();
+                    }}>
+                        <Text style={styles.submitText}>Submit</Text>
                     </TouchableOpacity>
                 </Modal>
             </Portal>
@@ -169,6 +245,15 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         color: '#000'
+    },
+    input: {
+        height: 48,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 10,
+        fontSize: 14,
+        backgroundColor: '#f9f9f9',
     },
     buttonGrid: {
         marginTop: 12,

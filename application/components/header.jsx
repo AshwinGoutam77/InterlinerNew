@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Colors from "../src/constants/colors";
 
-const CustomHeader = ({ title, canGoBack }) => {
+const CustomHeader = ({ title, canGoBack, itemCount = 4, onSupportPress, onCartPress }) => {
     const navigation = useNavigation();
     const route = useRoute();
     const { i18n } = useTranslation();
@@ -44,12 +44,40 @@ const CustomHeader = ({ title, canGoBack }) => {
                 </TouchableOpacity>
                 }
                 <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
-                    {/* <Icon name='notifications-active' size={30} color="#1E3A8A" />
-                    <Icon name='contact-support' size={32} color="#1E3A8A" /> */}
-                    <TouchableOpacity>
+                    {/* Support Icon */}
+
+
+                    {/* Shopping Bag with Item Count */}
+                    {/* <TouchableOpacity onPress={() => navigation.navigate('CartScreen')} style={{ position: 'relative' }}>
+                        <Icon name="shopping-bag" size={28} color={route.name !== 'CartScreen' ? "#000000" : Colors.primary} />
+                        {itemCount > 0 && (
+                            <View
+                                style={{
+                                    position: 'absolute',
+                                    right: -6,
+                                    top: -4,
+                                    backgroundColor: Colors.primary,
+                                    borderRadius: 10,
+                                    paddingHorizontal: 5,
+                                    paddingVertical: 1,
+                                    minWidth: 16,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <Text style={{ color: '#fff', fontSize: 10, fontWeight: 'bold' }}>{itemCount}</Text>
+                            </View>
+                        )}
+                    </TouchableOpacity> */}
+                    <TouchableOpacity onPress={() => navigation.navigate('HelpCenterScreen')}>
+                        <Icon name="support-agent" size={28} color={route.name !== 'HelpCenterScreen' ? "#000000" : Colors.primary} />
+                    </TouchableOpacity>
+
+                    {/* User Image */}
+                    <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
                         <Image
                             source={require('../../assets/images/user.jpg')}
-                            style={{ width: 36, height: 36, alignSelf: 'center', borderRadius: 100 }}
+                            style={{ width: 36, height: 36, borderRadius: 100 }}
                         />
                     </TouchableOpacity>
                 </View>

@@ -12,6 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
+import LinearGradient from 'react-native-linear-gradient';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -22,54 +23,69 @@ const LoginScreen = () => {
 
     return (
         <ImageBackground
-            source={require('../../assets/images/onbording-banner-1.jpg')}
+            source={require('../../assets/images/login-banner.png')}
             style={styles.background}
             resizeMode="cover"
         >
-            {/* <View style={styles.overlay} /> */}
-            <SafeAreaView style={styles.container}>
-                {/* Logo */}
-                <View style={styles.logoContainer}>
-                    <Image
+            <LinearGradient
+                colors={[
+                    'rgba(226, 226, 226, 1)',
+                    'rgba(183, 224, 255, 0.3)',
+                ]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={styles.container}
+            >
+                {/* <View style={styles.overlay} /> */}
+                <SafeAreaView style={styles.container}>
+                    {/* Logo */}
+                    <View style={styles.logoContainer}>
+                        <Image
                         source={require('../../assets/images/logo.png')}
                         style={styles.logo}
                         resizeMode="contain"
                     />
-                </View>
+                        {/* <Image
+                            source={require('../../assets/images/login-banner.png')}
+                            style={styles.loginBanner}
+                            resizeMode="contain"
+                        /> */}
+                        {/* <Text style={styles.heading}>Interliners</Text> */}
+                    </View>
 
-                {/* Title */}
-                <Text style={styles.title}>Login to Your Account</Text>
+                    {/* Title */}
+                    <Text style={styles.title}>Login to Your Account</Text>
 
-                {/* Email Input */}
-                <View style={styles.inputWrapper}>
-                    <Icon name="call-outline" size={20} color="#aaa" style={styles.inputIcon} />
-                    <TextInput
-                        placeholder="Phone Number"
-                        placeholderTextColor="#aaa"
-                        style={styles.input}
-                        value={email}
-                        onChangeText={setEmail}
-                    />
-                </View>
+                    {/* Email Input */}
+                    <View style={styles.inputWrapper}>
+                        <Icon name="call-outline" size={20} color="#aaa" style={styles.inputIcon} />
+                        <TextInput
+                            placeholder="Phone Number"
+                            placeholderTextColor="#aaa"
+                            style={styles.input}
+                            value={email}
+                            onChangeText={setEmail}
+                        />
+                    </View>
 
-                {/* Password Input */}
-                <View style={styles.inputWrapper}>
-                    <Icon name="lock-closed-outline" size={20} color="#aaa" style={styles.inputIcon} />
-                    <TextInput
-                        placeholder="Password"
-                        placeholderTextColor="#aaa"
-                        style={styles.input}
-                        secureTextEntry={!showPassword}
-                        value={password}
-                        onChangeText={setPassword}
-                    />
-                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                        <Icon name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#aaa" />
-                    </TouchableOpacity>
-                </View>
+                    {/* Password Input */}
+                    <View style={styles.inputWrapper}>
+                        <Icon name="lock-closed-outline" size={20} color="#aaa" style={styles.inputIcon} />
+                        <TextInput
+                            placeholder="Password"
+                            placeholderTextColor="#aaa"
+                            style={styles.input}
+                            secureTextEntry={!showPassword}
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                            <Icon name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#aaa" />
+                        </TouchableOpacity>
+                    </View>
 
-                {/* Remember Me */}
-                {/* <View style={styles.rememberRow}>
+                    {/* Remember Me */}
+                    {/* <View style={styles.rememberRow}>
                 <CheckBox
                     value={remember}
                     onValueChange={setRemember}
@@ -78,24 +94,25 @@ const LoginScreen = () => {
                 <Text style={styles.rememberText}>Remember me</Text>
             </View> */}
 
-                {/* Sign In Button */}
-                <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.navigate('MainApp')}>
-                    <Text style={styles.signInText}>Sign in</Text>
-                </TouchableOpacity>
-
-                {/* Forgot Password */}
-                <TouchableOpacity>
-                    <Text style={styles.forgot}>Forgot the password?</Text>
-                </TouchableOpacity>
-
-                {/* Signup Prompt */}
-                <View style={styles.footer}>
-                    <Text style={styles.footerText}>Don’t have an account? </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-                        <Text style={styles.signUpText}>Sign up</Text>
+                    {/* Sign In Button */}
+                    <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.navigate('MainApp')}>
+                        <Text style={styles.signInText}>Sign in</Text>
                     </TouchableOpacity>
-                </View>
-            </SafeAreaView>
+
+                    {/* Forgot Password */}
+                    <TouchableOpacity>
+                        <Text style={styles.forgot}>Forgot the password?</Text>
+                    </TouchableOpacity>
+
+                    {/* Signup Prompt */}
+                    <View style={styles.footer}>
+                        <Text style={styles.footerText}>Don’t have an account? </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                            <Text style={styles.signUpText}>Sign up</Text>
+                        </TouchableOpacity>
+                    </View>
+                </SafeAreaView>
+            </LinearGradient>
         </ImageBackground>
     );
 };
@@ -113,7 +130,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         padding: 24,
         flexDirection: 'column',
         justifyContent: 'center'
@@ -128,6 +145,18 @@ const styles = StyleSheet.create({
     logo: {
         width: 200,
         height: 200,
+    },
+    loginBanner: {
+        width: 350,
+        height: 200,
+        borderRadius: 5,
+        objectFit: 'cover',
+    },
+    heading: {
+        textAlign: 'center',
+        fontSize: 30,
+        fontWeight: '500',
+        color: '#000',
     },
     title: {
         textAlign: 'center',

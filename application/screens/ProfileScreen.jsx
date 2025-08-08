@@ -41,7 +41,7 @@ export default function ProfilePage() {
 
                 <View style={styles.optionsList}>
                     {renderOption('edit', t('profile.editProfile'), 'EditProfile', null, isRTL, navigation)}
-                    {renderOption('public', t('profile.rtl'), 'EditProfile', (
+                    {renderOption('public', t('profile.rtl'), 'ProfileScreen', (
                         <Switch
                             value={isRTL}
                             onValueChange={toggleRTL}
@@ -50,14 +50,13 @@ export default function ProfilePage() {
                             ios_backgroundColor="#ccc"
                         />
                     ), isRTL, navigation)}
-                    {renderOption('public', t('profile.language'), 'LanguageScreen', null, isRTL, navigation)}
-                    {renderOption('money', t('profile.currency'), 'CurrencyScreen', null, isRTL, navigation)}
+                    {renderOption('public', t('profile.language'), 'LanguageScreen', 'EN', isRTL, navigation)}
+                    {renderOption('money', t('profile.currency'), 'CurrencyScreen', '$', isRTL, navigation)}
                     {renderOption('pin', t('profile.address'), 'ShippingScreen', null, isRTL, navigation)}
                     {renderOption('notifications', t('profile.notification'), 'NotificationScreen', null, isRTL, navigation)}
-                    {renderOption('credit-card', t('profile.payment'), 'PaymentMethodScreen', null, isRTL, navigation)}
                     {renderOption('lock', t('profile.privacy'), 'PrivacyScreen', null, isRTL, navigation)}
                     {renderOption('info', t('profile.help'), 'HelpCenterScreen', null, isRTL, navigation)}
-                    {renderOption('logout', t('profile.logout'), 'LogoutScreen', null, isRTL, navigation)}
+                    {renderOption('logout', t('profile.logout'), 'Login', null, isRTL, navigation)}
                 </View>
             </ScrollView >
         </View >

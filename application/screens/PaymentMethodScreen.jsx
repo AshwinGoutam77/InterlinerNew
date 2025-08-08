@@ -21,21 +21,34 @@ const paymentMethods = [
         icon: require('../../assets/images/wallet.png')
     },
     {
-        title: 'PayPal',
-        icon: require('../../assets/images/paypal.png')
+        title: 'Buy now pay later',
+        subtitle: 'Your Credit Balance: $9,379',
+        icon: require('../../assets/images/buy-now.png')
     },
     {
-        title: 'Google Pay',
-        icon: require('../../assets/images/google-pay.png')
+        title: 'Partial Payment',
+        icon: require('../../assets/images/partial-payment.png')
     },
     {
-        title: 'Apple Pay',
-        icon: require('../../assets/images/apple-pay.png')
+        title: 'Cash',
+        icon: require('../../assets/images/cash.png')
     },
     {
-        title: '•••• •••• •••• 4679',
-        icon: require('../../assets/images/mastercard.png')
-    }
+        title: 'Credit Card',
+        icon: require('../../assets/images/credit-card.png')
+    },
+    {
+        title: 'Bank Transfer',
+        icon: require('../../assets/images/bank-transfer.png')
+    },
+    {
+        title: 'Payment Link',
+        icon: require('../../assets/images/payment-link.png')
+    },
+    {
+        title: 'Cheque',
+        icon: require('../../assets/images/cheque.png')
+    },
 ];
 
 export default function PaymentMethodScreen() {
@@ -52,6 +65,11 @@ export default function PaymentMethodScreen() {
     const TrackOrder = () => {
         setVisible(false);
         navigation.navigate('TrackOrderScreen');
+    };
+
+    const ContinueShopping = () => {
+        setVisible(false);
+        navigation.navigate('CategoryScreen');
     };
 
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'center', gap: 10, justifyContent: 'center' };
@@ -74,7 +92,7 @@ export default function PaymentMethodScreen() {
                             <View style={styles.iconCircle}>
                                 <Image
                                     source={method.icon}
-                                    style={{ width: 22, height: 22, resizeMode: 'contain' }}
+                                    style={{ width: 26, height: 26, resizeMode: 'cover' }}
                                 />
                             </View>
                             <View style={{ flex: 1, marginLeft: 10 }}>
@@ -94,18 +112,17 @@ export default function PaymentMethodScreen() {
                         source={require('../../assets/images/check.png')}
                         style={{ width: 100, height: 100, resizeMode: 'contain', margin: 'auto' }}
                     />
-                    <Text style={{ textAlign: 'center', fontSize: 18 }}>Order placed Thank you for shopping with us.</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 18 }}>Thank you for shopping with us.</Text>
                     <TouchableOpacity
                         style={styles.confirmBtn}
-                        onPress={() => navigation.navigate('CategoryScreen')}
-                    // onPress={showModal}
+                        // onPress={() => navigation.navigate('CategoryScreen')}
+                        onPress={ContinueShopping}
                     >
                         <Text style={styles.confirmText}>Continue Shopping</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.confirmBtn}
                         onPress={TrackOrder}
-                    // onPress={showModal}
                     >
                         <Text style={styles.confirmText}>Track Order</Text>
                     </TouchableOpacity>

@@ -1,177 +1,145 @@
 import React from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    ScrollView,
-    TouchableOpacity
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import Colors from '../src/constants/colors';
+import { useNavigation } from '@react-navigation/native';
 
-const trackingSteps = [
+const previousOrders = [
     {
-        title: 'Order In Transit',
-        date: 'Dec 17',
-        time: '15:20 PM',
-        location: '32 Manchester Ave. Ringgold, GA 30736',
+        id: '1',
+        title: 'Veggie Pizza',
+        date: 'Aug 5, 2025',
+        price: '$12.99',
+        image: 'https://via.placeholder.com/80',
     },
     {
-        title: 'Order ... Customs Port',
-        date: 'Dec 16',
-        time: '14:40 PM',
-        location: '4 Evergreen Street Lake Zurich, IL 60047',
+        id: '2',
+        title: 'Cheeseburger Meal',
+        date: 'Aug 3, 2025',
+        price: '$8.49',
+        image: 'https://via.placeholder.com/80',
     },
     {
-        title: 'Orders are ... Shipped',
-        date: 'Dec 15',
-        time: '11:30 AM',
-        location: '9177 Hillcrest Street Wheeling, WV 26003',
+        id: '3',
+        title: 'Veggie Pizza',
+        date: 'Aug 5, 2025',
+        price: '$12.99',
+        image: 'https://via.placeholder.com/80',
     },
     {
-        title: 'Order is in Packing',
-        date: 'Dec 15',
-        time: '10:25 AM',
-        location: '891 Glen Ridge St. Gainesville, VA 20155',
+        id: '4',
+        title: 'Cheeseburger Meal',
+        date: 'Aug 3, 2025',
+        price: '$8.49',
+        image: 'https://via.placeholder.com/80',
     },
     {
-        title: 'Verified Payments',
-        date: 'Dec 15',
-        time: '10:04 AM',
-        location: '55 Summerhouse Dr. Apopka, FL 32703',
+        id: '5',
+        title: 'Veggie Pizza',
+        date: 'Aug 5, 2025',
+        price: '$12.99',
+        image: 'https://via.placeholder.com/80',
+    },
+    {
+        id: '6',
+        title: 'Cheeseburger Meal',
+        date: 'Aug 3, 2025',
+        price: '$8.49',
+        image: 'https://via.placeholder.com/80',
     },
 ];
 
-export default function RepeatOrderScreen({ navigation }) {
+export default function RepeatOrderScreen() {
+    const navigation = useNavigation();
+    const handleRepeatOrder = (orderId) => {
+        console.log(`Repeating order: ${orderId}`);
+    };
+
+    const renderOrderCard = ({ item }) => (
+        <View style={styles.card}>
+            {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
+            <View style={styles.details}>
+                <Text style={styles.title}>Order ID - #23455</Text>
+                <Text style={styles.price}>Total - {item.price}</Text>
+                <Text style={styles.price}>Quantity - 4</Text>
+            </View>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigation.navigate('CartScreen', { orderId: item.id })}
+            >
+                <Text style={styles.buttonText}>Repeat</Text>
+            </TouchableOpacity>
+        </View>
+    );
+
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
-                {/* Product Card */}
-                <View style={styles.card} >
-                    <View style={styles.repeatOrderBox}>
-                        <Image
-                            source={require('../../assets/images/kandura.png')}
-                            style={styles.productImage}
-                        />
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.productTitle}>Lawson Chair</Text>
-                            <Text style={styles.productInfo}>● Blue Grey   |   Qty = 1</Text>
-                            <Text style={styles.productPrice}>$120.00</Text>
-                        </View>
-                    </View>
-                    <TouchableOpacity style={styles.repeatOrderBtn} onPress={() => navigation.navigate('CartScreen')}>
-                        <Text style={styles.repeatOrderBtnText}>Repeat Order</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.card} >
-                    <View style={styles.repeatOrderBox}>
-                        <Image
-                            source={require('../../assets/images/kandura.png')}
-                            style={styles.productImage}
-                        />
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.productTitle}>Lawson Chair</Text>
-                            <Text style={styles.productInfo}>● Blue Grey   |   Qty = 1</Text>
-                            <Text style={styles.productPrice}>$120.00</Text>
-                        </View>
-                    </View>
-                    <TouchableOpacity style={styles.repeatOrderBtn}>
-                        <Text style={styles.repeatOrderBtnText}>Repeat Order</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.card} >
-                    <View style={styles.repeatOrderBox}>
-                        <Image
-                            source={require('../../assets/images/kandura.png')}
-                            style={styles.productImage}
-                        />
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.productTitle}>Lawson Chair</Text>
-                            <Text style={styles.productInfo}>● Blue Grey   |   Qty = 1</Text>
-                            <Text style={styles.productPrice}>$120.00</Text>
-                        </View>
-                    </View>
-                    <TouchableOpacity style={styles.repeatOrderBtn}>
-                        <Text style={styles.repeatOrderBtnText}>Repeat Order</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
+            <FlatList
+                data={previousOrders}
+                renderItem={renderOrderCard}
+                keyExtractor={(item) => item.id}
+                showsVerticalScrollIndicator={false}
+            />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fefefe',
         flex: 1,
-        paddingHorizontal: 20
+        padding: 20,
+        backgroundColor: '#ffffffff',
     },
     header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 24
-    },
-    headerText: {
         fontSize: 20,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginBottom: 12,
     },
     card: {
+        flexDirection: 'row',
         backgroundColor: '#fff',
-        borderRadius: 8,
+        borderRadius: 12,
         padding: 16,
-        paddingVertical: 26,
-        marginVertical: 10,
-        marginHorizontal: 1,
-        shadowColor: '#ccc',
-        shadowOpacity: 1,
+        marginBottom: 12,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
         shadowRadius: 5,
         elevation: 2,
-        marginBottom: 10,
         borderWidth: 1,
-        borderColor: '#FAFAFA'
-    },
-    repeatOrderBox: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 10
-    },
-    productImage: {
-        width: 80,
-        height: 80,
-        marginRight: 12,
-        borderRadius: 8
-    },
-    productTitle: {
-        fontSize: 16,
-        fontWeight: 'bold'
-    },
-    productInfo: {
-        fontSize: 14,
-        color: '#666',
-        marginVertical: 4
-    },
-    productPrice: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#000'
-    },
-    repeatOrderBtn: {
-        backgroundColor: Colors.primary,
-        borderRadius: 5,
-        paddingVertical: 12,
+        borderColor: '#eee',
         paddingHorizontal: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 10,
-        width: '45%',
     },
-    repeatOrderBtnText: {
-        color: '#fff',
+    image: {
+        width: 60,
+        height: 60,
+        borderRadius: 8,
+        marginRight: 12,
+    },
+    details: {
+        flex: 1,
+    },
+    title: {
         fontSize: 16,
-        fontWeight: '800',
-        textAlign: 'center',
-        margin: 'auto'
+        fontWeight: '600',
+    },
+    date: {
+        fontSize: 12,
+        color: '#888',
+        marginVertical: 4,
+    },
+    price: {
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#222',
+    },
+    button: {
+        backgroundColor: Colors.primary,
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: '600',
     },
 });

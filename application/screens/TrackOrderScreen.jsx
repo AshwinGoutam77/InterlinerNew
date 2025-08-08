@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -8,6 +9,7 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Colors from '../src/constants/colors';
 
 const trackingSteps = [
     {
@@ -15,65 +17,108 @@ const trackingSteps = [
         date: 'Dec 17',
         time: '15:20 PM',
         location: '32 Manchester Ave. Ringgold, GA 30736',
+        completed: true
     },
     {
         title: 'Order ... Customs Port',
         date: 'Dec 16',
         time: '14:40 PM',
         location: '4 Evergreen Street Lake Zurich, IL 60047',
+        completed: true
     },
     {
         title: 'Orders are ... Shipped',
         date: 'Dec 15',
         time: '11:30 AM',
         location: '9177 Hillcrest Street Wheeling, WV 26003',
+        completed: false
     },
     {
         title: 'Order is in Packing',
         date: 'Dec 15',
         time: '10:25 AM',
         location: '891 Glen Ridge St. Gainesville, VA 20155',
+        completed: false
     },
     {
         title: 'Verified Payments',
         date: 'Dec 15',
         time: '10:04 AM',
         location: '55 Summerhouse Dr. Apopka, FL 32703',
+        completed: false
     },
 ];
 
 export default function TrackOrderScreen({ navigation }) {
+    const [showAll, setShowAll] = useState(false);
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={{ paddingBottom: 30 }}  showsVerticalScrollIndicator={false}>
+            <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
                 {/* Product Card */}
-                <View style={styles.card}>
-                    <Image
-                        source={require('../../assets/images/kandura.png')}
-                        style={styles.productImage}
-                    />
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.productTitle}>Lawson Chair</Text>
-                        <Text style={styles.productInfo}>● Blue Grey   |   Qty = 1</Text>
-                        <Text style={styles.productPrice}>$120.00</Text>
-                    </View>
-                </View>
 
-                {/* Delivery Steps Icons */}
-                <View style={styles.iconsRow}>
-                    {['cube', 'car', 'walk', 'gift'].map((icon, index) => (
-                        <View key={index} style={styles.iconStep}>
-                            <Icon
-                                name={icon}
-                                size={26}
-                                color="#000"
-                                style={styles.stepIcon}
-                            />
-                            {index < 3 && <View style={styles.dottedLine} />}
+                <View style={styles.card}>
+                    <View style={styles.orderHeader}>
+                        <Text style={styles.orderId}>Order: #2234</Text>
+                        <Text style={styles.orderSummary}>
+                            (4 Items) $1200
+                        </Text>
+                    </View>
+                    <View style={[styles.orderHeader, { marginTop: 0, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
+                        <Image
+                            source={require('../../assets/images/kandura.png')}
+                            style={styles.productImage}
+                        />
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.productTitle}>Collar- 2334</Text>
+                            <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                            <Text style={styles.productPrice}>$120.00</Text>
                         </View>
-                    ))}
+                    </View>
+
+                    <View style={[styles.orderHeader, { marginTop: 20, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
+                        <Image
+                            source={require('../../assets/images/kandura.png')}
+                            style={styles.productImage}
+                        />
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.productTitle}>Collar- 2334</Text>
+                            <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                            <Text style={styles.productPrice}>$120.00</Text>
+                        </View>
+                    </View>
+
+                    {showAll && (
+                        <>
+                            <View style={[styles.orderHeader, { marginTop: 0, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
+                                <Image
+                                    source={require('../../assets/images/kandura.png')}
+                                    style={styles.productImage}
+                                />
+                                <View style={{ flex: 1 }}>
+                                    <Text style={styles.productTitle}>Collar- 2334</Text>
+                                    <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                                    <Text style={styles.productPrice}>$120.00</Text>
+                                </View>
+                            </View>
+
+                            <View style={[styles.orderHeader, { marginTop: 20, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
+                                <Image
+                                    source={require('../../assets/images/kandura.png')}
+                                    style={styles.productImage}
+                                />
+                                <View style={{ flex: 1 }}>
+                                    <Text style={styles.productTitle}>Collar- 2334</Text>
+                                    <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                                    <Text style={styles.productPrice}>$120.00</Text>
+                                </View>
+                            </View>
+                        </>
+                    )}
+
+                    {!showAll && <TouchableOpacity onPress={() => setShowAll(true)}>
+                        <Text style={styles.viewAllText}>View All</Text>
+                    </TouchableOpacity>}
                 </View>
-                <Text style={styles.deliveryText}>Packet In Delivery</Text>
 
                 {/* Divider */}
                 <View style={styles.divider} />
@@ -81,29 +126,37 @@ export default function TrackOrderScreen({ navigation }) {
                 {/* Order Status Details */}
                 <Text style={styles.statusHeader}>Order Status Details</Text>
 
-                {trackingSteps.map((step, index) => (
-                    <View key={index} style={styles.statusItem}>
-                        <View style={styles.statusIconContainer}>
-                            <View style={styles.circleOuter}>
-                                <View style={styles.circleInner} />
+                {
+                    trackingSteps.map((step, index) => (
+                        <View
+                            key={index}
+                            style={[
+                                styles.statusItem,
+                                { opacity: Boolean(step.completed) ? 1 : 0.5 }
+                            ]}
+                        >
+                            <View style={styles.statusIconContainer}>
+                                <View style={styles.circleOuter}>
+                                    <View style={styles.circleInner} />
+                                </View>
+                                {index !== trackingSteps.length - 1 && (
+                                    <View style={styles.verticalLine} />
+                                )}
                             </View>
-                            {index !== trackingSteps.length - 1 && (
-                                <View style={styles.verticalLine} />
-                            )}
-                        </View>
-                        <View style={styles.statusDetails}>
-                            <View style={styles.statusRow}>
-                                <Text style={styles.statusTitle}>
-                                    {step.title} - {step.date}
-                                </Text>
-                                <Text style={styles.statusTime}>{step.time}</Text>
+                            <View style={styles.statusDetails}>
+                                <View style={styles.statusRow}>
+                                    <Text style={styles.statusTitle}>
+                                        {step.title} - {step.date}
+                                    </Text>
+                                    {step?.completed && <Text style={styles.statusTime}>{step.time}</Text>}
+                                </View>
+                                <Text style={styles.statusLocation}>{step.location}</Text>
                             </View>
-                            <Text style={styles.statusLocation}>{step.location}</Text>
                         </View>
-                    </View>
-                ))}
-            </ScrollView>
-        </View>
+                    ))
+                }
+            </ScrollView >
+        </View >
     );
 }
 
@@ -125,14 +178,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     card: {
-       flexDirection: 'row',
+        flexDirection: 'column',
         backgroundColor: '#fff',
         borderRadius: 8,
         padding: 16,
         paddingVertical: 26,
         marginVertical: 10,
         marginHorizontal: 1,
-        alignItems: 'center',
+        alignItems: 'left',
         shadowColor: '#ccc',
         shadowOpacity: 1,
         shadowRadius: 5,
@@ -223,7 +276,7 @@ const styles = StyleSheet.create({
         width: 10,
         height: 10,
         borderRadius: 5,
-        backgroundColor: '#000'
+        backgroundColor: '#2c0808ff'
     },
     verticalLine: {
         width: 2,
@@ -250,5 +303,26 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: '#777',
         marginTop: 4
-    }
+    },
+    orderHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+    },
+    orderId: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    orderSummary: {
+        fontSize: 14,
+        color: '#555',
+    },
+    viewAllText: {
+        textAlign: 'left',
+        fontSize: 16,
+        color: Colors.black,
+        fontWeight: '500',
+        marginTop: 10,
+        textDecorationLine: 'underline'
+    },
 });

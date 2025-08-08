@@ -30,34 +30,21 @@ const EditProfileScreen = () => {
 
             {/* Form */}
             <View style={styles.form}>
-                <TextInput placeholder="Full Name" style={styles.input} placeholderTextColor="#999" />
-
-                <TouchableOpacity onPress={() => setShowDatePicker(true)} style={styles.inputRow}>
-                    <Text style={styles.dateText}>{dob || 'Date of Birth'}</Text>
-                    <Icon name="calendar-today" size={20} color="#888" />
-                </TouchableOpacity>
-                {/* {showDatePicker && (
-                    <DateTimePicker
-                        value={new Date()}
-                        mode="date"
-                        display="default"
-                        onChange={onDateChange}
-                    />
-                )} */}
-
+                <TextInput placeholder="Name" style={styles.input} placeholderTextColor="#999" />
                 <View style={styles.inputRow}>
                     <TextInput placeholder="Email" style={styles.inputField} placeholderTextColor="#999" keyboardType="email-address" />
                     <Icon name="mail-outline" size={20} color="#888" />
                 </View>
 
                 <View style={styles.inputRow}>
-                    <Image source={{ uri: 'https://flagcdn.com/w320/us.png' }} style={styles.flag} />
                     <TextInput placeholder="Phone Number" style={styles.inputField} keyboardType="phone-pad" placeholderTextColor="#999" />
                 </View>
 
                 <View style={styles.inputRow}>
-                    <TextInput placeholder="Gender" style={styles.inputField} placeholderTextColor="#999" />
-                    <Icon name="arrow-drop-down" size={24} color="#888" />
+                    <TextInput placeholder="Password" style={styles.inputField} placeholderTextColor="#999" />
+                </View>
+                <View style={styles.inputRow}>
+                    <TextInput placeholder="Address" style={styles.inputField} placeholderTextColor="#999" />
                 </View>
             </View>
 

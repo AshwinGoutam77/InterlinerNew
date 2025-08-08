@@ -10,7 +10,7 @@ import PsA1YearRiskCalculator from "../screens/PsA1YearRiskCalculator";
 import CustomHeader from "../components/header";
 import InquiryForm from "../screens/InquiryForm";
 import AboutUs from "../screens/AboutUs";
-import { Pressable, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, Linking, Pressable, Text, TouchableWithoutFeedback, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DashboardScreen from "../screens/Dashboard";
@@ -85,7 +85,7 @@ function HomeStack() {
                 name="ProductsPage"
                 component={ProductsPage}
                 options={{
-                    header: () => <CustomHeader title="Products" />,
+                    header: () => <CustomHeader title="Collar" />,
                 }}
             />
             <Stack.Screen
@@ -121,7 +121,7 @@ function HomeStack() {
                 name="AddNewAddressScreen"
                 component={AddNewAddressScreen}
                 options={{
-                    header: () => <CustomHeader title="Shipping Address" />,
+                    header: () => <CustomHeader title="New Address" />,
                 }}
             />
             <Stack.Screen
@@ -194,6 +194,20 @@ function HomeStack() {
                     header: () => <CustomHeader title="Payment" />,
                 }}
             />
+            <Stack.Screen
+                name="HelpCenterScreen"
+                component={HelpCenterScreen}
+                options={{
+                    header: () => <CustomHeader title="Help Center" />,
+                }}
+            />
+            <Stack.Screen
+                name="ProfileScreen"
+                component={ProfilePage}
+                options={{
+                    header: () => <CustomHeader title="Profile" />,
+                }}
+            />
         </Stack.Navigator>
     );
 }
@@ -215,6 +229,7 @@ function ProfileTab() {
                     header: () => <CustomHeader title="Edit Profile" />,
                 }}
             />
+
             <Stack.Screen
                 name="ShippingScreen"
                 component={ShippingScreen}
@@ -223,10 +238,24 @@ function ProfileTab() {
                 }}
             />
             <Stack.Screen
+                name="CheckoutScreen"
+                component={Checkout}
+                options={{
+                    header: () => <CustomHeader title="Checkout" />,
+                }}
+            />
+            <Stack.Screen
+                name="CartScreen"
+                component={CartScreen}
+                options={{
+                    header: () => <CustomHeader title="Shopping Bag" />,
+                }}
+            />
+            <Stack.Screen
                 name="AddNewAddressScreen"
                 component={AddNewAddressScreen}
                 options={{
-                    header: () => <CustomHeader title="Shipping Address" />,
+                    header: () => <CustomHeader title="New Address" />,
                 }}
             />
             <Stack.Screen
@@ -275,19 +304,84 @@ function ProfileTab() {
     )
 }
 
-function ProfileScreen() {
+function CartTab() {
     return (
         <Stack.Navigator screenOptions={navigationOptions}>
             <Stack.Screen
-                name="InquiryForm"
-                component={InquiryForm}
+                name="cart"
+                component={CartScreen}
                 options={{
-                    header: () => <CustomHeader title="PRESTO-PsA" />,
+                    header: () => <CustomHeader title="Shopping Bag" />,
+                }}
+            />
+            <Stack.Screen
+                name="CheckoutScreen"
+                component={Checkout}
+                options={{
+                    header: () => <CustomHeader title="Checkout" />,
+                }}
+            />
+            <Stack.Screen
+                name="ShippingScreen"
+                component={ShippingScreen}
+                options={{
+                    header: () => <CustomHeader title="Shipping Address" />,
+                }}
+            />
+            <Stack.Screen
+                name="AddNewAddressScreen"
+                component={AddNewAddressScreen}
+                options={{
+                    header: () => <CustomHeader title="New Address" />,
+                }}
+            />
+            <Stack.Screen
+                name="AddShippingScreen"
+                component={AddShippingScreen}
+                options={{
+                    header: () => <CustomHeader title="Choose Shipping" />,
+                }}
+            />
+            <Stack.Screen
+                name="PromoCodeScreen"
+                component={PromoCodeScreen}
+                options={{
+                    header: () => <CustomHeader title="Promo Code" />,
+                }}
+            />
+            <Stack.Screen
+                name="PaymentMethodScreen"
+                component={PaymentMethodScreen}
+                options={{
+                    header: () => <CustomHeader title="Payment" />,
+                }}
+            />
+            <Stack.Screen
+                name="TrackOrderListingScreen"
+                component={TrackOrderListingScreen}
+                options={{
+                    header: () => <CustomHeader title="Track Order" />,
                 }}
             />
         </Stack.Navigator>
     )
 }
+
+function PaymentTab() {
+    return (
+        <Stack.Navigator screenOptions={navigationOptions}>
+            <Stack.Screen
+                name="HistoryScreen"
+                component={HistoryScreen}
+                options={{
+                    header: () => <CustomHeader title="Previous Orders" />,
+                }}
+            />
+        </Stack.Navigator>
+    )
+}
+
+const cartItemCount = 3;
 
 const tabBarIcon = (route) => ({ color, size, focused }) => {
     let iconName;
@@ -305,35 +399,61 @@ const tabBarIcon = (route) => ({ color, size, focused }) => {
         case 'orders':
             iconName = focused ? 'receipt' : 'receipt-outline';
             break;
+        case 'cart':
+            iconName = focused ? 'cart' : 'bag-outline';
+            break;
         case 'whatsaap':
-            iconName = focused ? 'logo-whatsapp' : 'logo-whatsapp';
+            iconName = 'logo-whatsapp';
             break;
         default:
             iconName = focused ? 'ellipse' : 'ellipse-outline';
             break;
     }
 
-    return <Icon name={iconName} size={size} color={color} />;
+    return (
+        <View style={{ position: 'relative' }}>
+            <Icon name={iconName} size={size} color={color} />
+            {route.name === 'cart' && cartItemCount > 0 && (
+                <View
+                    style={{
+                        position: 'absolute',
+                        right: -7,
+                        top: -3,
+                        backgroundColor: Colors.primary,
+                        borderRadius: 8,
+                        width: 18,
+                        height: 18,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}
+                >
+                    <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>
+                        {cartItemCount}
+                    </Text>
+                </View>
+            )}
+        </View>
+    );
 };
 
 
 export default function Logged() {
-    const { t } = useTranslation();
     const insets = useSafeAreaInsets();
 
-    const getTabBarVisibility = (route) => {
-        const routeName = getFocusedRouteNameFromRoute(route) ?? 'Dashboard';
+    const getTabBarVisibility = (route, tabName) => {
+        const routeName = getFocusedRouteNameFromRoute(route) ?? tabName;
 
         if ([
-            'ProductDetailScreen', 'CartScreen', 'CheckoutScreen', 'ShippingScreen', 'AddNewAddressScreen', 'AddShippingScreen',
+            'ProductDetailScreen', 'CartScreen', 'cart', 'CheckoutScreen', 'ShippingScreen', 'AddNewAddressScreen', 'AddShippingScreen',
             'InquiryForm', 'AboutUs', 'PromoCodeScreen', 'PaymentMethodScreen', 'TrackOrderScreen', 'HistoryScreen', 'RaiseComplainScreen',
             'PaymentScreen', 'ProfileScreen', 'EditProfile', 'LanguageScreen', 'TrackOrderListingScreen', 'OrderDetailsScreen'
         ].includes(routeName)) {
             return 'none';
         }
 
-        return 'flex'; // Show tab bar
+        return 'flex';
     };
+
 
     return (
         <Tab.Navigator
@@ -352,7 +472,7 @@ export default function Logged() {
                     paddingBottom: 15,
                     paddingTop: 15,
                     backgroundColor: '#fff',
-                    display: getTabBarVisibility(route),
+                    display: getTabBarVisibility(route, route.name),
                 },
                 tabBarIcon: tabBarIcon(route),
                 tabBarButton: (props) => (
@@ -377,9 +497,30 @@ export default function Logged() {
         >
 
             <Tab.Screen name="Home" component={HomeStack} />
-            <Tab.Screen name="whatsaap" component={HomeStack} />
-            <Tab.Screen name="orders" component={HomeStack} />
-            <Tab.Screen name="payment" component={HomeStack} />
+            {/* <Tab.Screen name="whatsaap" component={HomeStack} /> */}
+            <Tab.Screen
+                name="whatsaap"
+                component={HomeStack}
+                listeners={{
+                    tabPress: (e) => {
+                        e.preventDefault();
+                        const phoneNumber = '+971504775180';
+                        const url = `whatsapp://send?phone=${phoneNumber}`;
+
+                        Linking.canOpenURL(url)
+                            .then((supported) => {
+                                if (supported) {
+                                    Linking.openURL(url);
+                                } else {
+                                    Alert.alert('Error', 'Make sure WhatsApp is installed');
+                                }
+                            })
+                            .catch((err) => console.error('An error occurred', err));
+                    },
+                }}
+            />
+            <Tab.Screen name="orders" component={PaymentTab} />
+            <Tab.Screen name="cart" component={CartTab} />
             <Tab.Screen name="profile" component={ProfileTab} />
         </Tab.Navigator>
     );

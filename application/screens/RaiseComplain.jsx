@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
 import {
@@ -14,7 +15,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../src/constants/colors';
 
 const orderData = [
-    { id: '#2344', status: 'Pending', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' },
+    { id: '#2344', order: "#233344", createdDate: "02/07/025", status: 'Pending', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' },
     { id: '#2344', status: 'Complete', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' },
     { id: '#2344', status: 'Complete', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' }
 ];
@@ -25,22 +26,35 @@ export default function RaiseComplainScreen({ navigation }) {
     const hideModal = () => setVisible(false);
     const [orderId, setOrderId] = useState(null);
     const [complaint, setComplaint] = useState('');
-    const [open, setOpen] = useState(false);
     const [orderOptions, setOrderOptions] = useState([
         { label: '#2344', value: '2344' },
         { label: '#2345', value: '2345' },
         { label: '#2346', value: '2346' },
     ]);
 
+    const [feedbackVisible, setFeedbackVisible] = useState(false);
+    const [feedbackMessage, setFeedbackMessage] = useState('');
+    const [feedbackRating, setFeedbackRating] = useState(5);
+
+
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={showModal}>
+                <Icon name='add' size={24} />
                 <Text style={styles.buttonText}>Make complain</Text>
             </TouchableOpacity>
             <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
                 {orderData.map((order, index) => (
                     <View key={index} style={styles.card}>
+                        <View style={styles.orderRow}>
+                            <Text style={styles.label}>Order</Text>
+                            <Text style={styles.value}>{order.order}</Text>
+                        </View>
+                        <View style={styles.orderRow}>
+                            <Text style={styles.label}>Created Date</Text>
+                            <Text style={styles.value}>{order.createdDate}</Text>
+                        </View>
                         <View style={styles.orderRow}>
                             <Text style={styles.label}>Ticket ID</Text>
                             <Text style={styles.value}>{order.id}</Text>
@@ -57,6 +71,12 @@ export default function RaiseComplainScreen({ navigation }) {
                             <Text style={styles.descriptionRowLabel}>Description</Text>
                             <Text style={styles.descriptionRowLabelValue}>{order.description}</Text>
                         </View>
+                        <TouchableOpacity
+                            style={[styles.submitBtn, { marginTop: 10 }]}
+                            onPress={() => setFeedbackVisible(true)}
+                        >
+                            <Text style={styles.submitText}>Give Feedback</Text>
+                        </TouchableOpacity>
                     </View>
                 ))}
             </ScrollView>
@@ -100,16 +120,79 @@ export default function RaiseComplainScreen({ navigation }) {
                     />
 
                     {/* Submit Button */}
-                    <TouchableOpacity style={styles.submitBtn} onPress={() => {
+                    <TouchableOpacity style={styles.ModalsubmitBtn} onPress={() => {
                         // Handle complaint submission logic here
                         console.log('Complaint submitted:', { orderId, complaint });
                         hideModal();
                     }}>
-                        <Text style={styles.submitText}>Submit Complaint</Text>
+                        <Text style={styles.ModalsubmitText}>Submit Complaint</Text>
                     </TouchableOpacity>
                 </Modal>
             </Portal>
-        </View>
+
+            {/* Feedback Modal */}
+            <Portal>
+                <Modal
+                    visible={feedbackVisible}
+                    transparent
+                    animationType="slide"
+                    contentContainerStyle={containerStyle}
+                >
+                    {/* Close */}
+                    <TouchableOpacity onPress={() => setFeedbackVisible(false)} style={styles.closeIcon}>
+                        <Icon name="close" size={24} color="#000" />
+                    </TouchableOpacity>
+
+                    <Text style={styles.title}>Feedback</Text>
+
+                    {/* Message */}
+                    <Text style={styles.label}>Message</Text>
+                    <TextInput
+                        style={styles.textarea}
+                        value={feedbackMessage}
+                        onChangeText={setFeedbackMessage}
+                        multiline
+                        numberOfLines={4}
+                        placeholder="Enter your feedback..."
+                        textAlignVertical="top"
+                    />
+
+                    {/* Rating */}
+                    <Text style={styles.label}>Rating</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'start', gap: 10, marginBottom: 10 }}>
+                        {[1, 2, 3, 4, 5].map((rating) => (
+                            <TouchableOpacity
+                                key={rating}
+                                style={{
+                                    backgroundColor: feedbackRating === rating ? Colors.primary : '#eee',
+                                    padding: 10,
+                                    borderRadius: 6,
+                                    width: 45,
+                                    alignItems: 'center',
+                                }}
+                                onPress={() => setFeedbackRating(rating)}
+                            >
+                                <Text style={{ color: feedbackRating === rating ? '#fff' : '#000' }}>{rating}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
+                    {/* Submit Button */}
+                    <TouchableOpacity
+                        style={[styles.ModalsubmitBtn, { marginTop: 2 }]}
+                        onPress={() => {
+                            console.log('Feedback:', { feedbackMessage, feedbackRating });
+                            setFeedbackVisible(false);
+                            setFeedbackMessage('');
+                            setFeedbackRating(5);
+                        }}
+                    >
+                        <Text style={styles.ModalsubmitText}>Submit Feedback</Text>
+                    </TouchableOpacity>
+                </Modal>
+            </Portal>
+
+        </View >
     );
 }
 
@@ -169,8 +252,8 @@ const styles = StyleSheet.create({
     },
     descriptionRowLabelValue: {
         fontSize: 14,
-        fontWeight: 'bold',
-        color: '#000'
+        fontWeight: '400',
+        color: '#000000ff'
     },
     buttonGrid: {
         marginTop: 12,
@@ -178,19 +261,41 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'space-between'
     },
-    button: {
+    ModalsubmitBtn: {
         width: '48%',
         backgroundColor: Colors.primary,
-        paddingVertical: 10,
+        paddingVertical: 12,
         borderRadius: 6,
         marginVertical: 4,
-        // marginLeft: 'auto'
+        marginLeft: 'auto',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2,
+    },
+    ModalsubmitText: {
+        color: '#ffffffff',
+        textAlign: 'center',
+        fontSize: 14,
+        fontWeight: '600',
+    },
+    button: {
+        // width: '48%',
+        // backgroundColor: Colors.primary,
+        paddingVertical: 0,
+        borderRadius: 6,
+        marginVertical: 4,
+        marginLeft: 'auto',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 2,
     },
     buttonText: {
-        color: '#fff',
+        color: '#000000',
         textAlign: 'center',
         fontSize: 16,
-        fontWeight: '600'
+        fontWeight: '600',
     },
     bottomNav: {
         position: 'absolute',
@@ -221,16 +326,18 @@ const styles = StyleSheet.create({
         backgroundColor: '#f9f9f9',
     },
     submitBtn: {
-        backgroundColor: Colors.primary,
+        // backgroundColor: Colors.primary,
         borderRadius: 8,
-        paddingVertical: 12,
+        padding: 0,
         alignItems: 'center',
         marginTop: 20,
+        marginLeft: 'auto',
     },
     submitText: {
-        color: '#fff',
+        color: '#000000',
         fontSize: 16,
         fontWeight: '600',
+        textDecorationLine: 'underline',
     },
     overlay: {
         flex: 1,

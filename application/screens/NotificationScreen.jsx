@@ -44,6 +44,7 @@ const NotificationScreen = () => {
             <View>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.subtitle}>{item.subtitle}</Text>
+                <Text style={styles.date}>24/7/2025</Text>
             </View>
         </View>
     );
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     },
     card: {
         flexDirection: 'row',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         padding: 14,
         backgroundColor: '#F9F9F9',
         borderRadius: 8,
@@ -108,6 +109,11 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 13,
         color: '#777',
+    },
+    date: {
+        fontSize: 12,
+        color: '#777',
+        marginTop: 4,
     },
 });
 

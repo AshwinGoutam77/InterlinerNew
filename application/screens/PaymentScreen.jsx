@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react-native/no-inline-styles */
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
 import {
@@ -20,23 +22,31 @@ const tabs = ['Transaction', 'Due By Order', 'Direct Payment',];
 const transactionData = [
     {
         id: 1,
-        title: 'Lawson Chair',
+        title: 'Paid Directly',
         amount: '$120',
-        type: 'Orders',
+        type: 'Cash',
         icon: require('../../assets/images/kandura.png'),
         date: 'Dec 15, 2024 | 10:00 AM',
         color: '#F87171',
     },
     {
         id: 2,
-        title: 'Top Up Wallet',
+        title: 'Partial Payment',
         amount: '$400',
-        type: 'Top Up',
+        type: 'Cheque',
         icon: require('../../assets/images/kandura.png'),
         date: 'Dec 14, 2024 | 16:42 PM',
         color: '#60A5FA',
     },
-    // Add more...
+    {
+        id: 3,
+        title: 'Full Payment',
+        amount: '$100',
+        type: 'Card',
+        icon: require('../../assets/images/kandura.png'),
+        date: 'Dec 14, 2024 | 16:42 PM',
+        color: '#15c55eff',
+    },
 ];
 
 export default function PaymentScreen() {
@@ -72,7 +82,7 @@ export default function PaymentScreen() {
 
     const renderTransaction = ({ item }) => (
         <View style={styles.itemContainer}>
-            <Image source={item.icon} style={styles.icon} />
+            {/* <Image source={item.icon} style={styles.icon} /> */}
             <View style={{ flex: 1 }}>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.date}>{item.date}</Text>
@@ -93,8 +103,8 @@ export default function PaymentScreen() {
     );
 
     const orderData = [
-        { id: '#2344', status: 'Pending', totalAmount: '30', AmountPaid: '20', DueAmount: '10', paidVia: 'Cash', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum ' },
-        { id: '#2344', status: 'Pending', totalAmount: '30', AmountPaid: '20', DueAmount: '10', paidVia: 'Cash', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum ' },
+        { id: '#2344', status: 'Pending', totalAmount: '30', AmountPaid: '20', DueAmount: '10', DueDate: '21/11/2025', paidVia: 'Cash', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum ' },
+        { id: '#2344', status: 'Pending', totalAmount: '30', AmountPaid: '20', DueAmount: '10', DueDate: '21/11/2025', paidVia: 'Cash', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum ' },
     ];
 
     const DueByOrder = () => (
@@ -102,16 +112,12 @@ export default function PaymentScreen() {
             {orderData.map((order, index) => (
                 <View key={index} style={styles.card}>
                     <View style={styles.orderRow}>
-                        <Text style={styles.label}>Order ID</Text>
-                        <Text style={styles.value}>{order.id}</Text>
+                        <Text style={styles.label}>Order Date</Text>
+                        <Text style={styles.value}>{order.DueDate}</Text>
                     </View>
                     <View style={styles.orderRow}>
-                        <Text style={styles.label}>Status</Text>
-                        <Text style={{
-                            fontSize: 15,
-                            fontWeight: 'bold',
-                            color: order.status === 'Complete' ? 'green' : 'red'
-                        }}>{order.status}</Text>
+                        <Text style={styles.label}>Order ID</Text>
+                        <Text style={styles.value}>{order.id}</Text>
                     </View>
                     <View style={styles.orderRow}>
                         <Text style={styles.label}>Total Amount</Text>
@@ -122,24 +128,74 @@ export default function PaymentScreen() {
                         <Text style={styles.value}>$ {order.AmountPaid}</Text>
                     </View>
                     <View style={styles.orderRow}>
-                        <Text style={styles.label}>Due Amount</Text>
+                        <Text style={styles.label}>Balance Due</Text>
                         <Text style={styles.value}>$ {order.DueAmount}</Text>
-                    </View>
-                    <View style={styles.orderRow}>
-                        <Text style={styles.label}>Paid Via</Text>
-                        <Text style={styles.value}>{order.paidVia}</Text>
                     </View>
                     <View style={styles.descriptionRow}>
                         <Text style={styles.descriptionRowLabel}>Remark</Text>
                         <Text style={styles.descriptionRowLabelValue}>{order.description}</Text>
                     </View>
                     <TouchableOpacity style={styles.button} onPress={showModal}>
-                        <Text style={styles.buttonText}>Pay Due Amount</Text>
+                        <Text style={styles.buttonText}>Pay Now</Text>
                     </TouchableOpacity>
                 </View>
             ))}
         </ScrollView>
     )
+
+    const DirectPay = () => {
+        return (
+            <ScrollView style={[styles.scroll, { marginTop: 20 }]} showsVerticalScrollIndicator={false}>
+                <Text style={[styles.label, { marginBottom: 10 }]}>Payment Via</Text>
+                <View style={styles.pickerWrapper}>
+                    <Picker
+                        selectedValue={orderOptions}
+                        onValueChange={(itemValue) => setOrderOptions(itemValue)}
+                        style={styles.picker}
+                        dropdownIconColor="#666"
+                    >
+                        <Picker.Item label="Choose Method" value="" />
+                        <Picker.Item label="Cash" value="Cash" />
+                        <Picker.Item label="Cheque" value="Cheque" />
+                        <Picker.Item label="Card" value="Card" />
+                    </Picker>
+                </View>
+
+
+                {/* Complaint Textarea */}
+                <Text style={[styles.label, { marginBottom: 10 }]}>Amount</Text>
+                <TextInput
+                    style={styles.input}
+                    value={complaint}
+                    onChangeText={setComplaint}
+                    multiline
+                    numberOfLines={1}
+                    placeholder="Enter Amount"
+                    textAlignVertical="center"
+                />
+
+                <Text style={[styles.label, { marginBottom: 10, marginTop: 10 }]}>Remark</Text>
+                <TextInput
+                    style={styles.textarea}
+                    value={complaint}
+                    onChangeText={setComplaint}
+                    multiline
+                    numberOfLines={1}
+                    placeholder="Enter Your Remark"
+                    textAlignVertical="top"
+                />
+
+                {/* Submit Button */}
+                <TouchableOpacity style={styles.submitBtn} onPress={() => {
+                    // Handle complaint submission logic here
+                    console.log('Complaint submitted:', { orderId, complaint });
+                    hideModal();
+                }}>
+                    <Text style={styles.submitText}>Submit</Text>
+                </TouchableOpacity>
+            </ScrollView>
+        )
+    }
 
     const getContentForTab = () => {
         switch (activeTab) {
@@ -148,7 +204,7 @@ export default function PaymentScreen() {
             case 'Due By Order':
                 return <DueByOrder />;
             case 'Direct Payment':
-                return <Text style={styles.placeholder}>No content for this tab.</Text>;
+                return <DirectPay />
             default:
                 return null;
         }
@@ -334,8 +390,8 @@ const styles = StyleSheet.create({
     },
     descriptionRowLabelValue: {
         fontSize: 14,
-        fontWeight: 'bold',
-        color: '#000'
+        fontWeight: '400',
+        color: '#000000b4'
     },
     buttonGrid: {
         marginTop: 12,
@@ -344,7 +400,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     button: {
-        width: '48%',
+        width: '38%',
         backgroundColor: Colors.primary,
         paddingVertical: 10,
         borderRadius: 6,
@@ -430,6 +486,8 @@ const styles = StyleSheet.create({
         height: 50,
         width: '100%',
         color: '#333',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
 
 });

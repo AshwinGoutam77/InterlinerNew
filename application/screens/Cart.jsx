@@ -91,16 +91,7 @@ export default function CartScreen() {
             <View style={styles.details}>
                 <Text style={styles.title}>{item.title}</Text>
                 <View style={styles.colorRow}>
-                    <View
-                        style={[
-                            styles.colorDot,
-                            {
-                                backgroundColor:
-                                    item.color === 'Brown' ? '#8B4513' : '#6C7A89',
-                            },
-                        ]}
-                    />
-                    <Text style={styles.colorText}>{item.color}</Text>
+                    <Text style={styles.colorText}>Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
                 </View>
                 <Text style={styles.price}>${item.price.toFixed(2)}</Text>
             </View>
@@ -139,7 +130,7 @@ export default function CartScreen() {
                     style={styles.checkoutBtn}
                     onPress={() => navigation.navigate('CheckoutScreen')}
                 >
-                    <Text style={styles.checkoutText}>Checkout</Text>
+                    <Text style={styles.checkoutText}>Continue</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -204,6 +195,7 @@ const styles = StyleSheet.create({
     colorText: {
         fontSize: 12,
         color: '#333',
+        width: '80%',
     },
     price: {
         fontSize: 16,

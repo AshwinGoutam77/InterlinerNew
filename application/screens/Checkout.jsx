@@ -8,6 +8,7 @@ import {
     Image,
     StatusBar,
     SafeAreaView,
+    TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
@@ -138,16 +139,39 @@ const Checkout = () => {
                             <Text style={styles.summaryValue}>-${discount.toFixed(2)}</Text>
                         </View>
                         <View style={[styles.summaryRow, styles.totalRow]}>
-                            <Text style={styles.totalLabel}>Total</Text>
+                            <Text style={styles.summaryLabel}>Total</Text>
                             <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
                         </View>
                     </View>
+                    <View>
+                        <Text style={styles.label}>Remark</Text>
+                    </View>
+                    <TextInput
+                        style={styles.textarea}
+                        // value={feedbackMessage}
+                        // onChangeText={setFeedbackMessage}
+                        multiline
+                        numberOfLines={4}
+                        placeholder="Enter your feedback..."
+                        textAlignVertical="top"
+                    />
                 </ScrollView>
             </SafeAreaView>
-            <View style={styles.buttonContainer}>
+            {/* <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.continueButton} onPress={() => navigation.navigate('PaymentMethodScreen')}>
                     <Text style={styles.continueButtonText}>Continue to Payment</Text>
-                    {/* <Text style={styles.continueArrow}>→</Text> */}
+                </TouchableOpacity>
+            </View> */}
+            <View style={styles.footer}>
+                <View>
+                    <Text style={styles.totalLabel}>Total price</Text>
+                    <Text style={styles.totalPrice}>${total.toFixed(2)}</Text>
+                </View>
+                <TouchableOpacity
+                    style={styles.checkoutBtn}
+                    onPress={() => navigation.navigate('PaymentMethodScreen')}
+                >
+                    <Text style={styles.checkoutText}>Confirm Order</Text>
                 </TouchableOpacity>
             </View>
         </>
@@ -159,6 +183,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fdfdfd',
         paddingHorizontal: 20,
+        paddingBottom: 120
     },
     header: {
         flexDirection: 'row',
@@ -437,11 +462,11 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         marginTop: 10,
     },
-    totalLabel: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#000',
-    },
+    // totalLabel: {
+    //     fontSize: 20,
+    //     fontWeight: 'bold',
+    //     color: '#000',
+    // },
     totalValue: {
         fontSize: 18,
         fontWeight: 'bold',
@@ -470,6 +495,84 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        backgroundColor: '#fff',
+        padding: 26,
+        borderRadius: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.05,
+        shadowRadius: 5,
+        elevation: 3,
+    },
+    totalLabel: {
+        fontSize: 14,
+        color: '#000000',
+    },
+    totalPrice: {
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
+    checkoutBtn: {
+        backgroundColor: Colors.primary,
+        borderRadius: 5,
+        paddingVertical: 16,
+        paddingHorizontal: 48,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    checkoutText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '800',
+    },
+    bottomNav: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 60,
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        borderTopColor: '#eee',
+        borderTopWidth: 1,
+    },
+    navItem: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    navText: {
+        fontSize: 10,
+        marginTop: 2,
+    },
+    activeNav: {
+        color: '#000',
+    },
+    label: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#000000',
+        marginBottom: 8,
+        marginTop: 20,
+    },
+    textarea: {
+        height: 100,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 16,
+        fontSize: 14,
+        backgroundColor: '#ffffffff',
+        marginBottom: 20,
     },
 });
 

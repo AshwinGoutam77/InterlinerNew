@@ -15,10 +15,10 @@ import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 
 const categories = [
-    { label: 'Collar', icon: require('../../assets/images/shirt-collar.png') },
-    { label: 'Pocket', icon: require('../../assets/images/shirt-collar.png') },
-    { label: 'Faduka', icon: require('../../assets/images/shirt-cuffs.png') },
-    { label: 'Chest pieces', icon: require('../../assets/images/shirt-collar.png') },
+    { id: '1', label: 'Collar', icon: require('../../assets/images/shirt-collar.png') },
+    { id: '2', label: 'Pocket', icon: require('../../assets/images/shirt-collar.png') },
+    { id: '3', label: 'Faduka', icon: require('../../assets/images/shirt-cuffs.png') },
+    { id: '4', label: 'Chest pieces', icon: require('../../assets/images/shirt-collar.png') },
 ];
 
 const products = [
@@ -56,8 +56,15 @@ const ProductsPage = () => {
     const navigation = useNavigation();
     const renderCategory = ({ item }) => (
         <TouchableOpacity style={styles.categoryItem}>
-            <Image source={item.icon} style={styles.categoryImage} />
-            <Text style={styles.categoryLabel}>{item.label}</Text>
+            <Image
+                source={item.icon}
+                style={[
+                    styles.categoryImage,
+                    { borderWidth: item?.id == 1 ? 2 : 0, borderColor: Colors.primary }
+                ]}
+            />
+
+            <Text style={[styles.categoryLabel, { color: item?.id == 1 ? Colors.primary : "#000000" }]}>{item.label}</Text>
         </TouchableOpacity>
     );
 
@@ -76,8 +83,6 @@ const ProductsPage = () => {
 
     return (
         <ScrollView style={styles.container}>
-
-            <Text style={styles.sectionTitle}>Related Categories</Text>
             <FlatList
                 horizontal
                 data={categories}
@@ -87,7 +92,7 @@ const ProductsPage = () => {
                 contentContainerStyle={styles.categoryList}
             />
 
-            <Text style={styles.sectionTitle}>Collar</Text>
+            {/* <Text style={styles.sectionTitle}>Collar</Text> */}
             <FlatList
                 data={products}
                 renderItem={renderProduct}
@@ -104,7 +109,7 @@ const ProductsPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 20,
+        // paddingTop: 20,
         paddingHorizontal: 20,
         backgroundColor: '#fff',
     },

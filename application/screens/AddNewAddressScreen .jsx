@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 
@@ -16,28 +16,89 @@ const AddNewAddressScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.heading}>Add New Address</Text>
+            <ScrollView showsVerticalScrollIndicator={false} >
+                <Text style={styles.label}>Address Line 1 (street, house/building no.)</Text>
+                <TextInput
+                    placeholder=""
+                    value={label}
+                    onChangeText={setLabel}
+                    style={styles.input}
+                />
+                <Text style={styles.label}>Address Line 1 (street, house/building no.)</Text>
+                <TextInput
+                    placeholder=""
+                    value={label}
+                    onChangeText={setLabel}
+                    style={styles.input}
+                />
 
-            <Text style={styles.label}>Label</Text>
-            <TextInput
-                placeholder="e.g. Home, Office"
-                value={label}
-                onChangeText={setLabel}
-                style={styles.input}
-            />
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ width: '48%' }}>
+                        <Text style={styles.label}>City</Text>
+                        <TextInput
+                            placeholder=""
+                            value={label}
+                            onChangeText={setLabel}
+                            style={styles.input}
+                        />
+                    </View>
+                    <View style={{ width: '48%' }}>
+                        <Text style={styles.label}>State / Region</Text>
+                        <TextInput
+                            placeholder=""
+                            value={label}
+                            onChangeText={setLabel}
+                            style={styles.input}
+                        />
+                    </View>
+                </View>
 
-            <Text style={styles.label}>Full Address</Text>
-            <TextInput
-                placeholder="Enter complete address"
-                value={address}
-                onChangeText={setAddress}
-                style={[styles.textarea, { height: 100 }]}
-                multiline
-            />
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ width: '48%' }}>
+                        <Text style={styles.label}>Postal / Zip Code</Text>
+                        <TextInput
+                            placeholder=""
+                            value={label}
+                            onChangeText={setLabel}
+                            style={styles.input}
+                        />
+                    </View>
+                    <View style={{ width: '48%' }}>
+                        <Text style={styles.label}>Country</Text>
+                        <TextInput
+                            placeholder=""
+                            value={label}
+                            onChangeText={setLabel}
+                            style={styles.input}
+                        />
+                    </View>
+                </View>
 
-            <TouchableOpacity style={styles.saveBtn} onPress={() => navigation.navigate('ShippingScreen')}>
-                <Text style={styles.saveText}>Save Address</Text>
-            </TouchableOpacity>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1, borderColor: '#ddd', paddingTop: 20 }}>
+                    <View style={{ width: '48%' }}>
+                        <Text style={styles.label}>Address Name</Text>
+                        <TextInput
+                            placeholder=""
+                            value={label}
+                            onChangeText={setLabel}
+                            style={styles.input}
+                        />
+                    </View>
+                    <View style={{ width: '48%' }}>
+                        <Text style={styles.label}>Contact Number</Text>
+                        <TextInput
+                            placeholder=""
+                            value={label}
+                            onChangeText={setLabel}
+                            style={styles.input}
+                        />
+                    </View>
+                </View>
+
+                <TouchableOpacity style={styles.saveBtn} onPress={() => navigation.navigate('ShippingScreen')}>
+                    <Text style={styles.saveText}>Save Address</Text>
+                </TouchableOpacity>
+            </ScrollView>
         </SafeAreaView>
     );
 };
@@ -56,9 +117,9 @@ const styles = StyleSheet.create({
         marginBottom: 24,
     },
     label: {
-        fontSize: 16,
+        fontSize: 14,
         marginBottom: 6,
-        fontWeight: '600',
+        fontWeight: '400',
         color: '#474646ff',
     },
     input: {
@@ -66,7 +127,7 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         borderRadius: 8,
         paddingHorizontal: 16,
-        paddingVertical: 18,
+        paddingVertical: 16,
         marginBottom: 20,
         backgroundColor: '#ffffffff',
         fontSize: 15,
