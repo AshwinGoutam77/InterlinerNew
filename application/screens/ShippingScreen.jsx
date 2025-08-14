@@ -64,7 +64,7 @@ export default function ShippingScreen() {
             </ScrollView>
 
             <TouchableOpacity style={styles.applyBtn} onPress={() => navigation.navigate('CheckoutScreen')}>
-                <Text style={styles.applyText}>Make Default Address</Text>
+                <Text style={styles.applyText}>Make Regular Address</Text>
             </TouchableOpacity>
         </View>
     );

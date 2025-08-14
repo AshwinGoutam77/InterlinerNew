@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fdfdfd'
+    backgroundColor: '#fdfdfd',
   },
   title: {
     fontSize: 22,
@@ -105,11 +105,11 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor:  Colors.primary,
-    backgroundColor: selected ?  Colors.primary : 'transparent'
+    borderColor: Colors.primary,
+    backgroundColor: selected ? Colors.primary : 'transparent'
   }),
   applyBtn: {
-    backgroundColor:  Colors.primary,
+    backgroundColor: Colors.primary,
     padding: 18,
     fontWeight: '800',
     alignItems: 'center',

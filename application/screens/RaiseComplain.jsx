@@ -11,8 +11,10 @@ import {
     TextInput
 } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/AntDesign';
 import Colors from '../src/constants/colors';
+import CustomerFilter from '../components/CustomerFilter';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const orderData = [
     { id: '#2344', order: "#233344", createdDate: "02/07/025", status: 'Pending', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' },
@@ -35,13 +37,22 @@ export default function RaiseComplainScreen({ navigation }) {
     const [feedbackVisible, setFeedbackVisible] = useState(false);
     const [feedbackMessage, setFeedbackMessage] = useState('');
     const [feedbackRating, setFeedbackRating] = useState(5);
+    const handleAttachPhoto = () => {
+        launchImageLibrary({ mediaType: 'photo', quality: 0.7 }, (response) => {
+            if (!response.didCancel && !response.errorCode) {
+                console.log("Selected image:", response.assets[0].uri);
+                // You can store the URI in state if you want to preview it
+            }
+        });
+    };
 
 
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
     return (
         <View style={styles.container}>
+            {/* <CustomerFilter /> */}
             <TouchableOpacity style={styles.button} onPress={showModal}>
-                <Icon name='add' size={24} />
+                <Icon name='plus' size={24} />
                 <Text style={styles.buttonText}>Make complain</Text>
             </TouchableOpacity>
             <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
@@ -89,8 +100,16 @@ export default function RaiseComplainScreen({ navigation }) {
 
                     <Text style={styles.title}>Make complain</Text>
 
-                    {/* Order ID Dropdown */}
-                    <Text style={styles.label}>Select Order ID</Text>
+                    <TouchableOpacity
+                        style={styles.attachPhotoBtn}
+                        onPress={handleAttachPhoto}
+                    >
+                        <Icon name="camera" size={20} color="#ffffffff" />
+                        <Text style={styles.attachPhotoText}>Attach Photo</Text>
+                    </TouchableOpacity>
+
+                    {/* Order Number Dropdown */}
+                    <Text style={styles.label}>Select Order Number</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={orderOptions}
@@ -199,7 +218,7 @@ export default function RaiseComplainScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fdfdfd',
         // paddingTop: 20,
         paddingHorizontal: 20
     },
@@ -290,6 +309,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         gap: 2,
+        marginTop: 20,
     },
     buttonText: {
         color: '#000000',
@@ -371,5 +391,20 @@ const styles = StyleSheet.create({
         width: '100%',
         color: '#333',
     },
-
+    attachPhotoBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: Colors.primary,
+        paddingVertical: 10,
+        paddingHorizontal: 14,
+        borderRadius: 8,
+        gap: 10,
+        marginTop: 8,
+        alignSelf: 'flex-start'
+    },
+    attachPhotoText: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: '600',
+    },
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     View,
     Text,
@@ -13,9 +13,11 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
+import { CurrencyContext } from '../context/CurrencyContext';
 
 const Checkout = () => {
     const navigation = useNavigation();
+    const { currency } = useContext(CurrencyContext);
     const orderItems = [
         {
             id: 1,
@@ -86,7 +88,7 @@ const Checkout = () => {
                     </View>
 
                     {/* Choose Shipping */}
-                    <View style={styles.section}>
+                    {/* <View style={styles.section}>
                         <Text style={styles.sectionTitle}>Choose Shipping</Text>
                         <View style={styles.shippingOption}>
                             <View style={styles.shippingIcon}>
@@ -96,12 +98,11 @@ const Checkout = () => {
                                 <Text style={styles.shippingTitle}>Regular</Text>
                                 <Text style={styles.shippingDate}>Estimated ... Dec 20-22</Text>
                             </View>
-                            {/* <Text style={styles.shippingPrice}>$15</Text> */}
                             <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate('AddShippingScreen')}>
                                 <Text style={styles.editIcon}><Icon name='chevron-right' style={styles.editIcon} /></Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </View> */}
 
                     {/* Promo Code */}
                     <View style={styles.section}>
@@ -157,15 +158,10 @@ const Checkout = () => {
                     />
                 </ScrollView>
             </SafeAreaView>
-            {/* <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.continueButton} onPress={() => navigation.navigate('PaymentMethodScreen')}>
-                    <Text style={styles.continueButtonText}>Continue to Payment</Text>
-                </TouchableOpacity>
-            </View> */}
             <View style={styles.footer}>
                 <View>
                     <Text style={styles.totalLabel}>Total price</Text>
-                    <Text style={styles.totalPrice}>${total.toFixed(2)}</Text>
+                    <Text style={styles.totalPrice}>{currency}{total.toFixed(2)}</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.checkoutBtn}

@@ -13,12 +13,17 @@ export const AppProvider = ({ children }) => {
         (async () => {
             const storedLang = await AsyncStorage.getItem('appLanguage');
             const storedRTL = await AsyncStorage.getItem('appRTL');
+
             if (storedLang) {
                 setLanguage(storedLang);
                 i18n.changeLanguage(storedLang);
             }
+
             if (storedRTL !== null) {
-                setIsRTL(storedRTL === 'true');
+                const rtlValue = storedRTL === 'true';
+                setIsRTL(rtlValue);
+                I18nManager.allowRTL(rtlValue);
+                I18nManager.forceRTL(rtlValue);
             }
         })();
     }, []);
@@ -32,12 +37,20 @@ export const AppProvider = ({ children }) => {
         const shouldBeRTL = rtlLanguages.includes(lang);
         setIsRTL(shouldBeRTL);
         await AsyncStorage.setItem('appRTL', shouldBeRTL.toString());
+
+        I18nManager.allowRTL(shouldBeRTL);
+        I18nManager.forceRTL(shouldBeRTL);
+        // Might need to restart app here for layout to take effect
     };
 
     const toggleRTL = async () => {
         const newRTL = !isRTL;
         setIsRTL(newRTL);
         await AsyncStorage.setItem('appRTL', newRTL.toString());
+
+        I18nManager.allowRTL(newRTL);
+        I18nManager.forceRTL(newRTL);
+        // Might need to restart app here as well
     };
 
     return (

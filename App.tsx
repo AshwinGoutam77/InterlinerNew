@@ -13,6 +13,8 @@ import LoginScreen from './application/screens/LoginScreen';
 import RegisterScreen from './application/screens/RegisterScreen';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './application/src/i18n/i18n';
+import { CurrencyProvider } from './application/context/CurrencyContext';
+import ForgotPassword from './application/screens/ForgotPassword';
 
 const RootStack = createNativeStackNavigator();
 
@@ -33,21 +35,24 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <PaperProvider>
         <AppProvider>
-          <I18nextProvider i18n={i18n}>
-            {/* <RootStack.Navigator screenOptions={{ headerShown: false }}>
+          <CurrencyProvider>
+            <I18nextProvider i18n={i18n}>
+              {/* <RootStack.Navigator screenOptions={{ headerShown: false }}>
           {showWalkthrough ? (
             <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
           ) : (
             <RootStack.Screen name="MainApp" component={Logged} />
           )}
         </RootStack.Navigator> */}
-            <RootStack.Navigator screenOptions={{ headerShown: false }}>
-              <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
-              <RootStack.Screen name="Login" component={LoginScreen} />
-              <RootStack.Screen name="Register" component={RegisterScreen} />
-              <RootStack.Screen name="MainApp" component={Logged} />
-            </RootStack.Navigator>
-          </I18nextProvider>
+              <RootStack.Navigator screenOptions={{ headerShown: false }}>
+                <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
+                <RootStack.Screen name="Login" component={LoginScreen} />
+                <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
+                <RootStack.Screen name="Register" component={RegisterScreen} />
+                <RootStack.Screen name="MainApp" component={Logged} />
+              </RootStack.Navigator>
+            </I18nextProvider>
+          </CurrencyProvider>
         </AppProvider>
       </PaperProvider>
     </NavigationContainer>

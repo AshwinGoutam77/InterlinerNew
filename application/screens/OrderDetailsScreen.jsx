@@ -8,7 +8,7 @@ const OrderDetailsScreen = () => {
             {/* Order Info */}
             <View style={styles.card}>
                 <Text style={styles.label}>
-                    Order ID : <Text style={styles.bold}>#1245035000</Text>
+                    Order Number : <Text style={styles.bold}>#1245035000</Text>
                 </Text>
                 <View style={styles.statusRow}>
                     <Text style={styles.date}>01 Dec, 2022</Text>
@@ -81,7 +81,7 @@ export default OrderDetailsScreen;
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
-        backgroundColor: '#fff',
+        backgroundColor: '#fdfdfd',
         height: '100%',
         paddingTop: 20
     },

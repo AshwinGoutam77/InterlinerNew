@@ -10,9 +10,10 @@
         "repeatOrder": "Repeat Order",
         "support": "Support",
         "creditLimit": "Credit Limit",
-        "creditAvailable": "Credit Available",
+        "creditAvailable": "Total Credit Limit:",
         "creditUsed": "Credit Amount used",
-        "creditPeriod": "Credit Period",
+        "creditAvailableAmount": "Balance Credit Available",
+        "creditPeriod": "Balance credit period",
         "dueDate": "Payment due date"
     },
     "category": {

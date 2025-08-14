@@ -10,7 +10,7 @@ import PsA1YearRiskCalculator from "../screens/PsA1YearRiskCalculator";
 import CustomHeader from "../components/header";
 import InquiryForm from "../screens/InquiryForm";
 import AboutUs from "../screens/AboutUs";
-import { Alert, Linking, Pressable, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, I18nManager, Linking, Pressable, Text, TouchableWithoutFeedback, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DashboardScreen from "../screens/Dashboard";
@@ -363,6 +363,20 @@ function CartTab() {
                     header: () => <CustomHeader title="Track Order" />,
                 }}
             />
+            <Stack.Screen
+                name="Dashboard"
+                component={DashboardScreen}
+                options={{
+                    header: () => <CustomHeader title="Interliner" />,
+                }}
+            />
+            <Stack.Screen
+                name="CategoryScreen"
+                component={CategoryScreen}
+                options={{
+                    header: () => <CustomHeader title="Categories" />,
+                }}
+            />
         </Stack.Navigator>
     )
 }
@@ -371,10 +385,10 @@ function PaymentTab() {
     return (
         <Stack.Navigator screenOptions={navigationOptions}>
             <Stack.Screen
-                name="HistoryScreen"
-                component={HistoryScreen}
+                name="HelpCenterScreen"
+                component={HelpCenterScreen}
                 options={{
-                    header: () => <CustomHeader title="Previous Orders" />,
+                    header: () => <CustomHeader title="Help Center" />,
                 }}
             />
         </Stack.Navigator>
@@ -396,11 +410,11 @@ const tabBarIcon = (route) => ({ color, size, focused }) => {
         case 'payment':
             iconName = focused ? 'card' : 'card-outline';
             break;
-        case 'orders':
-            iconName = focused ? 'receipt' : 'receipt-outline';
+        case 'helpCenter':
+            iconName = focused ? 'call' : 'call-outline';
             break;
         case 'cart':
-            iconName = focused ? 'cart' : 'bag-outline';
+            iconName = focused ? 'cart' : 'cart-outline';
             break;
         case 'whatsaap':
             iconName = 'logo-whatsapp';
@@ -473,6 +487,7 @@ export default function Logged() {
                     paddingTop: 15,
                     backgroundColor: '#fff',
                     display: getTabBarVisibility(route, route.name),
+                    flexDirection: 'row',
                 },
                 tabBarIcon: tabBarIcon(route),
                 tabBarButton: (props) => (
@@ -497,29 +512,17 @@ export default function Logged() {
         >
 
             <Tab.Screen name="Home" component={HomeStack} />
-            {/* <Tab.Screen name="whatsaap" component={HomeStack} /> */}
             <Tab.Screen
                 name="whatsaap"
                 component={HomeStack}
                 listeners={{
                     tabPress: (e) => {
                         e.preventDefault();
-                        const phoneNumber = '+971504775180';
-                        const url = `whatsapp://send?phone=${phoneNumber}`;
-
-                        Linking.canOpenURL(url)
-                            .then((supported) => {
-                                if (supported) {
-                                    Linking.openURL(url);
-                                } else {
-                                    Alert.alert('Error', 'Make sure WhatsApp is installed');
-                                }
-                            })
-                            .catch((err) => console.error('An error occurred', err));
+                        Linking.openURL('https://wa.me/+971504775180');
                     },
                 }}
             />
-            <Tab.Screen name="orders" component={PaymentTab} />
+            <Tab.Screen name="helpCenter" component={PaymentTab} />
             <Tab.Screen name="cart" component={CartTab} />
             <Tab.Screen name="profile" component={ProfileTab} />
         </Tab.Navigator>

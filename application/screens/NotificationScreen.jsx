@@ -62,7 +62,11 @@ const NotificationScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff' },
+    container: {
+        flex: 1,
+        backgroundColor: '#fdfdfd',
+        paddingTop: 20,
+    },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -82,9 +86,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 14,
-        backgroundColor: '#F9F9F9',
+        backgroundColor: '#ffffffff',
         borderRadius: 8,
         marginBottom: 12,
+        elevation: 0.1,
     },
     iconContainer: {
         width: 40,

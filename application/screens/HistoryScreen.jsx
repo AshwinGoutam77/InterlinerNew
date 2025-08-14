@@ -13,9 +13,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../src/constants/colors';
 
 const orderData = [
-    { id: '#2344', paid: 24, due: 2, total: 26 },
-    { id: '#2344', paid: 24, due: 2, total: 26 },
-    { id: '#2344', paid: 24, due: 2, total: 26 }
+    { id: '#2344', paid: 24, due: 2, total: 26, date: '24/09/25' },
+    { id: '#2344', paid: 24, due: 2, total: 26, date: '24/09/25' },
+    { id: '#2344', paid: 24, due: 2, total: 26, date: '24/09/25' }
 ];
 
 export default function HistoryScreen({ navigation }) {
@@ -50,10 +50,10 @@ export default function HistoryScreen({ navigation }) {
                             <Text style={styles.label}>Order Date</Text>
                             <Text style={styles.value}>{order.date}</Text>
                         </View>
-                        <View style={styles.orderRow}>
-                            <Text style={styles.label}>Order ID</Text>
-                            <Text style={styles.value}>{order.id}</Text>
-                        </View>
+                        <TouchableOpacity style={styles.orderRow} onPress={() => navigation.navigate('OrderDetailsScreen')}>
+                            <Text style={styles.label}>Order Number</Text>
+                            <Text style={[styles.value, { color: Colors.primary }]}>{order.id}</Text>
+                        </TouchableOpacity>
                         <View style={styles.orderRow}>
                             <Text style={styles.label}>Total Amount</Text>
                             <Text style={styles.value}>${order.paid.toFixed(2)}</Text>
@@ -68,17 +68,17 @@ export default function HistoryScreen({ navigation }) {
                         </View>
 
                         <View style={styles.buttonGrid}>
-                            <TouchableOpacity style={styles.button} onPress={showModal}>
-                                <Text style={styles.buttonText}>Complain</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TrackOrderScreen')}>
+                            {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TrackOrderScreen')}>
                                 <Text style={styles.buttonText}>Track Order</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             <TouchableOpacity style={styles.button} onPress={showModalPay}>
                                 <Text style={styles.buttonText}>Pay Due Payments</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('OrderDetailsScreen')}>
-                                <Text style={styles.buttonText}>View Details</Text>
+                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RepeatOrderScreen', { orderId: order.id })}>
+                                <Text style={styles.buttonText}>Repeat Order</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={showModal}>
+                                <Text style={styles.buttonText}>Complain</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -95,8 +95,8 @@ export default function HistoryScreen({ navigation }) {
 
                     <Text style={styles.title}>Raise a Complaint</Text>
 
-                    {/* Order ID Dropdown */}
-                    <Text style={styles.label}>Select Order ID</Text>
+                    {/* Order Number Dropdown */}
+                    <Text style={styles.label}>Select Order Number</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={orderOptions}
@@ -145,7 +145,7 @@ export default function HistoryScreen({ navigation }) {
 
                     <Text style={styles.title}>Pay Due By Orders</Text>
 
-                    {/* Order ID Dropdown */}
+                    {/* Order Number Dropdown */}
                     <Text style={styles.label}>Payment Via</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
@@ -203,7 +203,7 @@ export default function HistoryScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fdfdfd',
         paddingTop: 20,
     },
     header: {

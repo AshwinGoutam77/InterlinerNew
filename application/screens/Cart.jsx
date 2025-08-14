@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // ✅ useState added
+import React, { useContext, useState } from 'react'; // ✅ useState added
 import {
     View,
     Text,
@@ -11,8 +11,9 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
+import { CurrencyContext } from '../context/CurrencyContext';
 
-const initialCartItems = [  // ✅ Made constant for default
+const initialCartItems = [
     {
         id: '1',
         title: 'Lawson Chair',
@@ -37,7 +38,7 @@ const initialCartItems = [  // ✅ Made constant for default
         quantity: 3,
         image: require('../../assets/images/jackets.png'),
     },
-     {
+    {
         id: '4',
         title: 'Lawson Chair',
         price: 120,
@@ -65,7 +66,9 @@ const initialCartItems = [  // ✅ Made constant for default
 
 export default function CartScreen() {
     const navigation = useNavigation();
-    const [cartItems, setCartItems] = useState(initialCartItems); // ✅ Store in state
+    const [cartItems, setCartItems] = useState(initialCartItems);
+    const { currency } = useContext(CurrencyContext);
+
 
     const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -86,14 +89,14 @@ export default function CartScreen() {
     };
 
     const renderItem = ({ item }) => (
-        <View style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ProductDetailScreen', { item })}>
             <Image source={item.image} style={styles.image} resizeMode="contain" />
             <View style={styles.details}>
                 <Text style={styles.title}>{item.title}</Text>
                 <View style={styles.colorRow}>
                     <Text style={styles.colorText}>Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
                 </View>
-                <Text style={styles.price}>${item.price.toFixed(2)}</Text>
+                <Text style={styles.price}>{currency} {item.price.toFixed(2)}</Text>
             </View>
             <View style={styles.rightControls}>
                 <View style={styles.counter}>
@@ -106,7 +109,7 @@ export default function CartScreen() {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 
     return (
@@ -122,9 +125,9 @@ export default function CartScreen() {
 
             {/* Footer */}
             <View style={styles.footer}>
-                <View>
+                <View style={styles.totalContainer}>
                     <Text style={styles.totalLabel}>Total price</Text>
-                    <Text style={styles.totalPrice}>${total.toFixed(2)}</Text>
+                    <Text style={styles.totalPrice}>{currency} {total.toFixed(2)}</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.checkoutBtn}
@@ -240,6 +243,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.05,
         shadowRadius: 5,
         elevation: 3,
+    },
+    totalContainer: {
+        backgroundColor: Colors.primary,
+        paddingVertical: 5,
+        paddingHorizontal: 18,
+        borderRadius: 5,
     },
     totalLabel: {
         fontSize: 14,

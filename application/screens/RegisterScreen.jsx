@@ -85,7 +85,7 @@ const RegisterScreen = () => {
 
                 <TextInput
                     style={styles.input}
-                    placeholder="User Name"
+                    placeholder="Name"
                     value={form.userName}
                     onChangeText={(text) => handleInputChange('userName', text)}
                 />
@@ -147,7 +147,7 @@ export default RegisterScreen;
 const styles = StyleSheet.create({
     container: {
         // flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fdfdfd',
         padding: 24,
         flexDirection: 'column',
         justifyContent: 'center',

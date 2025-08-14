@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     View,
     Text,
@@ -13,13 +13,15 @@ import { useAppContext } from '../context/RTLContext';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import { useTranslation } from 'react-i18next';
+import { CurrencyContext } from '../context/CurrencyContext';
 
 export default function ProfilePage() {
     const { t } = useTranslation();
     const [isDarkMode, setIsDarkMode] = React.useState(false);
     const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
-    const { isRTL, toggleRTL } = useAppContext();
+    const { isRTL, toggleRTL, language } = useAppContext();
     const navigation = useNavigation();
+    const { currency } = useContext(CurrencyContext);
 
     return (
         <View style={styles.container}>
@@ -41,7 +43,7 @@ export default function ProfilePage() {
 
                 <View style={styles.optionsList}>
                     {renderOption('edit', t('profile.editProfile'), 'EditProfile', null, isRTL, navigation)}
-                    {renderOption('public', t('profile.rtl'), 'ProfileScreen', (
+                    {/* {renderOption('public', t('profile.rtl'), 'ProfileScreen', (
                         <Switch
                             value={isRTL}
                             onValueChange={toggleRTL}
@@ -49,13 +51,12 @@ export default function ProfilePage() {
                             thumbColor={isRTL ? '#ffffff' : '#ffffff'}
                             ios_backgroundColor="#ccc"
                         />
-                    ), isRTL, navigation)}
-                    {renderOption('public', t('profile.language'), 'LanguageScreen', 'EN', isRTL, navigation)}
-                    {renderOption('money', t('profile.currency'), 'CurrencyScreen', '$', isRTL, navigation)}
+                    ), isRTL, navigation)} */}
+                    {renderOption('public', t('profile.language'), 'LanguageScreen', language, isRTL, navigation)}
+                    {renderOption('money', t('profile.currency'), 'CurrencyScreen', currency, isRTL, navigation)}
                     {renderOption('pin', t('profile.address'), 'ShippingScreen', null, isRTL, navigation)}
                     {renderOption('notifications', t('profile.notification'), 'NotificationScreen', null, isRTL, navigation)}
                     {renderOption('lock', t('profile.privacy'), 'PrivacyScreen', null, isRTL, navigation)}
-                    {renderOption('info', t('profile.help'), 'HelpCenterScreen', null, isRTL, navigation)}
                     {renderOption('logout', t('profile.logout'), 'Login', null, isRTL, navigation)}
                 </View>
             </ScrollView >
@@ -118,7 +119,10 @@ function renderTab(icon, label, active = false) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff' },
+    container: {
+        flex: 1,
+        backgroundColor: '#fdfdfd',
+    },
     scrollContent: {
         paddingBottom: 100,
     },

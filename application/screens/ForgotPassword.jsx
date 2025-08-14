@@ -14,7 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
 
-const LoginScreen = () => {
+const ForgotPassword = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -36,31 +36,22 @@ const LoginScreen = () => {
                 end={{ x: 0, y: 1 }}
                 style={styles.container}
             >
-                {/* <View style={styles.overlay} /> */}
                 <SafeAreaView style={styles.container}>
-                    {/* Logo */}
                     <View style={styles.logoContainer}>
                         <Image
                             source={require('../../assets/images/logo.png')}
                             style={styles.logo}
                             resizeMode="contain"
                         />
-                        {/* <Image
-                            source={require('../../assets/images/login-banner.png')}
-                            style={styles.loginBanner}
-                            resizeMode="contain"
-                        /> */}
-                        {/* <Text style={styles.heading}>Interliners</Text> */}
+
                     </View>
 
-                    {/* Title */}
-                    <Text style={styles.title}>Login to Your Account</Text>
+                    <Text style={styles.title}>Forgot Password</Text>
 
-                    {/* Email Input */}
                     <View style={styles.inputWrapper}>
                         <Icon name="call-outline" size={20} color="#aaa" style={styles.inputIcon} />
                         <TextInput
-                            placeholder="Phone Number"
+                            placeholder="Enter Your Phone Number"
                             placeholderTextColor="#aaa"
                             style={styles.input}
                             value={email}
@@ -68,7 +59,6 @@ const LoginScreen = () => {
                         />
                     </View>
 
-                    {/* Password Input */}
                     <View style={styles.inputWrapper}>
                         <Icon name="lock-closed-outline" size={20} color="#aaa" style={styles.inputIcon} />
                         <TextInput
@@ -84,30 +74,27 @@ const LoginScreen = () => {
                         </TouchableOpacity>
                     </View>
 
-                    {/* Remember Me */}
-                    {/* <View style={styles.rememberRow}>
-                <CheckBox
-                    value={remember}
-                    onValueChange={setRemember}
-                    tintColors={{ true: '#000', false: '#aaa' }}
-                />
-                <Text style={styles.rememberText}>Remember me</Text>
-            </View> */}
+                    <View style={styles.inputWrapper}>
+                        <Icon name="lock-closed-outline" size={20} color="#aaa" style={styles.inputIcon} />
+                        <TextInput
+                            placeholder="Confirm Password"
+                            placeholderTextColor="#aaa"
+                            style={styles.input}
+                            secureTextEntry={!showPassword}
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                            <Icon name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#aaa" />
+                        </TouchableOpacity>
+                    </View>
 
-                    {/* Sign In Button */}
                     <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.navigate('MainApp')}>
-                        <Text style={styles.signInText}>Sign in</Text>
+                        <Text style={styles.signInText}>Change Password</Text>
                     </TouchableOpacity>
 
-                    {/* Forgot Password */}
-                    <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-                        <Text style={styles.forgot}>Forgot the password?</Text>
-                    </TouchableOpacity>
-
-                    {/* Signup Prompt */}
                     <View style={styles.footer}>
-                        <Text style={styles.footerText}>Don’t have an account? </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                             <Text style={styles.signUpText}>Sign up</Text>
                         </TouchableOpacity>
                     </View>
@@ -117,7 +104,7 @@ const LoginScreen = () => {
     );
 };
 
-export default LoginScreen;
+export default ForgotPassword;
 
 const styles = StyleSheet.create({
     background: {

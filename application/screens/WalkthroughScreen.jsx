@@ -7,6 +7,7 @@ import {
     FlatList,
     Dimensions,
     TouchableOpacity,
+    I18nManager,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,17 +21,17 @@ const slides = [
     {
         id: '1',
         image: require('../../assets/images/onbording-banner-1.jpg'),
-        title: 'Your satisfaction is our priority',
+        title: 'Elevating garments from within where interlining meets innovation',
     },
     {
         id: '2',
         image: require('../../assets/images/onbording-banner-2.jpg'),
-        title: 'Get the best service experience',
+        title: 'Precision and premium interlining your standards are our benchmark.',
     },
     {
         id: '3',
         image: require('../../assets/images/onbording-banner-3.jpg'),
-        title: 'We care about your feedback',
+        title: 'Engineered for elegance—interlining that performs as beautifully as it feels.',
     },
 ];
 
@@ -40,12 +41,31 @@ const WalkthroughScreen = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const flatListRef = useRef(null);
 
+    // const handleNext = async () => {
+    //     if (currentIndex < slides.length - 1) {
+    //         flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
+    //     } else {
+    //         await AsyncStorage.setItem('hasSeenWalkthrough', 'true');
+    //         navigation.replace('Login');
+    //     }
+    // };
     const handleNext = async () => {
-        if (currentIndex < slides.length - 1) {
-            flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
+        if (I18nManager.isRTL) {
+            // In RTL inverted list, going "next" means decreasing index
+            if (currentIndex > 0) {
+                flatListRef.current?.scrollToIndex({ index: currentIndex - 1 });
+            } else {
+                await AsyncStorage.setItem('hasSeenWalkthrough', 'true');
+                navigation.replace('Login');
+            }
         } else {
-            await AsyncStorage.setItem('hasSeenWalkthrough', 'true');
-            navigation.replace('Login');
+            // Normal LTR flow
+            if (currentIndex < slides.length - 1) {
+                flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
+            } else {
+                await AsyncStorage.setItem('hasSeenWalkthrough', 'true');
+                navigation.replace('Login');
+            }
         }
     };
 
@@ -57,6 +77,7 @@ const WalkthroughScreen = () => {
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
+                inverted={I18nManager.isRTL}
                 keyExtractor={(item) => item.id}
                 onMomentumScrollEnd={(e) => {
                     const index = Math.round(e.nativeEvent.contentOffset.x / width);
@@ -109,6 +130,8 @@ const styles = StyleSheet.create({
     image: {
         width: width,
         height: height,
+        position: 'absolute',
+        top: -100,
     },
 
 
@@ -130,7 +153,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         marginBottom: 24,
+        direction: 'ltr', // stops auto-flip
     },
+
     dot: {
         width: 8,
         height: 8,
@@ -147,7 +172,9 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         paddingHorizontal: 48,
         borderRadius: 8,
+        direction: 'ltr', // optional, if your text or icon jumps
     },
+
     buttonText: {
         color: Colors.textColor,
         fontSize: 16,

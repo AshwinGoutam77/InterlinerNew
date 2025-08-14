@@ -4,9 +4,12 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
+import Colors from '../src/constants/colors';
+import { useNavigation } from '@react-navigation/native';
 
 const CreditInfoModal = ({ visible, onClose }) => {
     const { t } = useTranslation();
+    const navigation = useNavigation();
 
     const containerStyle = {
         backgroundColor: 'white',
@@ -40,6 +43,10 @@ const CreditInfoModal = ({ visible, onClose }) => {
                         <Text style={styles.value}>2000</Text>
                     </View>
                     <View style={styles.row}>
+                        <Text style={styles.label}>{t('dashboard.creditAvailableAmount')}</Text>
+                        <Text style={styles.value}>10 Days</Text>
+                    </View>
+                    <View style={styles.row}>
                         <Text style={styles.label}>{t('dashboard.creditPeriod')}</Text>
                         <Text style={styles.value}>10 Days</Text>
                     </View>
@@ -47,6 +54,17 @@ const CreditInfoModal = ({ visible, onClose }) => {
                         <Text style={styles.label}>{t('dashboard.dueDate')}</Text>
                         <Text style={styles.value}>24/8/2025</Text>
                     </View>
+
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                            onClose();
+                            navigation.navigate('PaymentScreen', { paymentType: 'directPayment' });
+                        }}
+                    >
+                        <Text style={styles.buttonText}>Make Payment</Text>
+                    </TouchableOpacity>
+
                 </View>
             </Modal>
         </Portal>
@@ -80,6 +98,18 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         color: '#000',
+    },
+    button: {
+        width: '38%',
+        backgroundColor: Colors.primary,
+        paddingVertical: 10,
+        borderRadius: 6,
+        marginTop: 20,
+    },
+    buttonText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 13
     },
 });
 

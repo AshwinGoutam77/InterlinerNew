@@ -21,28 +21,24 @@ const paymentMethods = [
         icon: require('../../assets/images/wallet.png')
     },
     {
+        title: 'Bank Transfer',
+        icon: require('../../assets/images/bank-transfer.png')
+    },
+    {
         title: 'Buy now pay later',
         subtitle: 'Your Credit Balance: $9,379',
         icon: require('../../assets/images/buy-now.png')
     },
     {
-        title: 'Partial Payment',
+        title: 'Part Payment',
         icon: require('../../assets/images/partial-payment.png')
     },
     {
-        title: 'Cash',
+        title: 'Full Payment',
         icon: require('../../assets/images/cash.png')
     },
     {
-        title: 'Credit Card',
-        icon: require('../../assets/images/credit-card.png')
-    },
-    {
-        title: 'Bank Transfer',
-        icon: require('../../assets/images/bank-transfer.png')
-    },
-    {
-        title: 'Payment Link',
+        title: 'Online Link',
         icon: require('../../assets/images/payment-link.png')
     },
     {
@@ -77,35 +73,33 @@ export default function PaymentMethodScreen() {
 
     return (
         <View style={styles.container}>
-            {/* <Text style={styles.subtitle}>
-                Select the payment method you want to use.
-            </Text> */}
-
-            <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 20 }}>
-                {paymentMethods.map((method, index) => (
-                    <TouchableOpacity
-                        key={index}
-                        style={styles.card(selected === index)}
-                        onPress={() => setSelected(index)}
-                    >
-                        <View style={styles.row}>
-                            <View style={styles.iconCircle}>
-                                <Image
-                                    source={method.icon}
-                                    style={{ width: 26, height: 26, resizeMode: 'cover' }}
-                                />
+            <ScrollView showsVerticalScrollIndicator={false} style={styles.paymentRow}>
+                <View style={styles.cardsWrapper}>
+                    {paymentMethods.map((method, index) => (
+                        <TouchableOpacity
+                            key={index}
+                            style={styles.card(selected === index)}
+                            onPress={() => setSelected(index)}
+                        >
+                            <View style={styles.row}>
+                                <View style={styles.iconCircle}>
+                                    <Image
+                                        source={method.icon}
+                                        style={{ width: 26, height: 26, resizeMode: 'cover' }}
+                                    />
+                                </View>
+                                <View style={{ flex: 1, marginLeft: 10 }}>
+                                    <Text style={styles.titleText}>{method.title}</Text>
+                                    {method.subtitle && (
+                                        <Text style={styles.descText}>{method.subtitle}</Text>
+                                    )}
+                                </View>
                             </View>
-                            <View style={{ flex: 1, marginLeft: 10 }}>
-                                <Text style={styles.titleText}>{method.title}</Text>
-                                {method.subtitle && (
-                                    <Text style={styles.descText}>{method.subtitle}</Text>
-                                )}
-                            </View>
-                            <View style={styles.radio(selected === index)} />
-                        </View>
-                    </TouchableOpacity>
-                ))}
+                        </TouchableOpacity>
+                    ))}
+                </View>
             </ScrollView>
+
             <Portal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                     <Image
@@ -144,9 +138,9 @@ export default function PaymentMethodScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fefefe',
+        backgroundColor: '#fdfdfd',
         paddingHorizontal: 20,
-        paddingBottom: 20
+        paddingVertical: 20
     },
     title: {
         fontSize: 22,
@@ -158,21 +152,31 @@ const styles = StyleSheet.create({
         color: '#00000',
         marginBottom: 16
     },
+    paymentRow: {
+        paddingTop: 10
+    },
+    cardsWrapper: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between'
+    },
     card: (active) => ({
         backgroundColor: '#fff',
         borderRadius: 16,
         paddingVertical: 20,
         paddingHorizontal: 16,
-        marginVertical: 8,
+        marginBottom: 12,
+        width: '48%',
         shadowColor: '#ccc',
         shadowOpacity: 0.2,
         shadowRadius: 5,
         elevation: 2,
-        borderWidth: 1,
-        borderColor: active ? '#ccc' : 'transparent'
+        borderWidth: 1.5,
+        borderColor: active ? Colors.primary : 'transparent'
     }),
+
     row: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center'
     },
     iconCircle: {
@@ -185,11 +189,13 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: 'center'
     },
     descText: {
         fontSize: 13,
-        color: '#777'
+        color: '#777',
+        textAlign: 'center'
     },
     radio: (selected) => ({
         width: 20,

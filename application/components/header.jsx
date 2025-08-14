@@ -1,7 +1,7 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image, I18nManager } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,7 @@ const CustomHeader = ({ title, canGoBack, itemCount = 4, onSupportPress, onCartP
         <SafeAreaView edges={['top']} style={{ backgroundColor: '#ffffffff' }}>
             <View style={[
                 styles.header,
-                { paddingBottom: route.name === 'Dashboard' ? 0 : 20 }
+                { paddingBottom: route.name === 'Dashboard' ? 20 : 20 }
             ]}>
                 {route.name == 'Dashboard' && !canGoBack ? (<Text style={{ color: Colors.black, fontSize: 24, paddingTop: 4, fontWeight: '800', fontFamily: 'Poppins-Regular' }}>Interliner</Text>) : <TouchableOpacity
                     onPress={() => route?.name == 'TrackOrderScreen' ? navigation.navigate('Dashboard') : navigation.goBack()}
@@ -45,32 +45,8 @@ const CustomHeader = ({ title, canGoBack, itemCount = 4, onSupportPress, onCartP
                 }
                 <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }}>
                     {/* Support Icon */}
-
-
-                    {/* Shopping Bag with Item Count */}
-                    {/* <TouchableOpacity onPress={() => navigation.navigate('CartScreen')} style={{ position: 'relative' }}>
-                        <Icon name="shopping-bag" size={28} color={route.name !== 'CartScreen' ? "#000000" : Colors.primary} />
-                        {itemCount > 0 && (
-                            <View
-                                style={{
-                                    position: 'absolute',
-                                    right: -6,
-                                    top: -4,
-                                    backgroundColor: Colors.primary,
-                                    borderRadius: 10,
-                                    paddingHorizontal: 5,
-                                    paddingVertical: 1,
-                                    minWidth: 16,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Text style={{ color: '#fff', fontSize: 10, fontWeight: 'bold' }}>{itemCount}</Text>
-                            </View>
-                        )}
-                    </TouchableOpacity> */}
                     <TouchableOpacity onPress={() => navigation.navigate('HelpCenterScreen')}>
-                        <Icon name="support-agent" size={28} color={route.name !== 'HelpCenterScreen' ? "#000000" : Colors.primary} />
+                        <Icon name="call" size={28} color={route.name !== 'HelpCenterScreen' ? "#000000" : Colors.primary} />
                     </TouchableOpacity>
 
                     {/* User Image */}
@@ -91,7 +67,8 @@ const styles = StyleSheet.create({
     header: {
         paddingTop: 30,
         paddingBottom: 20,
-        flexDirection: "row",
+        // flexDirection: "row",
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: 18,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     View,
     Text,
@@ -8,43 +8,14 @@ import {
     TouchableOpacity
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-const trackingSteps = [
-    {
-        title: 'Order In Transit',
-        date: 'Dec 17',
-        time: '15:20 PM',
-        location: '32 Manchester Ave. Ringgold, GA 30736',
-    },
-    {
-        title: 'Order ... Customs Port',
-        date: 'Dec 16',
-        time: '14:40 PM',
-        location: '4 Evergreen Street Lake Zurich, IL 60047',
-    },
-    {
-        title: 'Orders are ... Shipped',
-        date: 'Dec 15',
-        time: '11:30 AM',
-        location: '9177 Hillcrest Street Wheeling, WV 26003',
-    },
-    {
-        title: 'Order is in Packing',
-        date: 'Dec 15',
-        time: '10:25 AM',
-        location: '891 Glen Ridge St. Gainesville, VA 20155',
-    },
-    {
-        title: 'Verified Payments',
-        date: 'Dec 15',
-        time: '10:04 AM',
-        location: '55 Summerhouse Dr. Apopka, FL 32703',
-    },
-];
+import { CurrencyContext } from '../context/CurrencyContext';
+import CustomerFilter from '../components/CustomerFilter';
 
 export default function TrackOrderListingScreen({ navigation }) {
+    const { currency } = useContext(CurrencyContext);
     return (
         <View style={styles.container}>
+            {/* <CustomerFilter /> */}
             <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
                 {/* Product Card */}
                 <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
@@ -54,8 +25,8 @@ export default function TrackOrderListingScreen({ navigation }) {
                     />
                     <View style={{ flex: 1 }}>
                         <Text style={styles.productTitle}>Lawson Chair</Text>
-                        <Text style={styles.productInfo}>● Blue Grey   |   Qty = 1</Text>
-                        <Text style={styles.productPrice}>$120.00</Text>
+                        <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                        <Text style={styles.productPrice}>{currency}120.00</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
@@ -65,8 +36,8 @@ export default function TrackOrderListingScreen({ navigation }) {
                     />
                     <View style={{ flex: 1 }}>
                         <Text style={styles.productTitle}>Lawson Chair</Text>
-                        <Text style={styles.productInfo}>● Blue Grey   |   Qty = 1</Text>
-                        <Text style={styles.productPrice}>$120.00</Text>
+                        <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                        <Text style={styles.productPrice}>{currency} 120.00</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
@@ -76,8 +47,8 @@ export default function TrackOrderListingScreen({ navigation }) {
                     />
                     <View style={{ flex: 1 }}>
                         <Text style={styles.productTitle}>Lawson Chair</Text>
-                        <Text style={styles.productInfo}>● Blue Grey   |   Qty = 1</Text>
-                        <Text style={styles.productPrice}>$120.00</Text>
+                        <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                        <Text style={styles.productPrice}>{currency} 120.00</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
@@ -87,8 +58,8 @@ export default function TrackOrderListingScreen({ navigation }) {
                     />
                     <View style={{ flex: 1 }}>
                         <Text style={styles.productTitle}>Lawson Chair</Text>
-                        <Text style={styles.productInfo}>● Blue Grey   |   Qty = 1</Text>
-                        <Text style={styles.productPrice}>$120.00</Text>
+                        <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                        <Text style={styles.productPrice}>{currency} 120.00</Text>
                     </View>
                 </TouchableOpacity>
             </ScrollView>
@@ -98,7 +69,7 @@ export default function TrackOrderListingScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fefefe',
+        backgroundColor: '#fdfdfd',
         flex: 1,
         paddingHorizontal: 20
     },

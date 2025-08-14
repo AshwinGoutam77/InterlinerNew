@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     View,
     Text,
@@ -16,6 +16,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
+import { CurrencyContext } from '../context/CurrencyContext';
+import AddItemsModal from '../modals/AddItemsModal';
 
 const shades = ['White', 'Off White', 'Blue White', 'Cream'];
 const widths = ['36 Inch', '44 Inch', '60 Inch'];
@@ -23,6 +25,7 @@ const lengths = ['25 Mtr', '50 Mtr', '100 Mtr'];
 
 export default function ProductDetailScreen() {
     const navigation = useNavigation();
+    const { currency } = useContext(CurrencyContext);
     const [selectedShade, setSelectedShade] = useState('White');
     const [isCut, setIsCut] = useState(false);
     const [selectedWidth, setSelectedWidth] = useState('36 Inch');
@@ -32,6 +35,7 @@ export default function ProductDetailScreen() {
     const [selectedProductCode, setSelectedProductCode] = useState('23666');
     const [SelectCustomSize, setSelectCustomSize] = useState('12')
     const [selectedOption, setSelectedOption] = useState('none');
+    const [Visible, setVisible] = useState(false)
 
     const options = [
         { id: 'standard', label: 'Cut X rolls in standard collar size (12-20”)' },
@@ -56,85 +60,84 @@ export default function ProductDetailScreen() {
 
 
     return (
-            <View style={styles.container}>
-                <ScrollView
-                    style={{ flex: 1 }}
-                    contentContainerStyle={{ paddingBottom: 160 }}
-                    showsVerticalScrollIndicator={false}
-                    keyboardShouldPersistTaps="handled"
-                >
-                    {/* Product Code Dropdown */}
-                    <Text style={styles.label}>Choose Product Code</Text>
-                    <View style={styles.pickerWrapper}>
-                        <Picker
-                            selectedValue={selectedProductCode}
-                            onValueChange={(itemValue) => setSelectedProductCode(itemValue)}
-                            style={styles.picker}
-                            dropdownIconColor="#666"
-                        >
-                            <Picker.Item label="23666" value="23666" />
-                            <Picker.Item label="23667" value="23667" />
-                            <Picker.Item label="23668" value="23668" />
-                            {/* Add more product codes as needed */}
-                        </Picker>
-                    </View>
-
-
-                    {/* Image */}
-                    <Image
-                        source={require('../../assets/images/shirt-banner.png')}
-                        style={styles.image}
-                        resizeMode="cover"
-                    />
-                    <TouchableOpacity style={styles.downloadBtn}>
-                        <Text style={styles.downloadText}>Download Specs</Text>
-                    </TouchableOpacity>
-
-                    {/* Price */}
-                    <View style={styles.rowBetween}>
-                        <Text style={styles.code}>23666</Text>
-                        <Text style={styles.price}>$28</Text>
-                    </View>
-                    <View style={styles.label}>
-                        <Text>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
-                    </View>
-
-                    {/* Shade Selector */}
-                    {/* Shade Selector */}
-                    <Text style={styles.label}>Shade Selector</Text>
-                    <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.shadeRow}
+        <View style={styles.container}>
+            <ScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={{ paddingBottom: 160 }}
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+            >
+                {/* Product Code Dropdown */}
+                <Text style={styles.label}>Choose Product Code</Text>
+                <View style={styles.pickerWrapper}>
+                    <Picker
+                        selectedValue={selectedProductCode}
+                        onValueChange={(itemValue) => setSelectedProductCode(itemValue)}
+                        style={styles.picker}
+                        dropdownIconColor="#666"
                     >
-                        {shades.map((shade) => (
-                            <TouchableOpacity
-                                key={shade}
+                        <Picker.Item label="23666" value="23666" />
+                        <Picker.Item label="23667" value="23667" />
+                        <Picker.Item label="23668" value="23668" />
+                    </Picker>
+                </View>
+
+
+                {/* Image */}
+                <Image
+                    source={require('../../assets/images/shirt-banner.png')}
+                    style={styles.image}
+                    resizeMode="cover"
+                />
+                <TouchableOpacity style={styles.downloadBtn}>
+                    <Text style={styles.downloadText}>Download Specs</Text>
+                </TouchableOpacity>
+
+                {/* Price */}
+                <View style={styles.rowBetween}>
+                    <Text style={styles.code}>23666</Text>
+                    <Text style={styles.price}>{currency}28</Text>
+                </View>
+                <View style={styles.label}>
+                    <Text>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
+                </View>
+
+                {/* Shade Selector */}
+                {/* Shade Selector */}
+                <Text style={styles.label}>Shade Selector</Text>
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.shadeRow}
+                >
+                    {shades.map((shade) => (
+                        <TouchableOpacity
+                            key={shade}
+                            style={[
+                                styles.shadeBox,
+                                selectedShade === shade && styles.shadeBoxSelected,
+                            ]}
+                            onPress={() => setSelectedShade(shade)}
+                        >
+                            <View style={[
+                                styles.shadeSwatch,
+                                { backgroundColor: getShadeColor(shade) }
+                            ]} />
+                            <Text
                                 style={[
-                                    styles.shadeBox,
-                                    selectedShade === shade && styles.shadeBoxSelected,
+                                    styles.shadeText,
+                                    selectedShade === shade && styles.shadeTextSelected,
                                 ]}
-                                onPress={() => setSelectedShade(shade)}
                             >
-                                <View style={[
-                                    styles.shadeSwatch,
-                                    { backgroundColor: getShadeColor(shade) }
-                                ]} />
-                                <Text
-                                    style={[
-                                        styles.shadeText,
-                                        selectedShade === shade && styles.shadeTextSelected,
-                                    ]}
-                                >
-                                    {shade}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </ScrollView>
+                                {shade}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
 
 
-                    {/* Cut / Un-Cut */}
-                    {/* <View style={styles.rowBetween}>
+                {/* Cut / Un-Cut */}
+                {/* <View style={styles.rowBetween}>
                             <Text style={styles.label}> </Text>
                             <View style={styles.cutGroup}>
                                 <TouchableOpacity onPress={() => setIsCut(true)}>
@@ -146,107 +149,108 @@ export default function ProductDetailScreen() {
                             </View>
                         </View> */}
 
-                    {/* Width Selector */}
-                    <Text style={styles.label}>Select Width</Text>
-                    <View style={styles.optionsRow}>
-                        {widths.map((width) => (
-                            <TouchableOpacity
-                                key={width}
-                                style={[
-                                    styles.optionBox,
-                                    selectedWidth === width && styles.selectedOption,
-                                ]}
-                                onPress={() => setSelectedWidth(width)}
-                            >
-                                <Text style={[selectedWidth === width && styles.selectedOptionText,]}>{width}</Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-
-                    {/* Length Selector */}
-                    <Text style={styles.label}>Select Length</Text>
-                    <View style={styles.optionsRow}>
-                        {lengths.map((length) => (
-                            <TouchableOpacity
-                                key={length}
-                                style={[
-                                    styles.optionBox,
-                                    selectedLength === length && styles.selectedOption,
-                                ]}
-                                onPress={() => setSelectedLength(length)}
-                            >
-                                <Text
-                                    style={[selectedLength === length && styles.selectedOptionText,]}>
-                                    {length}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-
-                    {/* Number of Rolls */}
-                    <Text style={styles.label}>Enter Number of Rolls</Text>
-                    <TextInput
-                        style={styles.input}
-                        keyboardType="numeric"
-                        value={rolls}
-                        onChangeText={setRolls}
-                    />
-
-                    <Text style={styles.label}>Do you want customization</Text>
-                    {options.map((option) => (
+                {/* Width Selector */}
+                <Text style={styles.label}>Select Width</Text>
+                <View style={styles.optionsRow}>
+                    {widths.map((width) => (
                         <TouchableOpacity
-                            key={option.id}
-                            style={styles.radioContainer}
-                            onPress={() => setSelectedOption(option.id)}
+                            key={width}
+                            style={[
+                                styles.optionBox,
+                                selectedWidth === width && styles.selectedOption,
+                            ]}
+                            onPress={() => setSelectedWidth(width)}
                         >
-                            <View style={styles.radioCircle}>
-                                {selectedOption === option.id && <View style={styles.selectedRb} />}
-                            </View>
-                            <Text style={styles.radioText}>{option.label}</Text>
+                            <Text style={[selectedWidth === width && styles.selectedOptionText,]}>{width}</Text>
                         </TouchableOpacity>
                     ))}
+                </View>
 
-                    {selectedOption !== 'none' && <View>
-                        <Text style={styles.label}>Choose Customised Size</Text>
-                        <View style={styles.pickerWrapper}>
-                            <Picker
-                                selectedValue={SelectCustomSize}
-                                onValueChange={(itemValue) => setSelectCustomSize(itemValue)}
-                                style={styles.picker}
-                                dropdownIconColor="#666"
-                            >
-                                <Picker.Item label="12" value="12" />
-                                <Picker.Item label="15" value="15" />
-                                <Picker.Item label="20" value="20" />
-                            </Picker>
+                {/* Length Selector */}
+                <Text style={styles.label}>Select Length</Text>
+                <View style={styles.optionsRow}>
+                    {lengths.map((length) => (
+                        <TouchableOpacity
+                            key={length}
+                            style={[
+                                styles.optionBox,
+                                selectedLength === length && styles.selectedOption,
+                            ]}
+                            onPress={() => setSelectedLength(length)}
+                        >
+                            <Text
+                                style={[selectedLength === length && styles.selectedOptionText,]}>
+                                {length}
+                            </Text>
+                        </TouchableOpacity>
+                    ))}
+                </View>
+
+                {/* Number of Rolls */}
+                <Text style={styles.label}>Enter Number of Rolls</Text>
+                <TextInput
+                    style={styles.input}
+                    keyboardType="numeric"
+                    value={rolls}
+                    onChangeText={setRolls}
+                />
+
+                <Text style={styles.label}>Do you want customization</Text>
+                {options.map((option) => (
+                    <TouchableOpacity
+                        key={option.id}
+                        style={styles.radioContainer}
+                        onPress={() => setSelectedOption(option.id)}
+                    >
+                        <View style={styles.radioCircle}>
+                            {selectedOption === option.id && <View style={styles.selectedRb} />}
                         </View>
-                    </View>}
+                        <Text style={styles.radioText}>{option.label}</Text>
+                    </TouchableOpacity>
+                ))}
 
-                    {/* Remark */}
-                    <Text style={styles.label}>Remark</Text>
-                    <View style={styles.remarkRow}>
-                        <TextInput
-                            style={[styles.remarkInput, { height: 100, textAlignVertical: 'top' }]}
-                            placeholder="Enter your remark"
-                            value={remark}
-                            onChangeText={setRemark}
-                            multiline={true}
-                        />
-                        <Icon name="mic-outline" size={20} color="#888" style={{ paddingTop: '12' }} />
+                {selectedOption !== 'none' && <View>
+                    <Text style={styles.label}>Choose Customised Size</Text>
+                    <View style={styles.pickerWrapper}>
+                        <Picker
+                            selectedValue={SelectCustomSize}
+                            onValueChange={(itemValue) => setSelectCustomSize(itemValue)}
+                            style={styles.picker}
+                            dropdownIconColor="#666"
+                        >
+                            <Picker.Item label="12" value="12" />
+                            <Picker.Item label="15" value="15" />
+                            <Picker.Item label="20" value="20" />
+                        </Picker>
                     </View>
-                </ScrollView>
+                </View>}
 
-                {/* Add to Cart */}
-                <TouchableOpacity style={styles.cartBtn} onPress={() => navigation.navigate('CartScreen')}>
-                    <Text style={styles.cartText}>Add to Cart</Text>
-                </TouchableOpacity>
-            </View>
+                {/* Remark */}
+                <Text style={styles.label}>Remark</Text>
+                <View style={styles.remarkRow}>
+                    <TextInput
+                        style={[styles.remarkInput, { height: 100, textAlignVertical: 'top' }]}
+                        placeholder="Enter your remark"
+                        value={remark}
+                        onChangeText={setRemark}
+                        multiline={true}
+                    />
+                    <Icon name="mic-outline" size={20} color="#888" style={{ paddingTop: '12' }} />
+                </View>
+            </ScrollView>
+
+            <AddItemsModal visible={Visible} onClose={() => setVisible(false)} />
+            {/* Add to Cart */}
+            <TouchableOpacity style={styles.cartBtn} onPress={() => setVisible(true)}>
+                <Text style={styles.cartText}>Add to Cart</Text>
+            </TouchableOpacity>
+        </View>
     );
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fdfdfd',
         paddingHorizontal: 20,
         paddingTop: 10
     },

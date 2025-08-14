@@ -1,28 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import Colors from '../src/constants/colors';
 import { useNavigation } from '@react-navigation/native';
+import { CurrencyContext } from '../context/CurrencyContext';
+import CustomerFilter from '../components/CustomerFilter';
 
 const previousOrders = [
     {
         id: '1',
         title: 'Veggie Pizza',
         date: 'Aug 5, 2025',
-        price: '$12.99',
+        price: '12.99',
         image: 'https://via.placeholder.com/80',
     },
     {
         id: '2',
         title: 'Cheeseburger Meal',
         date: 'Aug 3, 2025',
-        price: '$8.49',
+        price: '8.49',
         image: 'https://via.placeholder.com/80',
     },
     {
         id: '3',
         title: 'Veggie Pizza',
         date: 'Aug 5, 2025',
-        price: '$12.99',
+        price: '12.99',
         image: 'https://via.placeholder.com/80',
     },
     {
@@ -36,30 +38,28 @@ const previousOrders = [
         id: '5',
         title: 'Veggie Pizza',
         date: 'Aug 5, 2025',
-        price: '$12.99',
+        price: '12.99',
         image: 'https://via.placeholder.com/80',
     },
     {
         id: '6',
         title: 'Cheeseburger Meal',
         date: 'Aug 3, 2025',
-        price: '$8.49',
+        price: '8.49',
         image: 'https://via.placeholder.com/80',
     },
 ];
 
 export default function RepeatOrderScreen() {
     const navigation = useNavigation();
-    const handleRepeatOrder = (orderId) => {
-        console.log(`Repeating order: ${orderId}`);
-    };
+    const { currency } = useContext(CurrencyContext);
 
     const renderOrderCard = ({ item }) => (
         <View style={styles.card}>
             {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
             <View style={styles.details}>
-                <Text style={styles.title}>Order ID - #23455</Text>
-                <Text style={styles.price}>Total - {item.price}</Text>
+                <Text style={styles.title}>Order Number - #23455</Text>
+                <Text style={styles.price}>Total - {currency}{item.price}</Text>
                 <Text style={styles.price}>Quantity - 4</Text>
             </View>
             <TouchableOpacity
@@ -73,6 +73,9 @@ export default function RepeatOrderScreen() {
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+                <CustomerFilter />
+            </View>
             <FlatList
                 data={previousOrders}
                 renderItem={renderOrderCard}
@@ -87,12 +90,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#ffffffff',
+        backgroundColor: '#fdfdfd',
     },
     header: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 12,
+        marginBottom: 20,
     },
     card: {
         flexDirection: 'row',

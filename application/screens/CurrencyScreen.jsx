@@ -1,65 +1,46 @@
-import React, { useState } from 'react';
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    StyleSheet,
-    SafeAreaView,
-} from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import React, { useContext } from "react";
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, SafeAreaView } from "react-native";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { CurrencyContext } from "../context/CurrencyContext";
 
-const CurrencyScreen = () => {
-    const [selectedCurrency, setSelectedCurrency] = useState('USD');
+export default function CurrencyScreen() {
+    const { currency, changeCurrency } = useContext(CurrencyContext);
 
-    const languageCurrencyMap = [
-        { language: 'English (US)', currency: 'US Dollar', code: 'USD' },
-        { language: 'Arabic', currency: 'Saudi Riyal', code: 'SAR' },
-        { language: 'Hindi', currency: 'Indian Rupee', code: 'INR' },
-        { language: 'French', currency: 'Euro', code: 'EUR' },
+    const currencyList = [
+        { currency: "US Dollar", code: "USD", symbol: "$" },
+        { currency: "Saudi Riyal", code: "SAR", symbol: "﷼" },
+        { currency: "Indian Rupee", code: "INR", symbol: "₹" },
+        { currency: "Euro", code: "EUR", symbol: "€" },
     ];
-
-    const renderItem = (item) => (
-        <TouchableOpacity
-            style={styles.languageRow}
-            onPress={() => setSelectedCurrency(item.code)}
-        >
-            <Text style={styles.languageText}>{item.code}</Text>
-            <MaterialIcons
-                name={selectedCurrency === item.code ? 'radio-button-checked' : 'radio-button-unchecked'}
-                size={22}
-                color="#000"
-            />
-        </TouchableOpacity>
-    );
 
     return (
         <SafeAreaView style={styles.container}>
             <FlatList
-                data={languageCurrencyMap}
-                renderItem={({ item }) => renderItem(item)}
+                data={currencyList}
                 keyExtractor={(item) => item.code}
-                showsVerticalScrollIndicator={false}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        style={styles.row}
+                        onPress={() => changeCurrency(item.symbol, item.currency, item.code)}
+                    >
+                        <Text style={styles.text}>{item.currency} ({item.symbol})</Text>
+                        <MaterialIcons
+                            name={currency === item.symbol ? "radio-button-checked" : "radio-button-unchecked"}
+                            size={22}
+                            color="#000"
+                        />
+                    </TouchableOpacity>
+                )}
             />
         </SafeAreaView>
     );
-};
-
-export default CurrencyScreen;
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        paddingHorizontal: 20,
+        backgroundColor: '#fdfdfd', paddingHorizontal: 20
     },
-    languageRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 12,
-    },
-    languageText: {
-        fontSize: 18,
-    },
+    row: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 12 },
+    text: { fontSize: 18 },
 });

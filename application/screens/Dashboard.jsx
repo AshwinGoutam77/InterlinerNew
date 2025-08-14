@@ -32,11 +32,9 @@ const DashboardScreen = () => {
         { key: 'startOrder', icon: 'add-circle-outline', label: t('dashboard.startNewOrder'), screen: 'CategoryScreen' },
         { key: 'previousOrders', icon: 'file-tray-full-outline', label: t('dashboard.previousOrders'), screen: 'HistoryScreen' },
         { key: 'trackOrder', icon: 'locate-outline', label: t('dashboard.trackOrder'), screen: 'TrackOrderListingScreen' },
-        { key: 'repeatOrder', icon: 'repeat', label: t('dashboard.repeatOrder'), screen: 'RepeatOrderScreen' },
         { key: 'creditInfo', icon: 'card-outline', label: t('dashboard.creditInfo'), screen: '' },
         { key: 'payment', icon: 'cash-outline', label: t('dashboard.payment'), screen: 'PaymentScreen' },
         { key: 'complain', icon: 'alert-circle-outline', label: t('dashboard.complain'), screen: 'RaiseComplainScreen' },
-        { key: 'support', icon: 'call-outline', label: t('dashboard.support'), screen: '' },
     ];
 
 
@@ -63,6 +61,7 @@ const DashboardScreen = () => {
                     <Swiper
                         autoplay
                         autoplayTimeout={5}
+                        autoplaySpeed={1000}
                         dotStyle={styles.dot}
                         activeDotStyle={styles.activeDot}
                         paginationStyle={{ bottom: 10 }}
@@ -72,7 +71,7 @@ const DashboardScreen = () => {
                             <View style={styles.slideContent}>
                                 <Image
                                     source={require('../../assets/images/banner-add-1.png')}
-                                    style={{ width: '100%', height: 180, borderRadius: 12 }}
+                                    style={{ width: '100%', height: 190, borderRadius: 12 }}
                                 />
                             </View>
                         </View>
@@ -80,7 +79,7 @@ const DashboardScreen = () => {
                             <View style={styles.slideContent}>
                                 <Image
                                     source={require('../../assets/images/banner-add-2.png')}
-                                    style={{ width: '100%', height: 180, borderRadius: 12 }}
+                                    style={{ width: '100%', height: 190, borderRadius: 12 }}
                                 />
                             </View>
                         </View>
@@ -88,7 +87,6 @@ const DashboardScreen = () => {
                 </View>
 
                 {/* Quick Actions */}
-                {/* <Text style={[styles.quickActionHeading, { textAlign: isRTL ? 'right' : 'left' }]}>Quick Actions</Text> */}
                 <Text style={[styles.quickActionHeading, { textAlign: isRTL ? 'right' : 'left' }]}>
                     {t('dashboard.quickActions')}
                 </Text>
@@ -120,7 +118,7 @@ const DashboardScreen = () => {
                             <Text
                                 style={[
                                     styles.quickLabel,
-                                    { textAlign: isRTL ? 'right' : 'left' } // ⬅️ Text direction
+                                    { textAlign: isRTL ? 'right' : 'left' }
                                 ]}
                             >
                                 {action.label}
@@ -136,19 +134,22 @@ const DashboardScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff', paddingTop: 20 },
+    container: {
+        flex: 1,
+        backgroundColor: '#fdfdfd', paddingTop: 20
+    },
     scrollContent: { paddingBottom: 10 },
     logo: { fontSize: 20, fontWeight: '700', color: Colors.primary },
     headerIcons: { flexDirection: 'row', alignItems: 'center' },
     icon: { marginRight: 12 },
     lang: { fontSize: 16, marginRight: 12 },
     profile: { width: 32, height: 32, borderRadius: 16 },
-    swiperContainer: { marginTop: 0, height: 180 },
+    swiperContainer: { marginTop: 0, height: 190 },
     slide: {
-        backgroundColor: Colors.primary,
+        // backgroundColor: Colors.primary,
         borderRadius: 12,
         marginHorizontal: 16,
-        height: 180,
+        height: 190,
         padding: 0,
     },
     slideContent: {

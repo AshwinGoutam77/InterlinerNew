@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
 import { Picker } from '@react-native-picker/picker';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     View,
     Text,
@@ -16,14 +16,16 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modal, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../src/constants/colors';
+import { CurrencyContext } from '../context/CurrencyContext';
+import CustomerFilter from '../components/CustomerFilter';
 
-const tabs = ['Transaction', 'Due By Order', 'Direct Payment',];
+const tabs = ['Payment records', 'Pay by order', 'Direct Payment',];
 
 const transactionData = [
     {
         id: 1,
         title: 'Paid Directly',
-        amount: '$120',
+        amount: '120',
         type: 'Cash',
         icon: require('../../assets/images/kandura.png'),
         date: 'Dec 15, 2024 | 10:00 AM',
@@ -32,7 +34,7 @@ const transactionData = [
     {
         id: 2,
         title: 'Partial Payment',
-        amount: '$400',
+        amount: '400',
         type: 'Cheque',
         icon: require('../../assets/images/kandura.png'),
         date: 'Dec 14, 2024 | 16:42 PM',
@@ -41,7 +43,7 @@ const transactionData = [
     {
         id: 3,
         title: 'Full Payment',
-        amount: '$100',
+        amount: '100',
         type: 'Card',
         icon: require('../../assets/images/kandura.png'),
         date: 'Dec 14, 2024 | 16:42 PM',
@@ -49,8 +51,10 @@ const transactionData = [
     },
 ];
 
-export default function PaymentScreen() {
-    const [activeTab, setActiveTab] = useState('Transaction');
+export default function PaymentScreen({ route }) {
+    const paymentType = route?.params?.paymentType ?? null; 
+    const { currency } = useContext(CurrencyContext);
+    const [activeTab, setActiveTab] = useState(paymentType ? 'Direct Payment' : 'Payment records');
     const [visible, setVisible] = React.useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
@@ -88,7 +92,7 @@ export default function PaymentScreen() {
                 <Text style={styles.date}>{item.date}</Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-                <Text style={styles.amount}>{item.amount}</Text>
+                <Text style={styles.amount}>{currency} {item.amount}</Text>
                 <View style={styles.typeRow}>
                     <Text style={styles.typeText}>{item.type}</Text>
                     <View
@@ -116,20 +120,20 @@ export default function PaymentScreen() {
                         <Text style={styles.value}>{order.DueDate}</Text>
                     </View>
                     <View style={styles.orderRow}>
-                        <Text style={styles.label}>Order ID</Text>
+                        <Text style={styles.label}>Order Number</Text>
                         <Text style={styles.value}>{order.id}</Text>
                     </View>
                     <View style={styles.orderRow}>
                         <Text style={styles.label}>Total Amount</Text>
-                        <Text style={styles.value}>$ {order.totalAmount}</Text>
+                        <Text style={styles.value}>{currency} {order.totalAmount}</Text>
                     </View>
                     <View style={styles.orderRow}>
                         <Text style={styles.label}>Paid Amount</Text>
-                        <Text style={styles.value}>$ {order.AmountPaid}</Text>
+                        <Text style={styles.value}>{currency} {order.AmountPaid}</Text>
                     </View>
                     <View style={styles.orderRow}>
                         <Text style={styles.label}>Balance Due</Text>
-                        <Text style={styles.value}>$ {order.DueAmount}</Text>
+                        <Text style={styles.value}>{currency} {order.DueAmount}</Text>
                     </View>
                     <View style={styles.descriptionRow}>
                         <Text style={styles.descriptionRowLabel}>Remark</Text>
@@ -199,9 +203,9 @@ export default function PaymentScreen() {
 
     const getContentForTab = () => {
         switch (activeTab) {
-            case 'Transaction':
+            case 'Payment records':
                 return <FlatList data={transactionData} keyExtractor={(item) => item.id.toString()} renderItem={renderTransaction} />;
-            case 'Due By Order':
+            case 'Pay by order':
                 return <DueByOrder />;
             case 'Direct Payment':
                 return <DirectPay />
@@ -212,6 +216,7 @@ export default function PaymentScreen() {
 
     return (
         <View style={styles.container}>
+            {/* <CustomerFilter /> */}
             <View style={styles.tabContainer}>{tabs.map(renderTab)}</View>
             <View style={styles.contentContainer}>{getContentForTab()}</View>
 
@@ -224,7 +229,7 @@ export default function PaymentScreen() {
 
                     <Text style={styles.title}>Pay Due By Orders</Text>
 
-                    {/* Order ID Dropdown */}
+                    {/* Order Number Dropdown */}
                     <Text style={styles.label}>Payment Via</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
@@ -280,7 +285,10 @@ export default function PaymentScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 20 },
+    container: {
+        flex: 1,
+        backgroundColor: '#fdfdfd', paddingHorizontal: 20
+    },
     tabContainer: {
         flexDirection: 'row',
         backgroundColor: '#F3F4F6',

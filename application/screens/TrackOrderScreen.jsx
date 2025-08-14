@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     View,
     Text,
@@ -10,6 +10,7 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../src/constants/colors';
+import { CurrencyContext } from '../context/CurrencyContext';
 
 const trackingSteps = [
     {
@@ -51,6 +52,7 @@ const trackingSteps = [
 
 export default function TrackOrderScreen({ navigation }) {
     const [showAll, setShowAll] = useState(false);
+    const { currency } = useContext(CurrencyContext);
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
@@ -60,56 +62,56 @@ export default function TrackOrderScreen({ navigation }) {
                     <View style={styles.orderHeader}>
                         <Text style={styles.orderId}>Order: #2234</Text>
                         <Text style={styles.orderSummary}>
-                            (4 Items) $1200
+                            (4 Items) {currency}1200
                         </Text>
                     </View>
                     <View style={[styles.orderHeader, { marginTop: 0, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
-                        <Image
+                        {/* <Image
                             source={require('../../assets/images/kandura.png')}
                             style={styles.productImage}
-                        />
+                        /> */}
                         <View style={{ flex: 1 }}>
                             <Text style={styles.productTitle}>Collar- 2334</Text>
                             <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                            <Text style={styles.productPrice}>$120.00</Text>
+                            <Text style={styles.productPrice}>{currency}120.00</Text>
                         </View>
                     </View>
 
                     <View style={[styles.orderHeader, { marginTop: 20, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
-                        <Image
+                        {/* <Image
                             source={require('../../assets/images/kandura.png')}
                             style={styles.productImage}
-                        />
+                        /> */}
                         <View style={{ flex: 1 }}>
                             <Text style={styles.productTitle}>Collar- 2334</Text>
                             <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                            <Text style={styles.productPrice}>$120.00</Text>
+                            <Text style={styles.productPrice}>{currency}120.00</Text>
                         </View>
                     </View>
 
                     {showAll && (
                         <>
                             <View style={[styles.orderHeader, { marginTop: 0, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
-                                <Image
+                                {/* <Image
                                     source={require('../../assets/images/kandura.png')}
                                     style={styles.productImage}
-                                />
+                                /> */}
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.productTitle}>Collar- 2334</Text>
                                     <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                                    <Text style={styles.productPrice}>$120.00</Text>
+                                    <Text style={styles.productPrice}>{currency}120.00</Text>
                                 </View>
                             </View>
 
                             <View style={[styles.orderHeader, { marginTop: 20, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
-                                <Image
+                                {/* <Image
                                     source={require('../../assets/images/kandura.png')}
                                     style={styles.productImage}
-                                />
+                                /> */}
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.productTitle}>Collar- 2334</Text>
                                     <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                                    <Text style={styles.productPrice}>$120.00</Text>
+                                    <Text style={styles.productPrice}>{currency}120.00</Text>
                                 </View>
                             </View>
                         </>
@@ -155,6 +157,14 @@ export default function TrackOrderScreen({ navigation }) {
                         </View>
                     ))
                 }
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.downloadButton}>
+                        <Text style={styles.downloadText}>Mark as Received</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.downloadButton}>
+                        <Text style={styles.downloadText}>Download Invoice</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView >
         </View >
     );
@@ -162,7 +172,7 @@ export default function TrackOrderScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fefefe',
+        backgroundColor: '#fdfdfd',
         flex: 1,
         // paddingTop: 20,
         paddingHorizontal: 20
@@ -325,4 +335,24 @@ const styles = StyleSheet.create({
         marginTop: 10,
         textDecorationLine: 'underline'
     },
+    downloadButton: {
+        backgroundColor: Colors.primary,
+        paddingVertical: 14,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        marginTop: 8,
+        alignItems: 'center',
+        width: '100%'
+    },
+    downloadText: {
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: 16,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'start',
+        gap: 20
+    }
 });

@@ -12,9 +12,11 @@ import Icon from 'react-native-vector-icons/Ionicons'; // For back arrow
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // For radio buttons
 import i18n from '../src/i18n/i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAppContext } from '../context/RTLContext';
 
 const LanguageScreen = ({ navigation }) => {
     const { t } = useTranslation();
+    const { isRTL, toggleRTL } = useAppContext();
     const languages = [
         { code: 'en', label: t('language.English (US)') },
         { code: 'ar', label: t('language.Arabic') },
@@ -52,14 +54,19 @@ const LanguageScreen = ({ navigation }) => {
         try {
             await i18n.changeLanguage(lang);
             setSelectedLanguage(lang);
-            await AsyncStorage.setItem('APP_LANGUAGE', lang); // ✅ Save to storage
+            await AsyncStorage.setItem('APP_LANGUAGE', lang);
+            if (lang === 'ar') {
+                toggleRTL(true);
+            } else {
+                toggleRTL(false);
+            }
         } catch (err) {
             console.error('Failed to change language:', err);
         }
     };
     const renderItem = (item) => (
         <TouchableOpacity
-            style={styles.languageRow}
+            style={[styles.languageRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
             onPress={() => changeLang(item.code)}
         >
             <Text style={styles.languageText}>{item.label}</Text>
@@ -88,7 +95,7 @@ export default LanguageScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fdfdfd',
         paddingHorizontal: 20,
     },
     header: {

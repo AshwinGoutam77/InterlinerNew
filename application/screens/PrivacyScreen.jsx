@@ -19,6 +19,16 @@ export default function PrivacyScreen({ navigation }) {
 
                 <Text style={styles.statusHeader}>3. Disclousre of your personal data</Text>
                 <Text style={styles.statusDescription}>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
+
+                <Text style={styles.statusHeader}>4. Types of data we collect</Text>
+                <Text style={styles.statusDescription}>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
+
+                <Text style={styles.statusHeader}>5. Use of personal data</Text>
+                <Text style={styles.statusDescription}>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
+
+                <Text style={styles.statusHeader}>6. Disclousre of your personal data</Text>
+                <Text style={styles.statusDescription}>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
+
             </ScrollView>
         </View>
     );
@@ -26,9 +36,9 @@ export default function PrivacyScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fefefe',
+        backgroundColor: '#fdfdfd',
         flex: 1,
-        // paddingTop: 20,
+        paddingTop: 20,
         paddingHorizontal: 20
     },
     header: {
@@ -63,7 +73,7 @@ const styles = StyleSheet.create({
         borderRadius: 8
     },
     productTitle: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold'
     },
     productInfo: {
@@ -115,14 +125,14 @@ const styles = StyleSheet.create({
         marginBottom: 16
     },
     statusHeader: {
-        fontSize: 22,
+        fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10
     },
     statusDescription: {
         fontSize: 14,
         fontWeight: '500',
-        marginBottom: 10
+        marginBottom: 20
     },
     statusItem: {
         flexDirection: 'row',

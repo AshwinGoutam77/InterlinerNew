@@ -106,7 +106,10 @@ export default function Home() {
 
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff' },
+    container: {
+        flex: 1,
+        backgroundColor: '#fdfdfd',
+    },
     content: { padding: 20 },
     title: { fontSize: 24, fontWeight: 'bold', color: '#4B5563' },
     subtitle: { fontSize: 16, marginBottom: 20, fontFamily: 'Poppins-Regular' },

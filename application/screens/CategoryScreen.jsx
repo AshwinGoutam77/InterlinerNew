@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     View,
     Text,
@@ -12,6 +12,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
+import { CurrencyContext } from '../context/CurrencyContext';
+import CustomerFilter from '../components/CustomerFilter';
 
 const data = [
     {
@@ -122,10 +124,12 @@ const data = [
 
 const CategoryScreen = () => {
     const { t } = useTranslation();
+    const { currency } = useContext(CurrencyContext);
     const navigation = useNavigation();
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
+            {/* <CustomerFilter show /> */}
             <View style={styles.searchBox}>
                 <Icon name='search' size={24} color='#999' />
                 <TextInput
@@ -173,7 +177,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         padding: 20,
         // paddingBottom: 100,
-        backgroundColor: '#fff',
+        backgroundColor: '#fdfdfd',
         flexGrow: 1,
     },
     heading: {
@@ -191,7 +195,8 @@ const styles = StyleSheet.create({
         justifyContent: 'start',
         flexDirection: 'row',
         alignItems: 'center',
-        gap: '10'
+        gap: '10',
+        marginTop: 12,
     },
     input: {
         fontSize: 16,

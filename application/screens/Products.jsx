@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     View,
     Text,
@@ -13,6 +13,7 @@ import {
 const { width } = Dimensions.get('window');
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
+import { CurrencyContext } from '../context/CurrencyContext';
 
 const categories = [
     { id: '1', label: 'Collar', icon: require('../../assets/images/shirt-collar.png') },
@@ -26,33 +27,62 @@ const products = [
         id: '1',
         name: '23666',
         description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '$28',
+        price: '28',
         image: require('../../assets/images/product-1.png'),
     },
     {
         id: '2',
         name: '3223H',
         description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '$12',
+        price: '12',
         image: require('../../assets/images/product-1.png'),
     },
     {
         id: '3',
         name: '2777',
         description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '$20',
+        price: '20',
         image: require('../../assets/images/product-1.png'),
     },
     {
         id: '4',
         name: '3093',
         description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '$15',
+        price: '15',
+        image: require('../../assets/images/product-1.png'),
+    },
+    {
+        id: '5',
+        name: '23666',
+        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
+        price: '28',
+        image: require('../../assets/images/product-1.png'),
+    },
+    {
+        id: '6',
+        name: '3223H',
+        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
+        price: '12',
+        image: require('../../assets/images/product-1.png'),
+    },
+    {
+        id: '7',
+        name: '2777',
+        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
+        price: '20',
+        image: require('../../assets/images/product-1.png'),
+    },
+    {
+        id: '8',
+        name: '3093',
+        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
+        price: '15',
         image: require('../../assets/images/product-1.png'),
     },
 ];
 
 const ProductsPage = () => {
+    const { currency } = useContext(CurrencyContext);
     const navigation = useNavigation();
     const renderCategory = ({ item }) => (
         <TouchableOpacity style={styles.categoryItem}>
@@ -74,7 +104,7 @@ const ProductsPage = () => {
                 <Image source={item.image} style={styles.productImage} />
                 <View style={styles.productDescription}>
                     <Text style={styles.productName}>{item.name}</Text>
-                    <Text style={styles.productPrice}>{item.price}</Text>
+                    <Text style={styles.productPrice}>{currency} {item.price}</Text>
                 </View>
                 {/* <Text style={styles.productDescription}>{item.description}</Text> */}
             </View>
@@ -109,9 +139,9 @@ const ProductsPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // paddingTop: 20,
+        paddingTop: 20,
         paddingHorizontal: 20,
-        backgroundColor: '#fff',
+        backgroundColor: '#fdfdfd',
     },
     backText: {
         fontSize: 16,
@@ -181,7 +211,7 @@ const styles = StyleSheet.create({
     productPrice: {
         fontSize: 16,
         fontWeight: '800',
-        color: Colors.primary,
+        color: Colors.black,
     },
 });
 
