@@ -21,12 +21,16 @@ const orderData = [
 export default function HistoryScreen({ navigation }) {
     const [visible, setVisible] = React.useState(false);
     const [visiblePay, setVisiblePay] = React.useState(false);
+    const [RepeatOrder, setRepeatOrder] = useState(false)
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
 
 
     const showModalPay = () => setVisiblePay(true);
     const hideModalPay = () => setVisiblePay(false);
+
+    const showRepeat = () => setRepeatOrder(true);
+    const hideRepeat = () => setRepeatOrder(false);
 
     const [orderId, setOrderId] = useState(null);
     const [complaint, setComplaint] = useState('');
@@ -74,11 +78,14 @@ export default function HistoryScreen({ navigation }) {
                             <TouchableOpacity style={styles.button} onPress={showModalPay}>
                                 <Text style={styles.buttonText}>Pay Due Payments</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RepeatOrderScreen', { orderId: order.id })}>
+                            <TouchableOpacity style={styles.button} onPress={showRepeat}>
                                 <Text style={styles.buttonText}>Repeat Order</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.button} onPress={showModal}>
                                 <Text style={styles.buttonText}>Complain</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('HelpCenterScreen')}>
+                                <Text style={styles.buttonText}>Support</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -156,12 +163,18 @@ export default function HistoryScreen({ navigation }) {
                         >
                             <Picker.Item label="Choose Method" value="" />
                             <Picker.Item label="Cash" value="Cash" />
-                            <Picker.Item label="Cheque" value="Cheque" />
-                            <Picker.Item label="Card" value="Card" />
-                            {/* Add more as needed */}
+                            <Picker.Item label="Bank Transfer" value="Bank Transfer" />
+                            <Picker.Item label="Wallet" value="Wallet" />
+                            <Picker.Item label="Online Link" value="Online Link" />
                         </Picker>
                     </View>
 
+                    <View style={styles.PaymentButtonGrid}>
+                        <TouchableOpacity style={styles.paymentBtn}><Text style={styles.buttonText}>
+                            Full Payment</Text></TouchableOpacity>
+                        <TouchableOpacity style={styles.paymentBtn}><Text style={styles.buttonText}>
+                            Partial Payment</Text></TouchableOpacity>
+                    </View>
 
                     {/* Complaint Textarea */}
                     <Text style={styles.label}>Amount</Text>
@@ -194,6 +207,26 @@ export default function HistoryScreen({ navigation }) {
                     }}>
                         <Text style={styles.submitText}>Submit</Text>
                     </TouchableOpacity>
+                </Modal>
+            </Portal>
+
+            {/* repeat order */}
+            <Portal>
+                <Modal visible={RepeatOrder} transparent animationType="slide" contentContainerStyle={containerStyle}>
+                    {/* Close Button */}
+                    <TouchableOpacity onPress={hideRepeat} style={styles.closeIcon}>
+                        <Icon name="close" size={24} color="#000" />
+                    </TouchableOpacity>
+
+                    <Text style={styles.RepeatTitle}>Please confirm if you would like to proceed with placing this same order again.</Text>
+                    <View style={styles.RepeatButtonGrid}>
+                        <TouchableOpacity style={styles.RepeatSubmitBtn} onPress={() => { navigation.navigate('CartScreen'), hideRepeat() }}>
+                            <Text style={styles.submitText}>Place Order</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.RepeatSubmitBtn} onPress={() => { hideRepeat() }}>
+                            <Text style={styles.submitText}>Cancle</Text>
+                        </TouchableOpacity>
+                    </View>
                 </Modal>
             </Portal>
         </View>
@@ -342,6 +375,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         textAlign: 'left',
     },
+    RepeatTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        marginTop: 30,
+    },
     pickerWrapper: {
         borderWidth: 1,
         borderColor: '#ccc',
@@ -350,11 +390,35 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         backgroundColor: '#f9f9f9',
     },
-
+    RepeatButtonGrid: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
     picker: {
         height: 50,
         width: '100%',
         color: '#333',
     },
-
+    PaymentButtonGrid: {
+        // marginTop: 12,
+        flexDirection: 'row',
+        justifyContent: 'left',
+        gap: 10,
+    },
+    paymentBtn: {
+        backgroundColor: Colors.primary,
+        borderRadius: 8,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        alignItems: 'center',
+        // marginTop: 20,
+    },
+    RepeatSubmitBtn: {
+        backgroundColor: Colors.primary,
+        borderRadius: 8,
+        paddingVertical: 12,
+        alignItems: 'center',
+        marginTop: 20,
+        width: '48%',
+    },
 });

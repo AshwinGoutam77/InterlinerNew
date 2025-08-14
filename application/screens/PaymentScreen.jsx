@@ -52,7 +52,10 @@ const transactionData = [
 ];
 
 export default function PaymentScreen({ route }) {
-    const paymentType = route?.params?.paymentType ?? null; 
+    const { role } = route || {}; // safe destructuring
+    console.log("Role:", route);
+
+    const paymentType = route?.params?.paymentType ?? null;
     const { currency } = useContext(CurrencyContext);
     const [activeTab, setActiveTab] = useState(paymentType ? 'Direct Payment' : 'Payment records');
     const [visible, setVisible] = React.useState(false);

@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
 import AddItemsModal from '../modals/AddItemsModal';
+import { Modal, Portal, Button } from "react-native-paper";
 
 const shades = ['White', 'Off White', 'Blue White', 'Cream'];
 const widths = ['36 Inch', '44 Inch', '60 Inch'];
@@ -38,9 +39,8 @@ export default function ProductDetailScreen() {
     const [Visible, setVisible] = useState(false)
 
     const options = [
-        { id: 'standard', label: 'Cut X rolls in standard collar size (12-20”)' },
-        { id: 'custom', label: 'Cut collars from X rolls in customized size (charges extra)' },
-        { id: 'none', label: 'None' },
+        { id: 'standard', label: 'yes' },
+        { id: 'none', label: 'No' },
     ];
 
     const getShadeColor = (shade) => {
@@ -58,6 +58,16 @@ export default function ProductDetailScreen() {
         }
     };
 
+    const inchesList = ["1.5 Inch", "2 Inch", "2.5 Inch", "3 Inch", "3.5 Inch", "4 Inch", "4.5 Inch", "5 Inch", "5.5 Inch", "6 Inch", "6.5 Inch", "7 Inch", "7.5 Inch", "8 Inch"];
+    const [cutRollsVisible, setCutRollsVisible] = useState(false);
+    const [inchQuantities, setInchQuantities] = useState(
+        inchesList.reduce((acc, inch) => ({ ...acc, [inch]: "" }), {})
+    );
+
+    const handleSaveCutRolls = () => {
+        console.log("Cut Rolls Data:", inchQuantities);
+        setCutRollsVisible(false);
+    };
 
     return (
         <View style={styles.container}>
@@ -187,7 +197,7 @@ export default function ProductDetailScreen() {
                 </View>
 
                 {/* Number of Rolls */}
-                <Text style={styles.label}>Enter Number of Rolls</Text>
+                <Text style={styles.label}>Enter Number of Uncut Rolls</Text>
                 <TextInput
                     style={styles.input}
                     keyboardType="numeric"
@@ -195,21 +205,29 @@ export default function ProductDetailScreen() {
                     onChangeText={setRolls}
                 />
 
-                <Text style={styles.label}>Do you want customization</Text>
-                {options.map((option) => (
+                <Text style={styles.label}>Do you want Cut Rolls</Text>
+                {["standard", "none"].map((id) => (
                     <TouchableOpacity
-                        key={option.id}
+                        key={id}
                         style={styles.radioContainer}
-                        onPress={() => setSelectedOption(option.id)}
+                        onPress={() => {
+                            setSelectedOption(id);
+                            if (id === "standard") {
+                                setCutRollsVisible(true);
+                            }
+                        }}
                     >
                         <View style={styles.radioCircle}>
-                            {selectedOption === option.id && <View style={styles.selectedRb} />}
+                            {selectedOption === id && <View style={styles.selectedRb} />}
                         </View>
-                        <Text style={styles.radioText}>{option.label}</Text>
+                        <Text style={styles.radioText}>
+                            {id === "standard" ? "Yes" : "No"}
+                        </Text>
                     </TouchableOpacity>
                 ))}
 
-                {selectedOption !== 'none' && <View>
+
+                {/* {selectedOption !== 'none' && <View>
                     <Text style={styles.label}>Choose Customised Size</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
@@ -223,7 +241,7 @@ export default function ProductDetailScreen() {
                             <Picker.Item label="20" value="20" />
                         </Picker>
                     </View>
-                </View>}
+                </View>} */}
 
                 {/* Remark */}
                 <Text style={styles.label}>Remark</Text>
@@ -244,6 +262,52 @@ export default function ProductDetailScreen() {
             <TouchableOpacity style={styles.cartBtn} onPress={() => setVisible(true)}>
                 <Text style={styles.cartText}>Add to Cart</Text>
             </TouchableOpacity>
+
+            <Portal>
+                <Modal
+                    visible={cutRollsVisible}
+                    onDismiss={() => setCutRollsVisible(false)}
+                    contentContainerStyle={styles.modalContainer}
+                >
+                    <View style={styles.inchRow}>
+                        <Text style={styles.modalTitle}>Enter Pieces for Each Size</Text>
+                        <TouchableOpacity onPress={() => setCutRollsVisible(false)} style={styles.closeIcon}>
+                            <Icon name="close" size={24} color="#000" />
+                        </TouchableOpacity>
+                    </View>
+                    <ScrollView style={{ maxHeight: 450 }}>
+                        {inchesList.map((inch) => (
+                            <View key={inch} style={styles.inchRow}>
+                                <Text style={styles.inchLabel}>{inch}</Text>
+                                <TextInput
+                                    style={styles.inchInput}
+                                    keyboardType="numeric"
+                                    value={inchQuantities[inch]}
+                                    onChangeText={(value) =>
+                                        setInchQuantities((prev) => ({
+                                            ...prev,
+                                            [inch]: value,
+                                        }))
+                                    }
+                                />
+                            </View>
+                        ))}
+                    </ScrollView>
+                    <View>
+                        <View style={styles.inchRow}>
+                            <Text style={styles.totalText}>Total: 33 Inches</Text>
+                            <Text style={styles.totalText}>No. of Rolls: 1</Text>
+                        </View>
+                        <Button
+                            mode="contained"
+                            onPress={handleSaveCutRolls}
+                            style={styles.SaveBtn}
+                        >
+                            Save
+                        </Button>
+                    </View>
+                </Modal>
+            </Portal>
         </View>
     );
 }
@@ -373,6 +437,13 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 40,
     },
+    SaveBtn: {
+        backgroundColor: Colors.primary,
+        borderRadius: 8,
+        paddingVertical: 5,
+        alignItems: 'center',
+        // marginTop: 16,
+    },
     cartBtn: {
         position: 'absolute',
         bottom: 20,
@@ -457,4 +528,42 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: Colors.primary,
     },
+    modalContainer: {
+        backgroundColor: "white",
+        padding: 20,
+        marginHorizontal: 20,
+        borderRadius: 10,
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: "600",
+        // marginBottom: 12,
+    },
+    inchRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 10,
+        marginTop: 10,
+    },
+    inchLabel: {
+        fontSize: 16,
+    },
+    inchInput: {
+        borderWidth: 1,
+        borderColor: "#ccc",
+        borderRadius: 6,
+        width: 80,
+        padding: 6,
+        textAlign: "center",
+    },
+    totalText: {
+        fontSize: 16,
+        fontWeight: '600',
+        marginTop: 10,
+    },
+    // inchRow: {
+    //     flexDirection: 'row',
+    //     justifyContent: 'space-between'
+    // }
 });

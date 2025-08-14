@@ -1,15 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/self-closing-comp */
-import React from 'react'
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Colors from '../src/constants/colors';
 import { Modal, Portal } from 'react-native-paper';
 
 export default function CustomerFilter({ show }) {
-    const [visible, setVisible] = React.useState(show ? true : false);
+    const [visible, setVisible] = useState(show ? true : false);
+    const [search, setSearch] = useState('');
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
+
     const customers = [
         { id: "1", name: "John Doe", email: "john@example.com", avatar: require("../../assets/images/user.jpg") },
         { id: "2", name: "Sarah Smith", email: "sarah@example.com", avatar: require("../../assets/images/user.jpg") },
@@ -17,6 +19,14 @@ export default function CustomerFilter({ show }) {
         { id: "4", name: "John Doe", email: "john@example.com", avatar: require("../../assets/images/user.jpg") },
         { id: "5", name: "Sarah Smith", email: "sarah@example.com", avatar: require("../../assets/images/user.jpg") },
     ];
+
+    // Filter customers based on search text
+    const filteredCustomers = customers.filter(
+        c =>
+            c.name.toLowerCase().includes(search.toLowerCase()) ||
+            c.email.toLowerCase().includes(search.toLowerCase())
+    );
+
     const renderItem = ({ item }) => (
         <TouchableOpacity style={styles.card} onPress={() => hideModal(item)}>
             <Image source={item.avatar} style={styles.avatar} />
@@ -28,19 +38,25 @@ export default function CustomerFilter({ show }) {
         </TouchableOpacity>
     );
 
-    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
+    const containerStyle = {
+        backgroundColor: 'white',
+        padding: 20,
+        margin: 20,
+        borderRadius: 10,
+    };
+
     return (
         <>
             <TouchableOpacity onPress={showModal} style={styles.customerContainer}>
                 <View style={styles.userBox}>
                     <Icon name='user' size={22} style={styles.userIcon}></Icon>
-                    {/* <Text style={styles.userText}>Select Customer</Text> */}
                     <Text style={styles.userText}>Sarah Smith</Text>
                 </View>
                 <View>
                     <Icon name='right' size={20} style={styles.userIcon}></Icon>
                 </View>
             </TouchableOpacity>
+
             <Portal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                     {/* Header */}
@@ -51,17 +67,34 @@ export default function CustomerFilter({ show }) {
                         </TouchableOpacity>
                     </View>
 
+                    {/* Search Bar */}
+                    <View style={styles.searchBox}>
+                        <Icon name="search1" size={18} color="#888" style={{ marginRight: 8 }} />
+                        <TextInput
+                            placeholder="Search customer..."
+                            placeholderTextColor="#888"
+                            style={styles.searchInput}
+                            value={search}
+                            onChangeText={setSearch}
+                        />
+                    </View>
+
                     {/* List */}
                     <FlatList
-                        data={customers}
+                        data={filteredCustomers}
                         keyExtractor={(item) => item.id}
                         renderItem={renderItem}
                         ItemSeparatorComponent={() => <View style={styles.separator} />}
+                        ListEmptyComponent={
+                            <Text style={{ textAlign: 'center', marginTop: 20, color: '#888' }}>
+                                No customers found
+                            </Text>
+                        }
                     />
                 </Modal>
             </Portal>
         </>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -89,11 +122,26 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 20,
+        marginBottom: 16,
     },
     title: {
         fontSize: 16,
         fontWeight: '500',
+    },
+    searchBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        marginBottom: 14,
+    },
+    searchInput: {
+        flex: 1,
+        fontSize: 14,
+        color: '#000',
     },
     card: {
         flexDirection: "row",
@@ -120,4 +168,4 @@ const styles = StyleSheet.create({
         backgroundColor: "#eee",
         marginVertical: 5,
     },
-})
+});

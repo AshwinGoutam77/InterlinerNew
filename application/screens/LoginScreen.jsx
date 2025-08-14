@@ -23,14 +23,14 @@ const LoginScreen = () => {
 
     return (
         <ImageBackground
-            source={require('../../assets/images/login-banner.png')}
+            source={require('../../assets/images/login-banner.jpg')}
             style={styles.background}
-            resizeMode="cover"
+            resizeMode="contain"
         >
             <LinearGradient
                 colors={[
-                    'rgba(226, 226, 226, 1)',
-                    'rgba(183, 224, 255, 0.3)',
+                    'rgba(255, 255, 255, 0.4)',
+                    'rgba(255, 255, 255, 0.15)',
                 ]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
@@ -38,19 +38,18 @@ const LoginScreen = () => {
             >
                 {/* <View style={styles.overlay} /> */}
                 <SafeAreaView style={styles.container}>
-                    {/* Logo */}
-                    <View style={styles.logoContainer}>
+                    <View style={styles.UpperLogoContainer}>
                         <Image
-                            source={require('../../assets/images/logo.png')}
+                            source={require('../../assets/images/permisis-logo.png')}
                             style={styles.logo}
                             resizeMode="contain"
                         />
-                        {/* <Image
-                            source={require('../../assets/images/login-banner.png')}
-                            style={styles.loginBanner}
+                        <Text style={styles.title}>Brought to you by</Text>
+                        <Image
+                            source={require('../../assets/images/logo.png')}
+                            style={styles.MainLogo}
                             resizeMode="contain"
-                        /> */}
-                        {/* <Text style={styles.heading}>Interliners</Text> */}
+                        />
                     </View>
 
                     {/* Title */}
@@ -84,20 +83,13 @@ const LoginScreen = () => {
                         </TouchableOpacity>
                     </View>
 
-                    {/* Remember Me */}
-                    {/* <View style={styles.rememberRow}>
-                <CheckBox
-                    value={remember}
-                    onValueChange={setRemember}
-                    tintColors={{ true: '#000', false: '#aaa' }}
-                />
-                <Text style={styles.rememberText}>Remember me</Text>
-            </View> */}
-
                     {/* Sign In Button */}
-                    <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.navigate('MainApp')}>
-                        <Text style={styles.signInText}>Sign in</Text>
+                    <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.navigate('MainApp', { role: 'customer' })}>
+                        <Text style={styles.signInText}>Login</Text>
                     </TouchableOpacity>
+                    {/* <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.navigate('MainApp', { role: 'sales' })}>
+                        <Text style={styles.signInText}>Login as Sales</Text>
+                    </TouchableOpacity> */}
 
                     {/* Forgot Password */}
                     <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
@@ -123,10 +115,11 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
         justifyContent: 'center',
+        backgroundColor: '#ffffffff',
     },
     overlay: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0, 0, 0, 0.4)', // Adjust opacity here
+        backgroundColor: 'rgba(255, 255, 255, 1)', // Adjust opacity here
     },
     container: {
         flex: 1,
@@ -138,13 +131,25 @@ const styles = StyleSheet.create({
     backBtn: {
         marginBottom: 12,
     },
+    UpperLogoContainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 20,
+    },
     logoContainer: {
         alignItems: 'center',
         marginVertical: 12,
     },
+    MainLogo: {
+        width: 100,
+        height: 100,
+        // margin: 'auto'
+    },
     logo: {
-        width: 200,
-        height: 200,
+        width: 300,
+        height: 100,
+        // margin: 'auto'
     },
     loginBanner: {
         width: 350,

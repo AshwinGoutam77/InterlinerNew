@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     View,
     Text,
@@ -12,17 +12,22 @@ import { useNavigation } from '@react-navigation/native';
 import { Modal, Portal } from 'react-native-paper';
 import { t } from 'i18next';
 import Colors from '../src/constants/colors';
+import { CurrencyContext } from '../context/CurrencyContext';
 
 
 const paymentMethods = [
     {
-        title: 'My Wallet',
-        subtitle: '$9,379',
-        icon: require('../../assets/images/wallet.png')
+        title: 'Cheque',
+        icon: require('../../assets/images/cheque.png')
     },
     {
         title: 'Bank Transfer',
         icon: require('../../assets/images/bank-transfer.png')
+    },
+    {
+        title: 'My Wallet',
+        subtitle: '$9,379',
+        icon: require('../../assets/images/wallet.png')
     },
     {
         title: 'Buy now pay later',
@@ -30,25 +35,23 @@ const paymentMethods = [
         icon: require('../../assets/images/buy-now.png')
     },
     {
-        title: 'Part Payment',
-        icon: require('../../assets/images/partial-payment.png')
-    },
-    {
         title: 'Full Payment',
         icon: require('../../assets/images/cash.png')
+    },
+    {
+        title: 'Part Payment',
+        icon: require('../../assets/images/partial-payment.png')
     },
     {
         title: 'Online Link',
         icon: require('../../assets/images/payment-link.png')
     },
-    {
-        title: 'Cheque',
-        icon: require('../../assets/images/cheque.png')
-    },
+
 ];
 
 export default function PaymentMethodScreen() {
     const navigation = useNavigation();
+    const { currency } = useContext(CurrencyContext);
     const [selected, setSelected] = useState(0);
     const [visible, setVisible] = React.useState(false);
 
@@ -74,6 +77,9 @@ export default function PaymentMethodScreen() {
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.paymentRow}>
+                <View>
+                    <Text style={styles.totalText}>Total Payment: {currency} 3000</Text>
+                </View>
                 <View style={styles.cardsWrapper}>
                     {paymentMethods.map((method, index) => (
                         <TouchableOpacity
@@ -122,8 +128,6 @@ export default function PaymentMethodScreen() {
                     </TouchableOpacity>
                 </Modal>
             </Portal>
-
-
             <TouchableOpacity
                 style={styles.confirmBtn}
                 // onPress={() => navigation.navigate('CheckoutScreen')}
@@ -217,5 +221,11 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16
+    },
+    totalText: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: Colors.black,
+        marginBottom: 20,
     }
 });

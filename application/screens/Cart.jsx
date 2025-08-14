@@ -94,7 +94,7 @@ export default function CartScreen() {
             <View style={styles.details}>
                 <Text style={styles.title}>{item.title}</Text>
                 <View style={styles.colorRow}>
-                    <Text style={styles.colorText}>Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                    <Text style={styles.colorText}>Off White | cut - 10 Rolls | UnCut - 2 Rolls | 36 Inch | 25 Meter</Text>
                 </View>
                 <Text style={styles.price}>{currency} {item.price.toFixed(2)}</Text>
             </View>
@@ -108,6 +108,7 @@ export default function CartScreen() {
                         <Text style={styles.counterBtn}>+</Text>
                     </TouchableOpacity>
                 </View>
+                <Text style={styles.removeBtn}>Remove</Text>
             </View>
         </TouchableOpacity>
     );
@@ -228,12 +229,21 @@ const styles = StyleSheet.create({
         color: Colors.black,
         fontWeight: '600',
     },
+    removeBtn: {
+        marginRight: 10,
+        color: Colors.black,
+        fontSize: 14,
+        fontWeight: '600',
+        marginTop: 10,
+        textDecorationLine: 'underline',
+        textDecorationColor: Colors.black,
+    },
     footer: {
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        backgroundColor: '#fff',
+        backgroundColor: Colors.primary,
         padding: 26,
         borderRadius: 10,
         flexDirection: 'row',
@@ -246,8 +256,8 @@ const styles = StyleSheet.create({
     },
     totalContainer: {
         backgroundColor: Colors.primary,
-        paddingVertical: 5,
-        paddingHorizontal: 18,
+        // paddingVertical: 5,
+        // paddingHorizontal: 18,
         borderRadius: 5,
     },
     totalLabel: {
@@ -259,7 +269,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     checkoutBtn: {
-        backgroundColor: Colors.primary,
+        backgroundColor: Colors.white,
         borderRadius: 5,
         paddingVertical: 16,
         paddingHorizontal: 48,
@@ -267,7 +277,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     checkoutText: {
-        color: '#fff',
+        color: Colors.black,
         fontSize: 16,
         fontWeight: '800',
     },

@@ -1,10 +1,62 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, TextInput } from 'react-native';
 import Colors from '../src/constants/colors';
+import { Modal, Portal } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Picker } from '@react-native-picker/picker';
 
 const OrderDetailsScreen = () => {
+    const [visible, setVisible] = React.useState(false);
+    const [complaint, setComplaint] = useState('');
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+
+    const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
+    const transactionData = [
+        {
+            id: 1,
+            title: 'Paid Directly',
+            amount: '120',
+            type: 'Cash',
+            icon: require('../../assets/images/kandura.png'),
+            date: 'Dec 15, 2024 | 10:00 AM',
+            color: '#F87171',
+        },
+        {
+            id: 2,
+            title: 'Partial Payment',
+            amount: '400',
+            type: 'Cheque',
+            icon: require('../../assets/images/kandura.png'),
+            date: 'Dec 14, 2024 | 16:42 PM',
+            color: '#60A5FA',
+        },
+        {
+            id: 3,
+            title: 'Full Payment',
+            amount: '100',
+            type: 'Card',
+            icon: require('../../assets/images/kandura.png'),
+            date: 'Dec 14, 2024 | 16:42 PM',
+            color: '#15c55eff',
+        },
+    ];
     return (
         <ScrollView contentContainerStyle={styles.container}>
+
+            {/* Buttons at the top */}
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.actionButton}>
+                    <Text style={styles.buttonText}>Mark as Received</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionButton}>
+                    <Text style={styles.buttonText}>Download Invoice</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionButton} onPress={showModal}>
+                    <Text style={styles.buttonText}>Complain</Text>
+                </TouchableOpacity>
+            </View>
+
             {/* Order Info */}
             <View style={styles.card}>
                 <Text style={styles.label}>
@@ -32,7 +84,7 @@ const OrderDetailsScreen = () => {
                 <View style={styles.productRow}>
                     <View style={styles.productRow}>
                         <Image
-                            source={require('../../assets/images/kandura.png')} // replace with your image
+                            source={require('../../assets/images/kandura.png')}
                             style={styles.productImage}
                         />
                         <View>
@@ -53,7 +105,7 @@ const OrderDetailsScreen = () => {
                     <Text style={styles.text}>₹1640.80</Text>
                 </View>
                 <View style={styles.priceRow}>
-                    <Text style={styles.text}>Discount (10%)</Text>
+                    <Text style={styles.text}>Promo (10%)</Text>
                     <Text style={styles.text}>₹0.00</Text>
                 </View>
                 <View style={styles.separator} />
@@ -63,15 +115,62 @@ const OrderDetailsScreen = () => {
                 </View>
             </View>
 
-            {/* Button */}
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.downloadButton}>
-                    <Text style={styles.downloadText}>Mark as Received</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.downloadButton}>
-                    <Text style={styles.downloadText}>Download Invoice</Text>
-                </TouchableOpacity>
-            </View>
+            {/* Transaction History */}
+            <Text style={styles.TrancactionHeading}>Transaction History</Text>
+            {transactionData?.map((item, index) => {
+                return (
+                    <View style={styles.itemContainer} key={index}>
+                        {/* <Image source={item.icon} style={styles.icon} /> */}
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.TrancactionTitle}>{item.title}</Text>
+                            <Text style={styles.date}>{item.date}</Text>
+                        </View>
+                        <View style={{ alignItems: 'flex-end' }}>
+                            <Text style={styles.amount}>{"currency"} {item.amount}</Text>
+                            <View style={styles.typeRow}>
+                                <Text style={styles.typeText}>{item.type}</Text>
+                                <View
+                                    style={[
+                                        styles.typeIcon,
+                                        { backgroundColor: item.color },
+                                    ]}
+                                />
+                            </View>
+                        </View>
+                    </View>
+                )
+            })}
+
+
+            <Portal>
+                <Modal visible={visible} transparent animationType="slide" contentContainerStyle={containerStyle}>
+                    {/* Close Button */}
+                    <TouchableOpacity onPress={hideModal} style={styles.closeIcon}>
+                        <Icon name="close" size={24} color="#000" />
+                    </TouchableOpacity>
+
+                    <Text style={styles.title}>Raise a Complaint</Text>
+
+                    <Text style={styles.label}>Your Complaint</Text>
+                    <TextInput
+                        style={styles.textarea}
+                        value={complaint}
+                        onChangeText={setComplaint}
+                        multiline
+                        numberOfLines={1}
+                        placeholder="Describe your issue..."
+                        textAlignVertical="top"
+                    />
+
+                    {/* Submit Button */}
+                    <TouchableOpacity style={styles.submitBtn} onPress={() => {
+                        hideModal();
+                    }}>
+                        <Text style={styles.submitText}>Submit Complaint</Text>
+                    </TouchableOpacity>
+                </Modal>
+            </Portal>
+
         </ScrollView>
     );
 };
@@ -82,14 +181,8 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
         backgroundColor: '#fdfdfd',
+        paddingTop: 20,
         height: '100%',
-        paddingTop: 20
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: '700',
-        marginBottom: 16,
-        textAlign: 'center',
     },
     card: {
         backgroundColor: '#fff',
@@ -106,6 +199,18 @@ const styles = StyleSheet.create({
     bold: {
         fontWeight: '700',
         color: '#000',
+    },
+    TrancactionHeading: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#111827',
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+    },
+    TrancactionTitle: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#111827',
     },
     date: {
         fontSize: 13,
@@ -173,22 +278,123 @@ const styles = StyleSheet.create({
         borderColor: '#E0E0E0',
         marginVertical: 8,
     },
-    downloadButton: {
-        backgroundColor: Colors.primary,
-        paddingVertical: 14,
-        borderRadius: 8,
-        marginTop: 8,
-        alignItems: 'center',
-        width: '48%'
-    },
-    downloadText: {
-        color: '#fff',
-        fontWeight: '600',
-        fontSize: 16,
-    },
     buttonContainer: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginBottom: 16,
+    },
+    actionButton: {
+        backgroundColor: Colors.primary,
+        paddingVertical: 12,
+        borderRadius: 8,
         alignItems: 'center',
-        justifyContent: 'space-between'
-    }
+        width: '32%',
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: 14,
+        textAlign: 'center',
+    },
+    historyRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 6,
+    },
+    historyLabel: {
+        fontSize: 13,
+        color: '#888',
+    },
+    historyText: {
+        fontSize: 13,
+        color: '#333',
+    },
+    value: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: '#000'
+    },
+    input: {
+        height: 48,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 10,
+        fontSize: 14,
+        backgroundColor: '#f9f9f9',
+    },
+    textarea: {
+        height: 100,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 10,
+        fontSize: 14,
+        backgroundColor: '#f9f9f9',
+    },
+    overlay: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0,0,0,0.3)',
+        paddingHorizontal: 20,
+    },
+    closeIcon: {
+        position: 'absolute',
+        right: 15,
+        top: 15,
+        zIndex: 1,
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'left',
+    },
+    submitBtn: {
+        backgroundColor: Colors.primary,
+        borderRadius: 8,
+        paddingVertical: 12,
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    submitText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    itemContainer: {
+        flexDirection: 'row',
+        paddingVertical: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#E5E7EB',
+        alignItems: 'center',
+        paddingHorizontal: 10,
+    },
+    icon: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        marginRight: 12,
+    },
+    amount: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#111827',
+    },
+    typeRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 4,
+    },
+    typeText: {
+        fontSize: 12,
+        color: '#6B7280',
+        marginRight: 6,
+    },
+    typeIcon: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+    },
 });
