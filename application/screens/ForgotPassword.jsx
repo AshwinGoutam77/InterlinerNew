@@ -23,7 +23,7 @@ const ForgotPassword = () => {
 
     return (
         <ImageBackground
-            source={require('../../assets/images/login-banner.png')}
+            source={require('../../assets/images/login-banner.jpg')}
             style={styles.background}
             resizeMode="cover"
         >
