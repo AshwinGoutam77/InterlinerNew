@@ -95,7 +95,7 @@ export default function PaymentScreen({ route }) {
                 <Text style={styles.date}>{item.date}</Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-                <Text style={styles.amount}>{currency} {item.amount}</Text>
+                <Text style={styles.amount}>{currency?.symbol} {item.amount}</Text>
                 <View style={styles.typeRow}>
                     <Text style={styles.typeText}>{item.type}</Text>
                     <View
@@ -128,15 +128,15 @@ export default function PaymentScreen({ route }) {
                     </View>
                     <View style={styles.orderRow}>
                         <Text style={styles.label}>Total Amount</Text>
-                        <Text style={styles.value}>{currency} {order.totalAmount}</Text>
+                        <Text style={styles.value}>{currency?.symbol} {order.totalAmount}</Text>
                     </View>
                     <View style={styles.orderRow}>
                         <Text style={styles.label}>Paid Amount</Text>
-                        <Text style={styles.value}>{currency} {order.AmountPaid}</Text>
+                        <Text style={styles.value}>{currency?.symbol} {order.AmountPaid}</Text>
                     </View>
                     <View style={styles.orderRow}>
                         <Text style={styles.label}>Balance Due</Text>
-                        <Text style={styles.value}>{currency} {order.DueAmount}</Text>
+                        <Text style={styles.value}>{currency?.symbol} {order.DueAmount}</Text>
                     </View>
                     <View style={styles.descriptionRow}>
                         <Text style={styles.descriptionRowLabel}>Remark</Text>

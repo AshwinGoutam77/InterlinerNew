@@ -83,6 +83,8 @@ const products = [
 
 const ProductsPage = () => {
     const { currency } = useContext(CurrencyContext);
+    console.log(currency);
+    
     const navigation = useNavigation();
     const renderCategory = ({ item }) => (
         <TouchableOpacity style={styles.categoryItem}>
@@ -104,7 +106,7 @@ const ProductsPage = () => {
                 <Image source={item.image} style={styles.productImage} />
                 <View style={styles.productDescription}>
                     <Text style={styles.productName}>{item.name}</Text>
-                    <Text style={styles.productPrice}>{currency} {item.price}</Text>
+                    <Text style={styles.productPrice}>{currency?.symbol} {item.price}</Text>
                 </View>
                 {/* <Text style={styles.productDescription}>{item.description}</Text> */}
             </View>

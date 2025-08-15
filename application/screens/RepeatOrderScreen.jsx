@@ -59,7 +59,7 @@ export default function RepeatOrderScreen() {
             {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
             <View style={styles.details}>
                 <Text style={styles.title}>Order Number - #23455</Text>
-                <Text style={styles.price}>Total - {currency}{item.price}</Text>
+                <Text style={styles.price}>Total - {currency?.symbol}{item.price}</Text>
                 <Text style={styles.price}>Quantity - 4</Text>
             </View>
             <TouchableOpacity

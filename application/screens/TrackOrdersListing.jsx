@@ -26,7 +26,7 @@ export default function TrackOrderListingScreen({ navigation }) {
                     <View style={{ flex: 1 }}>
                         <Text style={styles.productTitle}>Lawson Chair</Text>
                         <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                        <Text style={styles.productPrice}>{currency}120.00</Text>
+                        <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
@@ -37,7 +37,7 @@ export default function TrackOrderListingScreen({ navigation }) {
                     <View style={{ flex: 1 }}>
                         <Text style={styles.productTitle}>Lawson Chair</Text>
                         <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                        <Text style={styles.productPrice}>{currency} 120.00</Text>
+                        <Text style={styles.productPrice}>{currency?.symbol} 120.00</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
@@ -48,7 +48,7 @@ export default function TrackOrderListingScreen({ navigation }) {
                     <View style={{ flex: 1 }}>
                         <Text style={styles.productTitle}>Lawson Chair</Text>
                         <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                        <Text style={styles.productPrice}>{currency} 120.00</Text>
+                        <Text style={styles.productPrice}>{currency?.symbol} 120.00</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
@@ -59,7 +59,7 @@ export default function TrackOrderListingScreen({ navigation }) {
                     <View style={{ flex: 1 }}>
                         <Text style={styles.productTitle}>Lawson Chair</Text>
                         <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                        <Text style={styles.productPrice}>{currency} 120.00</Text>
+                        <Text style={styles.productPrice}>{currency?.symbol} 120.00</Text>
                     </View>
                 </TouchableOpacity>
             </ScrollView>

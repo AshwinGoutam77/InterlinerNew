@@ -62,7 +62,7 @@ export default function TrackOrderScreen({ navigation }) {
                     <View style={styles.orderHeader}>
                         <Text style={styles.orderId}>Order: #2234</Text>
                         <Text style={styles.orderSummary}>
-                            (4 Items) {currency}1200
+                            (4 Items) {currency?.symbol}1200
                         </Text>
                     </View>
                     <View style={[styles.orderHeader, { marginTop: 0, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
@@ -73,7 +73,7 @@ export default function TrackOrderScreen({ navigation }) {
                         <View style={{ flex: 1 }}>
                             <Text style={styles.productTitle}>Collar- 2334</Text>
                             <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                            <Text style={styles.productPrice}>{currency}120.00</Text>
+                            <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
                         </View>
                     </View>
 
@@ -85,7 +85,7 @@ export default function TrackOrderScreen({ navigation }) {
                         <View style={{ flex: 1 }}>
                             <Text style={styles.productTitle}>Collar- 2334</Text>
                             <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                            <Text style={styles.productPrice}>{currency}120.00</Text>
+                            <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
                         </View>
                     </View>
 
@@ -99,7 +99,7 @@ export default function TrackOrderScreen({ navigation }) {
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.productTitle}>Collar- 2334</Text>
                                     <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                                    <Text style={styles.productPrice}>{currency}120.00</Text>
+                                    <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
                                 </View>
                             </View>
 
@@ -111,7 +111,7 @@ export default function TrackOrderScreen({ navigation }) {
                                 <View style={{ flex: 1 }}>
                                     <Text style={styles.productTitle}>Collar- 2334</Text>
                                     <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                                    <Text style={styles.productPrice}>{currency}120.00</Text>
+                                    <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
                                 </View>
                             </View>
                         </>

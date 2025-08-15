@@ -106,7 +106,7 @@ export default function ProductDetailScreen() {
                 {/* Price */}
                 <View style={styles.rowBetween}>
                     <Text style={styles.code}>23666</Text>
-                    <Text style={styles.price}>{currency}28</Text>
+                    <Text style={styles.price}>{currency?.symbol}28</Text>
                 </View>
                 <View style={styles.label}>
                     <Text>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>

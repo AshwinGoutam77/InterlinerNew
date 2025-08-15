@@ -161,7 +161,7 @@ const Checkout = () => {
             <View style={styles.footer}>
                 <View>
                     <Text style={styles.totalLabel}>Total price</Text>
-                    <Text style={styles.totalPrice}>{currency}{total.toFixed(2)}</Text>
+                    <Text style={styles.totalPrice}>{currency?.symbol}{total.toFixed(2)}</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.checkoutBtn}

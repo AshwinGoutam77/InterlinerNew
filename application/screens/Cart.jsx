@@ -96,7 +96,7 @@ export default function CartScreen() {
                 <View style={styles.colorRow}>
                     <Text style={styles.colorText}>Off White | cut - 10 Rolls | UnCut - 2 Rolls | 36 Inch | 25 Meter</Text>
                 </View>
-                <Text style={styles.price}>{currency} {item.price.toFixed(2)}</Text>
+                <Text style={styles.price}>{currency?.symbol} {item.price.toFixed(2)}</Text>
             </View>
             <View style={styles.rightControls}>
                 <View style={styles.counter}>
@@ -128,7 +128,7 @@ export default function CartScreen() {
             <View style={styles.footer}>
                 <View style={styles.totalContainer}>
                     <Text style={styles.totalLabel}>Total price</Text>
-                    <Text style={styles.totalPrice}>{currency} {total.toFixed(2)}</Text>
+                    <Text style={styles.totalPrice}>{currency?.symbol} {total.toFixed(2)}</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.checkoutBtn}

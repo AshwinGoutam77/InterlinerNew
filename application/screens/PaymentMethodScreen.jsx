@@ -78,7 +78,7 @@ export default function PaymentMethodScreen() {
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.paymentRow}>
                 <View>
-                    <Text style={styles.totalText}>Total Payment: {currency} 3000</Text>
+                    <Text style={styles.totalText}>Total Payment: {currency?.symbol} 3000</Text>
                 </View>
                 <View style={styles.cardsWrapper}>
                     {paymentMethods.map((method, index) => (
