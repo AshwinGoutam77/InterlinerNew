@@ -10,7 +10,8 @@ import {
     Image,
     StyleSheet,
     TextInput,
-    SafeAreaView
+    SafeAreaView,
+    I18nManager
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modal, Portal } from 'react-native-paper';
@@ -18,8 +19,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
 import CustomerFilter from '../components/CustomerFilter';
+import { RoleContext } from '../context/RoleContext';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
-const tabs = ['Payment records', 'Pay by order', 'Direct Payment',];
+const tabs = ['Payment records', 'Pay by order', 'Make Payment',];
 
 const transactionData = [
     {
@@ -52,12 +56,12 @@ const transactionData = [
 ];
 
 export default function PaymentScreen({ route }) {
-    const { role } = route || {}; // safe destructuring
-    console.log("Role:", route);
-
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
+    const { role } = useContext(RoleContext);
     const paymentType = route?.params?.paymentType ?? null;
-    const { currency } = useContext(CurrencyContext);
-    const [activeTab, setActiveTab] = useState(paymentType ? 'Direct Payment' : 'Payment records');
+    const currency = '$'
+    const [activeTab, setActiveTab] = useState(paymentType ? 'Make Payment' : 'Payment records');
     const [visible, setVisible] = React.useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
@@ -69,6 +73,7 @@ export default function PaymentScreen({ route }) {
         { label: '#2345', value: '2345' },
         { label: '#2346', value: '2346' },
     ]);
+    const [paymentTypes, setPaymentTypes] = useState("full");
 
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
 
@@ -87,15 +92,20 @@ export default function PaymentScreen({ route }) {
         </TouchableOpacity>
     );
 
+    const orderData = [
+        { id: '#2344', status: 'Pending', totalAmount: '30', AmountPaid: '20', DueAmount: '10', DueDate: '21/11/2025', paidVia: 'Cash', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum ' },
+        { id: '#2344', status: 'Pending', totalAmount: '30', AmountPaid: '20', DueAmount: '10', DueDate: '21/11/2025', paidVia: 'Cash', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum ' },
+    ];
+
     const renderTransaction = ({ item }) => (
-        <View style={styles.itemContainer}>
-            {/* <Image source={item.icon} style={styles.icon} /> */}
-            <View style={{ flex: 1 }}>
-                <Text style={styles.title}>{item.title}</Text>
+        <View style={[styles.itemContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+            <View>
+                <Text style={[styles.title, { textAlign: isRTL ? 'right' : 'left' }]}>{item.title}</Text>
                 <Text style={styles.date}>{item.date}</Text>
+                {role == 'sales' && <Text style={styles.date}>Sarah Smith</Text>}
             </View>
-            <View style={{ alignItems: 'flex-end' }}>
-                <Text style={styles.amount}>{currency?.symbol} {item.amount}</Text>
+            <View style={{ flexDirection: 'column', alignItems: isRTL ? 'flex-start' : 'flex-end' }}>
+                <Text style={[styles.amount, { textAlign: isRTL ? 'left' : 'right' }]}>{currency} {item.amount}</Text>
                 <View style={styles.typeRow}>
                     <Text style={styles.typeText}>{item.type}</Text>
                     <View
@@ -109,51 +119,63 @@ export default function PaymentScreen({ route }) {
         </View>
     );
 
-    const orderData = [
-        { id: '#2344', status: 'Pending', totalAmount: '30', AmountPaid: '20', DueAmount: '10', DueDate: '21/11/2025', paidVia: 'Cash', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum ' },
-        { id: '#2344', status: 'Pending', totalAmount: '30', AmountPaid: '20', DueAmount: '10', DueDate: '21/11/2025', paidVia: 'Cash', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum ' },
-    ];
-
     const DueByOrder = () => (
         <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
             {orderData.map((order, index) => (
                 <View key={index} style={styles.card}>
-                    <View style={styles.orderRow}>
+                    {role == 'sales' && <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                        <Text style={styles.label}>Customer Name</Text>
+                        <Text style={styles.value}>Sarah Smith</Text>
+                    </View>}
+                    <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.label}>Order Date</Text>
                         <Text style={styles.value}>{order.DueDate}</Text>
                     </View>
-                    <View style={styles.orderRow}>
+                    <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.label}>Order Number</Text>
                         <Text style={styles.value}>{order.id}</Text>
                     </View>
-                    <View style={styles.orderRow}>
+                    <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.label}>Total Amount</Text>
-                        <Text style={styles.value}>{currency?.symbol} {order.totalAmount}</Text>
+                        <Text style={styles.value}>{currency} {order.totalAmount}</Text>
                     </View>
-                    <View style={styles.orderRow}>
+                    <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.label}>Paid Amount</Text>
-                        <Text style={styles.value}>{currency?.symbol} {order.AmountPaid}</Text>
+                        <Text style={styles.value}>{currency} {order.AmountPaid}</Text>
                     </View>
-                    <View style={styles.orderRow}>
+                    <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.label}>Balance Due</Text>
-                        <Text style={styles.value}>{currency?.symbol} {order.DueAmount}</Text>
+                        <Text style={styles.value}>{currency} {order.DueAmount}</Text>
                     </View>
                     <View style={styles.descriptionRow}>
-                        <Text style={styles.descriptionRowLabel}>Remark</Text>
-                        <Text style={styles.descriptionRowLabelValue}>{order.description}</Text>
+                        <Text style={[styles.descriptionRowLabel, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
+                        <Text style={[styles.descriptionRowLabelValue, { textAlign: isRTL ? 'right' : 'left' }]}>{order.description}</Text>
                     </View>
-                    <TouchableOpacity style={styles.button} onPress={showModal}>
+                    <TouchableOpacity style={[styles.button, { marginLeft: isRTL ? 'auto' : '0' }]} onPress={showModal}>
                         <Text style={styles.buttonText}>Pay Now</Text>
                     </TouchableOpacity>
                 </View>
-            ))}
-        </ScrollView>
+            ))
+            }
+        </ScrollView >
     )
 
     const DirectPay = () => {
         return (
-            <ScrollView style={[styles.scroll, { marginTop: 20 }]} showsVerticalScrollIndicator={false}>
-                <Text style={[styles.label, { marginBottom: 10 }]}>Payment Via</Text>
+            <ScrollView
+                style={[styles.scroll, { marginTop: 0 }]}
+                showsVerticalScrollIndicator={false}
+            >
+                <Text style={styles.duePaymentText}>Payment Due - $230</Text>
+                <Text
+                    style={[
+                        styles.label,
+                        { marginBottom: 10 },
+                        { textAlign: isRTL ? "right" : "left" },
+                    ]}
+                >
+                    Payment Via
+                </Text>
                 <View style={styles.pickerWrapper}>
                     <Picker
                         selectedValue={orderOptions}
@@ -168,22 +190,85 @@ export default function PaymentScreen({ route }) {
                     </Picker>
                 </View>
 
+                <Text
+                    style={[
+                        styles.label,
+                        { marginBottom: 10, marginTop: 10 },
+                        { textAlign: isRTL ? "right" : "left" },
+                    ]}
+                >
+                    Payment Type
+                </Text>
+                <View style={styles.paymentTypeWrapper}>
+                    <TouchableOpacity
+                        style={[
+                            styles.optionBtn,
+                            paymentTypes === "full" && styles.optionBtnActive,
+                        ]}
+                        onPress={() => setPaymentTypes("full")}
+                    >
+                        <Text
+                            style={[
+                                styles.optionText,
+                                paymentTypes === "full" && styles.optionTextActive,
+                            ]}
+                        >
+                            Full Payment
+                        </Text>
+                    </TouchableOpacity>
 
-                {/* Complaint Textarea */}
-                <Text style={[styles.label, { marginBottom: 10 }]}>Amount</Text>
-                <TextInput
-                    style={styles.input}
-                    value={complaint}
-                    onChangeText={setComplaint}
-                    multiline
-                    numberOfLines={1}
-                    placeholder="Enter Amount"
-                    textAlignVertical="center"
-                />
+                    <TouchableOpacity
+                        style={[
+                            styles.optionBtn,
+                            paymentTypes === "part" && styles.optionBtnActive,
+                        ]}
+                        onPress={() => setPaymentTypes("part")}
+                    >
+                        <Text
+                            style={[
+                                styles.optionText,
+                                paymentTypes === "part" && styles.optionTextActive,
+                            ]}
+                        >
+                            Part Payment
+                        </Text>
+                    </TouchableOpacity>
+                </View>
 
-                <Text style={[styles.label, { marginBottom: 10, marginTop: 10 }]}>Remark</Text>
+                {paymentTypes === "part" && (
+                    <>
+                        <Text
+                            style={[
+                                styles.label,
+                                { marginBottom: 10 },
+                                { textAlign: isRTL ? "right" : "left" },
+                            ]}
+                        >
+                            Amount
+                        </Text>
+                        <TextInput
+                            style={[styles.input, { textAlign: isRTL ? "right" : "left" }]}
+                            value={complaint}
+                            onChangeText={setComplaint}
+                            keyboardType="numeric"
+                            placeholder="Enter Amount"
+                            textAlignVertical="center"
+                        />
+                    </>
+                )}
+
+                {/* Remark */}
+                <Text
+                    style={[
+                        styles.label,
+                        { marginBottom: 10, marginTop: 10 },
+                        { textAlign: isRTL ? "right" : "left" },
+                    ]}
+                >
+                    Remark
+                </Text>
                 <TextInput
-                    style={styles.textarea}
+                    style={[styles.textarea, { textAlign: isRTL ? "right" : "left" }]}
                     value={complaint}
                     onChangeText={setComplaint}
                     multiline
@@ -193,11 +278,17 @@ export default function PaymentScreen({ route }) {
                 />
 
                 {/* Submit Button */}
-                <TouchableOpacity style={styles.submitBtn} onPress={() => {
-                    // Handle complaint submission logic here
-                    console.log('Complaint submitted:', { orderId, complaint });
-                    hideModal();
-                }}>
+                <TouchableOpacity
+                    style={styles.submitBtn}
+                    onPress={() => {
+                        console.log("Payment submitted:", {
+                            method: orderOptions,
+                            type: paymentType,
+                            amount: paymentType === "part" ? complaint : "Full Amount",
+                        });
+                        hideModal();
+                    }}
+                >
                     <Text style={styles.submitText}>Submit</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -210,7 +301,7 @@ export default function PaymentScreen({ route }) {
                 return <FlatList data={transactionData} keyExtractor={(item) => item.id.toString()} renderItem={renderTransaction} />;
             case 'Pay by order':
                 return <DueByOrder />;
-            case 'Direct Payment':
+            case 'Make Payment':
                 return <DirectPay />
             default:
                 return null;
@@ -219,7 +310,7 @@ export default function PaymentScreen({ route }) {
 
     return (
         <View style={styles.container}>
-            {/* <CustomerFilter /> */}
+            {role == 'sales' && <CustomerFilter />}
             <View style={styles.tabContainer}>{tabs.map(renderTab)}</View>
             <View style={styles.contentContainer}>{getContentForTab()}</View>
 
@@ -233,7 +324,7 @@ export default function PaymentScreen({ route }) {
                     <Text style={styles.title}>Pay Due By Orders</Text>
 
                     {/* Order Number Dropdown */}
-                    <Text style={styles.label}>Payment Via</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Payment Via</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={orderOptions}
@@ -251,9 +342,9 @@ export default function PaymentScreen({ route }) {
 
 
                     {/* Complaint Textarea */}
-                    <Text style={styles.label}>Amount</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Amount</Text>
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
                         value={complaint}
                         onChangeText={setComplaint}
                         multiline
@@ -262,9 +353,9 @@ export default function PaymentScreen({ route }) {
                         textAlignVertical="center"
                     />
 
-                    <Text style={styles.label}>Remark</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
                     <TextInput
-                        style={styles.textarea}
+                        style={[styles.textarea, { textAlign: isRTL ? 'right' : 'left' }]}
                         value={complaint}
                         onChangeText={setComplaint}
                         multiline
@@ -327,6 +418,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#E5E7EB',
         alignItems: 'center',
+        justifyContent: 'space-between'
     },
     icon: {
         width: 48,
@@ -380,29 +472,40 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     orderRow: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         justifyContent: 'space-between',
         marginVertical: 4
     },
     label: {
         fontSize: 15,
         fontWeight: '600',
-        color: '#000000'
+        color: '#000000',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
+    },
+    duePaymentText: {
+        fontWeight: 800,
+        fontSize: 16,
+        textAlign: 'left',
+        marginBottom: 20,
+        color: Colors.primary
     },
     descriptionRowLabel: {
         fontSize: 15,
         fontWeight: '600',
-        color: '#000000'
+        color: '#000000',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     value: {
         fontSize: 15,
         fontWeight: 'bold',
-        color: '#000'
+        color: '#000',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     descriptionRowLabelValue: {
         fontSize: 14,
         fontWeight: '400',
-        color: '#000000b4'
+        color: '#000000b4',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     buttonGrid: {
         marginTop: 12,
@@ -416,11 +519,13 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 6,
         marginTop: 20,
+        marginLeft: I18nManager.isRTL ? 'auto' : '0'
     },
     buttonText: {
-        color: '#fff',
+        color: '#000000ff',
         textAlign: 'center',
-        fontSize: 13
+        fontSize: 13,
+        fontWeight: '600'
     },
     bottomNav: {
         position: 'absolute',
@@ -459,6 +564,7 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize: 14,
         backgroundColor: '#f9f9f9',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     submitBtn: {
         backgroundColor: Colors.primary,
@@ -468,7 +574,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     submitText: {
-        color: '#fff',
+        color: '#000000ff',
         fontSize: 16,
         fontWeight: '600',
     },
@@ -497,8 +603,28 @@ const styles = StyleSheet.create({
         height: 50,
         width: '100%',
         color: '#333',
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         alignItems: 'center',
     },
-
+    paymentTypeWrapper: {
+        flexDirection: "row",
+        marginBottom: 10,
+    },
+    optionBtn: {
+        flex: 1,
+        borderWidth: 2,
+        borderColor: "#ffffffff",
+        borderRadius: 8,
+        padding: 12,
+        alignItems: "center",
+        marginHorizontal: 5,
+        backgroundColor: '#F3F4F6'
+    },
+    optionBtnActive: {
+        backgroundColor: Colors.white,
+        borderWidth: 2,
+        borderColor: Colors.primary,
+    },
+    optionText: { color: "#333", fontWeight: "500" },
+    optionTextActive: { color: Colors.black },
 });

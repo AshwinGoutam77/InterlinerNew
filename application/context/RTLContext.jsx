@@ -22,8 +22,8 @@ export const AppProvider = ({ children }) => {
             if (storedRTL !== null) {
                 const rtlValue = storedRTL === 'true';
                 setIsRTL(rtlValue);
-                I18nManager.allowRTL(rtlValue);
-                I18nManager.forceRTL(rtlValue);
+                // I18nManager.allowRTL(rtlValue);
+                // I18nManager.forceRTL(rtlValue);
             }
         })();
     }, []);
@@ -38,18 +38,19 @@ export const AppProvider = ({ children }) => {
         setIsRTL(shouldBeRTL);
         await AsyncStorage.setItem('appRTL', shouldBeRTL.toString());
 
-        I18nManager.allowRTL(shouldBeRTL);
-        I18nManager.forceRTL(shouldBeRTL);
-        // Might need to restart app here for layout to take effect
+        // ❌ REMOVE these two lines so layout doesn’t get permanently reversed
+        // I18nManager.allowRTL(shouldBeRTL);
+        // I18nManager.forceRTL(shouldBeRTL);
     };
+
 
     const toggleRTL = async () => {
         const newRTL = !isRTL;
         setIsRTL(newRTL);
         await AsyncStorage.setItem('appRTL', newRTL.toString());
 
-        I18nManager.allowRTL(newRTL);
-        I18nManager.forceRTL(newRTL);
+        // I18nManager.allowRTL(newRTL);
+        // I18nManager.forceRTL(newRTL);
         // Might need to restart app here as well
     };
 

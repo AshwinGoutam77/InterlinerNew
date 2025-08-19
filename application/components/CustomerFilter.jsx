@@ -47,6 +47,7 @@ export default function CustomerFilter({ show }) {
 
     return (
         <>
+            <View style={styles.filter}><Text style={styles.filterText}>Clear Filter</Text></View>
             <TouchableOpacity onPress={showModal} style={styles.customerContainer}>
                 <View style={styles.userBox}>
                     <Icon name='user' size={22} style={styles.userIcon}></Icon>
@@ -168,4 +169,14 @@ const styles = StyleSheet.create({
         backgroundColor: "#eee",
         marginVertical: 5,
     },
+    filter: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        marginTop: 10
+    },
+    filterText: {
+        color: Colors.primary,
+        fontWeight: '600',
+        fontSize: 14
+    }
 });

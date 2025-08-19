@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useContext } from 'react';
 import {
     View,
@@ -5,61 +6,70 @@ import {
     StyleSheet,
     Image,
     ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    I18nManager
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { CurrencyContext } from '../context/CurrencyContext';
 import CustomerFilter from '../components/CustomerFilter';
+import { RoleContext } from '../context/RoleContext';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 export default function TrackOrderListingScreen({ navigation }) {
-    const { currency } = useContext(CurrencyContext);
+    const currency = '$'
+    const { role } = useContext(RoleContext);
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
+
     return (
         <View style={styles.container}>
             {/* <CustomerFilter /> */}
             <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
+                {role === 'sales' && <CustomerFilter />}
                 {/* Product Card */}
-                <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
+                <TouchableOpacity style={[styles.card, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('TrackOrderScreen')} >
                     <Image
                         source={require('../../assets/images/kandura.png')}
                         style={styles.productImage}
                     />
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.productTitle}>Lawson Chair</Text>
-                        <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                        <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
+                        <Text style={styles.productTitle}>Order Number - #223344</Text>
+                        <Text style={styles.productPrice}>Total - {currency}120.00</Text>
+                        {role == 'sales' && <Text style={styles.productPrice}>Customer Name - Sarah Smith</Text>}
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
+                <TouchableOpacity style={[styles.card, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('TrackOrderScreen')} >
                     <Image
                         source={require('../../assets/images/kandura.png')}
                         style={styles.productImage}
                     />
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.productTitle}>Lawson Chair</Text>
-                        <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                        <Text style={styles.productPrice}>{currency?.symbol} 120.00</Text>
+                        <Text style={styles.productTitle}>Order Number - #223344</Text>
+                        <Text style={styles.productPrice}>Total - {currency}120.00</Text>
+                        {role == 'sales' && <Text style={styles.productPrice}>Customer Name - Sarah Smith</Text>}
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
+                <TouchableOpacity style={[styles.card, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('TrackOrderScreen')} >
                     <Image
                         source={require('../../assets/images/kandura.png')}
                         style={styles.productImage}
                     />
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.productTitle}>Lawson Chair</Text>
-                        <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                        <Text style={styles.productPrice}>{currency?.symbol} 120.00</Text>
+                        <Text style={styles.productTitle}>Order Number - #223344</Text>
+                        <Text style={styles.productPrice}>Total - {currency}120.00</Text>
+                        {role == 'sales' && <Text style={styles.productPrice}>Customer Name - Sarah Smith</Text>}
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('TrackOrderScreen')} >
+                <TouchableOpacity style={[styles.card, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('TrackOrderScreen')} >
                     <Image
                         source={require('../../assets/images/kandura.png')}
                         style={styles.productImage}
                     />
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.productTitle}>Lawson Chair</Text>
-                        <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                        <Text style={styles.productPrice}>{currency?.symbol} 120.00</Text>
+                        <Text style={styles.productTitle}>Order Number - #223344</Text>
+                        <Text style={styles.productPrice}>Total - {currency}120.00</Text>
+                        {role == 'sales' && <Text style={styles.productPrice}>Customer Name - Sarah Smith</Text>}
                     </View>
                 </TouchableOpacity>
             </ScrollView>
@@ -84,7 +94,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     card: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         backgroundColor: '#fff',
         borderRadius: 8,
         padding: 16,
@@ -98,7 +108,8 @@ const styles = StyleSheet.create({
         elevation: 2,
         marginBottom: 10,
         borderWidth: 1,
-        borderColor: '#FAFAFA'
+        borderColor: '#FAFAFA',
+        gap: '10'
     },
     productImage: {
         width: 80,

@@ -1,5 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
 import { Picker } from '@react-native-picker/picker';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     View,
     Text,
@@ -11,6 +12,10 @@ import {
 import { Modal, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../src/constants/colors';
+import { RoleContext } from '../context/RoleContext';
+import CustomerFilter from '../components/CustomerFilter';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 const orderData = [
     { id: '#2344', paid: 24, due: 2, total: 26, date: '24/09/25' },
@@ -19,12 +24,14 @@ const orderData = [
 ];
 
 export default function HistoryScreen({ navigation }) {
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
+    const { role } = useContext(RoleContext);
     const [visible, setVisible] = React.useState(false);
     const [visiblePay, setVisiblePay] = React.useState(false);
     const [RepeatOrder, setRepeatOrder] = useState(false)
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
-
 
     const showModalPay = () => setVisiblePay(true);
     const hideModalPay = () => setVisiblePay(false);
@@ -48,33 +55,37 @@ export default function HistoryScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <ScrollView style={styles.scroll}>
+                <View style={{ marginBottom: 20 }}>
+                    {role == 'sales' && <CustomerFilter />}
+                </View>
                 {orderData.map((order, index) => (
                     <View key={index} style={styles.card}>
-                        <View style={styles.orderRow}>
+                        {role === 'sales' && <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                            <Text style={styles.label}>Customer Name</Text>
+                            <Text style={styles.value}>Sarah Smith</Text>
+                        </View>}
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.label}>Order Date</Text>
                             <Text style={styles.value}>{order.date}</Text>
                         </View>
-                        <TouchableOpacity style={styles.orderRow} onPress={() => navigation.navigate('OrderDetailsScreen')}>
+                        <TouchableOpacity style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('OrderDetailsScreen')}>
                             <Text style={styles.label}>Order Number</Text>
                             <Text style={[styles.value, { color: Colors.primary }]}>{order.id}</Text>
                         </TouchableOpacity>
-                        <View style={styles.orderRow}>
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.label}>Total Amount</Text>
                             <Text style={styles.value}>${order.paid.toFixed(2)}</Text>
                         </View>
-                        <View style={styles.orderRow}>
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.label}>Paid Amount</Text>
                             <Text style={styles.value}>${order.due.toFixed(2)}</Text>
                         </View>
-                        <View style={styles.orderRow}>
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.label}>Balance Due</Text>
                             <Text style={styles.value}>${order.total.toFixed(2)}</Text>
                         </View>
 
-                        <View style={styles.buttonGrid}>
-                            {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('TrackOrderScreen')}>
-                                <Text style={styles.buttonText}>Track Order</Text>
-                            </TouchableOpacity> */}
+                        <View style={[styles.buttonGrid, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <TouchableOpacity style={styles.button} onPress={showModalPay}>
                                 <Text style={styles.buttonText}>Pay Due Payments</Text>
                             </TouchableOpacity>
@@ -103,7 +114,7 @@ export default function HistoryScreen({ navigation }) {
                     <Text style={styles.title}>Raise a Complaint</Text>
 
                     {/* Order Number Dropdown */}
-                    <Text style={styles.label}>Select Order Number</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Order Number</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={orderOptions}
@@ -121,9 +132,9 @@ export default function HistoryScreen({ navigation }) {
 
 
                     {/* Complaint Textarea */}
-                    <Text style={styles.label}>Your Complaint</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Your Complaint</Text>
                     <TextInput
-                        style={styles.textarea}
+                        style={[styles.textarea, { textAlign: isRTL ? 'right' : 'left' }]}
                         value={complaint}
                         onChangeText={setComplaint}
                         multiline
@@ -153,7 +164,7 @@ export default function HistoryScreen({ navigation }) {
                     <Text style={styles.title}>Pay Due By Orders</Text>
 
                     {/* Order Number Dropdown */}
-                    <Text style={styles.label}>Payment Via</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Payment Via</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={orderOptions}
@@ -169,7 +180,7 @@ export default function HistoryScreen({ navigation }) {
                         </Picker>
                     </View>
 
-                    <View style={styles.PaymentButtonGrid}>
+                    <View style={[styles.PaymentButtonGrid, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <TouchableOpacity style={styles.paymentBtn}><Text style={styles.buttonText}>
                             Full Payment</Text></TouchableOpacity>
                         <TouchableOpacity style={styles.paymentBtn}><Text style={styles.buttonText}>
@@ -177,9 +188,9 @@ export default function HistoryScreen({ navigation }) {
                     </View>
 
                     {/* Complaint Textarea */}
-                    <Text style={styles.label}>Amount</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Amount</Text>
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
                         value={Amount}
                         onChangeText={setAmount}
                         multiline
@@ -188,9 +199,9 @@ export default function HistoryScreen({ navigation }) {
                         textAlignVertical="center"
                     />
 
-                    <Text style={styles.label}>Remark</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
                     <TextInput
-                        style={styles.textarea}
+                        style={[styles.textarea, { textAlign: isRTL ? 'right' : 'left' }]}
                         value={Remark}
                         onChangeText={setRemark}
                         multiline
@@ -201,7 +212,6 @@ export default function HistoryScreen({ navigation }) {
 
                     {/* Submit Button */}
                     <TouchableOpacity style={styles.submitBtn} onPress={() => {
-                        // Handle complaint submission logic here
                         console.log('Complaint submitted:', { orderId, complaint });
                         hideModalPay();
                     }}>
@@ -302,7 +312,7 @@ const styles = StyleSheet.create({
         marginVertical: 4
     },
     buttonText: {
-        color: '#fff',
+        color: '#000000ff',
         textAlign: 'center',
         fontSize: 13,
         fontWeight: '600'
@@ -353,7 +363,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     submitText: {
-        color: '#fff',
+        color: '#000000ff',
         fontSize: 16,
         fontWeight: '600',
     },

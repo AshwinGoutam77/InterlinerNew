@@ -31,7 +31,7 @@ const slides = [
     {
         id: '3',
         image: require('../../assets/images/onbording-banner-3.jpg'),
-        title: 'Engineered for elegance—interlining that performs as beautifully as it feels.',
+        title: 'Elegance engineered interlining that performs beautifully.',
     },
 ];
 

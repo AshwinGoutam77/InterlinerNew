@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     View,
     Text,
@@ -13,13 +13,20 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import LinearGradient from 'react-native-linear-gradient';
+import { RoleContext } from '../context/RoleContext';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
+    const { setRole } = useContext(RoleContext);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [remember, setRemember] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    const handleLogin = (userRole) => {
+        setRole(userRole); // save role globally
+        navigation.navigate('MainApp'); // navigate without passing role prop
+    };
 
     return (
         <ImageBackground
@@ -36,7 +43,6 @@ const LoginScreen = () => {
                 end={{ x: 0, y: 1 }}
                 style={styles.container}
             >
-                {/* <View style={styles.overlay} /> */}
                 <SafeAreaView style={styles.container}>
                     <View style={styles.UpperLogoContainer}>
                         <Image
@@ -52,10 +58,9 @@ const LoginScreen = () => {
                         />
                     </View>
 
-                    {/* Title */}
                     <Text style={styles.title}>Login to Your Account</Text>
 
-                    {/* Email Input */}
+                    {/* Phone Input */}
                     <View style={styles.inputWrapper}>
                         <Icon name="call-outline" size={20} color="#aaa" style={styles.inputIcon} />
                         <TextInput
@@ -83,13 +88,14 @@ const LoginScreen = () => {
                         </TouchableOpacity>
                     </View>
 
-                    {/* Sign In Button */}
-                    <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.navigate('MainApp', { role: 'customer' })}>
-                        <Text style={styles.signInText}>Login</Text>
+                    {/* Login Buttons */}
+                    <TouchableOpacity style={styles.signInBtn} onPress={() => handleLogin('customer')}>
+                        <Text style={styles.signInText}>Login as Customer</Text>
                     </TouchableOpacity>
-                    {/* <TouchableOpacity style={styles.signInBtn} onPress={() => navigation.navigate('MainApp', { role: 'sales' })}>
+
+                    <TouchableOpacity style={[styles.signInBtn]} onPress={() => handleLogin('sales')}>
                         <Text style={styles.signInText}>Login as Sales</Text>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
 
                     {/* Forgot Password */}
                     <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>

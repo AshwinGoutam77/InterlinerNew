@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useContext } from 'react';
 import {
     View,
@@ -8,84 +9,41 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
+    I18nManager,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 const categories = [
     { id: '1', label: 'Collar', icon: require('../../assets/images/shirt-collar.png') },
     { id: '2', label: 'Pocket', icon: require('../../assets/images/shirt-collar.png') },
     { id: '3', label: 'Faduka', icon: require('../../assets/images/shirt-cuffs.png') },
     { id: '4', label: 'Chest pieces', icon: require('../../assets/images/shirt-collar.png') },
+    { id: '5', label: 'Pre-cut collars', icon: require('../../assets/images/shirt-collar.png') },
 ];
 
 const products = [
-    {
-        id: '1',
-        name: '23666',
-        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '28',
-        image: require('../../assets/images/product-1.png'),
-    },
-    {
-        id: '2',
-        name: '3223H',
-        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '12',
-        image: require('../../assets/images/product-1.png'),
-    },
-    {
-        id: '3',
-        name: '2777',
-        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '20',
-        image: require('../../assets/images/product-1.png'),
-    },
-    {
-        id: '4',
-        name: '3093',
-        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '15',
-        image: require('../../assets/images/product-1.png'),
-    },
-    {
-        id: '5',
-        name: '23666',
-        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '28',
-        image: require('../../assets/images/product-1.png'),
-    },
-    {
-        id: '6',
-        name: '3223H',
-        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '12',
-        image: require('../../assets/images/product-1.png'),
-    },
-    {
-        id: '7',
-        name: '2777',
-        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '20',
-        image: require('../../assets/images/product-1.png'),
-    },
-    {
-        id: '8',
-        name: '3093',
-        description: 'Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.',
-        price: '15',
-        image: require('../../assets/images/product-1.png'),
-    },
+    { id: '1', title: 'PANTONE', name: '23666', price: '28', image: require('../../assets/images/product-1.png') },
+    { id: '2', title: 'PANTONE', name: '3223H', price: '12', image: require('../../assets/images/product-1.png') },
+    { id: '3', title: 'PANTONE', name: '2777', price: '20', image: require('../../assets/images/product-1.png') },
+    { id: '4', title: 'PANTONE', name: '3093', price: '15', image: require('../../assets/images/product-1.png') },
+    { id: '5', title: 'PANTONE', name: '23666', price: '28', image: require('../../assets/images/product-1.png') },
+    { id: '6', title: 'PANTONE', name: '3223H', price: '12', image: require('../../assets/images/product-1.png') },
+    { id: '7', title: 'PANTONE', name: '2777', price: '20', image: require('../../assets/images/product-1.png') },
+    { id: '8', title: 'PANTONE', name: '3093', price: '15', image: require('../../assets/images/product-1.png') },
 ];
 
 const ProductsPage = () => {
-    const { currency } = useContext(CurrencyContext);
-    console.log(currency);
-    
+    const currency = '$'
     const navigation = useNavigation();
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
+
     const renderCategory = ({ item }) => (
         <TouchableOpacity style={styles.categoryItem}>
             <Image
@@ -95,8 +53,17 @@ const ProductsPage = () => {
                     { borderWidth: item?.id == 1 ? 2 : 0, borderColor: Colors.primary }
                 ]}
             />
-
-            <Text style={[styles.categoryLabel, { color: item?.id == 1 ? Colors.primary : "#000000" }]}>{item.label}</Text>
+            <Text
+                style={[
+                    styles.categoryLabel,
+                    {
+                        color: item?.id == 1 ? Colors.primary : "#000000",
+                        textAlign: isRTL ? 'right' : 'left'
+                    }
+                ]}
+            >
+                {item.label}
+            </Text>
         </TouchableOpacity>
     );
 
@@ -104,11 +71,11 @@ const ProductsPage = () => {
         <TouchableOpacity onPress={() => navigation.navigate('ProductDetailScreen')}>
             <View style={styles.productCard}>
                 <Image source={item.image} style={styles.productImage} />
-                <View style={styles.productDescription}>
-                    <Text style={styles.productName}>{item.name}</Text>
-                    <Text style={styles.productPrice}>{currency?.symbol} {item.price}</Text>
+                <View style={[styles.productDescription]}>
+                    <Text style={styles.productName}>{item.title}</Text>
+                    <Text style={styles.productSubName}>{item.name}</Text>
+                    <Text style={styles.productPrice}>{currency} {item.price}</Text>
                 </View>
-                {/* <Text style={styles.productDescription}>{item.description}</Text> */}
             </View>
         </TouchableOpacity>
     );
@@ -117,6 +84,7 @@ const ProductsPage = () => {
         <ScrollView style={styles.container}>
             <FlatList
                 horizontal
+                inverted={I18nManager.isRTL}
                 data={categories}
                 renderItem={renderCategory}
                 keyExtractor={(item, index) => index.toString()}
@@ -124,13 +92,15 @@ const ProductsPage = () => {
                 contentContainerStyle={styles.categoryList}
             />
 
-            {/* <Text style={styles.sectionTitle}>Collar</Text> */}
             <FlatList
                 data={products}
                 renderItem={renderProduct}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
-                columnWrapperStyle={styles.columnWrapper}
+                columnWrapperStyle={[
+                    styles.columnWrapper,
+                    { flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' }
+                ]}
                 contentContainerStyle={styles.productList}
                 scrollEnabled={false}
             />
@@ -150,19 +120,21 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#1A1A1A',
         marginVertical: 16,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     sectionTitle: {
         fontSize: 24,
         fontWeight: '700',
         color: '#000',
         marginBottom: 12,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     categoryList: {
         marginBottom: 24,
     },
     categoryItem: {
         alignItems: 'center',
-        marginRight: 30,
+        marginHorizontal: 15,
         marginTop: 10
     },
     categoryImage: {
@@ -187,15 +159,17 @@ const styles = StyleSheet.create({
     productCard: {
         width: (width - 50) / 2,
         backgroundColor: '#fff',
-        borderRadius: 12,
+        borderRadius: 0,
         padding: 10,
         paddingVertical: 12,
-        elevation: 1
+        elevation: 2,
+        shadowColor: '#dadadaff',
+        shadowOpacity: 1
     },
     productImage: {
         width: '100%',
         height: 160,
-        borderRadius: 10,
+        borderRadius: 0,
         resizeMode: 'cover',
         marginBottom: 10
     },
@@ -203,19 +177,25 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#000',
         fontWeight: '600',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
+    },
+    productSubName: {
+        fontSize: 14,
+        color: '#000',
+        fontWeight: '600',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     productDescription: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        // flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+        alignItems: 'left',
+        justifyContent: 'start',
         paddingHorizontal: 5
     },
     productPrice: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '800',
         color: Colors.black,
     },
 });
-
 
 export default ProductsPage;

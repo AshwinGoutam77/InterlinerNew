@@ -7,11 +7,14 @@ import {
     TouchableOpacity,
     FlatList,
     SafeAreaView,
+    I18nManager,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 const initialCartItems = [
     {
@@ -65,10 +68,12 @@ const initialCartItems = [
 ];
 
 export default function CartScreen() {
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
     const navigation = useNavigation();
     const [cartItems, setCartItems] = useState(initialCartItems);
-    const { currency } = useContext(CurrencyContext);
-
+    const currency = '$'
+    // const { currency } = useContext(CurrencyContext);
 
     const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -89,14 +94,14 @@ export default function CartScreen() {
     };
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ProductDetailScreen', { item })}>
+        <TouchableOpacity style={[styles.card, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('ProductDetailScreen', { item })}>
             <Image source={item.image} style={styles.image} resizeMode="contain" />
             <View style={styles.details}>
                 <Text style={styles.title}>{item.title}</Text>
                 <View style={styles.colorRow}>
                     <Text style={styles.colorText}>Off White | cut - 10 Rolls | UnCut - 2 Rolls | 36 Inch | 25 Meter</Text>
                 </View>
-                <Text style={styles.price}>{currency?.symbol} {item.price.toFixed(2)}</Text>
+                <Text style={styles.price}>{currency} {item.price.toFixed(2)}</Text>
             </View>
             <View style={styles.rightControls}>
                 <View style={styles.counter}>
@@ -125,10 +130,10 @@ export default function CartScreen() {
             />
 
             {/* Footer */}
-            <View style={styles.footer}>
+            <View style={[styles.footer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                 <View style={styles.totalContainer}>
                     <Text style={styles.totalLabel}>Total price</Text>
-                    <Text style={styles.totalPrice}>{currency?.symbol} {total.toFixed(2)}</Text>
+                    <Text style={styles.totalPrice}>{currency} {total.toFixed(2)}</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.checkoutBtn}
@@ -158,7 +163,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     card: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         backgroundColor: '#fff',
         borderRadius: 8,
         padding: 16,
@@ -245,24 +250,19 @@ const styles = StyleSheet.create({
         right: 0,
         backgroundColor: Colors.primary,
         padding: 26,
-        borderRadius: 10,
-        flexDirection: 'row',
+        borderRadius: 0,
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         shadowColor: '#000',
         shadowOpacity: 0.05,
-        shadowRadius: 5,
+        shadowRadius: 0,
         elevation: 3,
-    },
-    totalContainer: {
-        backgroundColor: Colors.primary,
-        // paddingVertical: 5,
-        // paddingHorizontal: 18,
-        borderRadius: 5,
     },
     totalLabel: {
         fontSize: 14,
         color: '#000000',
+        fontWeight: '600'
     },
     totalPrice: {
         fontSize: 24,

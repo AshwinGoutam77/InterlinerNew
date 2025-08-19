@@ -5,12 +5,17 @@ import {
     Text,
     StyleSheet,
     Image,
-    ScrollView
+    ScrollView,
+    I18nManager
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
+import CustomerFilter from '../components/CustomerFilter';
+import { RoleContext } from '../context/RoleContext';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 const trackingSteps = [
     {
@@ -51,18 +56,22 @@ const trackingSteps = [
 ];
 
 export default function TrackOrderScreen({ navigation }) {
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
+    const { role } = useContext(RoleContext);
     const [showAll, setShowAll] = useState(false);
-    const { currency } = useContext(CurrencyContext);
+    const currency = '$'
+
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
                 {/* Product Card */}
-
+                {/* {role == 'sales' && <CustomerFilter />} */}
                 <View style={styles.card}>
-                    <View style={styles.orderHeader}>
+                    <View style={[styles.orderHeader, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.orderId}>Order: #2234</Text>
                         <Text style={styles.orderSummary}>
-                            (4 Items) {currency?.symbol}1200
+                            (4 Items) {currency}1200
                         </Text>
                     </View>
                     <View style={[styles.orderHeader, { marginTop: 0, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
@@ -71,9 +80,9 @@ export default function TrackOrderScreen({ navigation }) {
                             style={styles.productImage}
                         /> */}
                         <View style={{ flex: 1 }}>
-                            <Text style={styles.productTitle}>Collar- 2334</Text>
-                            <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                            <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
+                            <Text style={[styles.productTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Collar- 2334</Text>
+                            <Text style={[styles.productInfo, { textAlign: isRTL ? 'right' : 'left' }]}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                            <Text style={[styles.productPrice, { textAlign: isRTL ? 'right' : 'left' }]}>{currency}120.00</Text>
                         </View>
                     </View>
 
@@ -83,42 +92,34 @@ export default function TrackOrderScreen({ navigation }) {
                             style={styles.productImage}
                         /> */}
                         <View style={{ flex: 1 }}>
-                            <Text style={styles.productTitle}>Collar- 2334</Text>
-                            <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                            <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
+                            <Text style={[styles.productTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Collar- 2334</Text>
+                            <Text style={[styles.productInfo, { textAlign: isRTL ? 'right' : 'left' }]}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                            <Text style={[styles.productPrice, { textAlign: isRTL ? 'right' : 'left' }]}>{currency}120.00</Text>
                         </View>
                     </View>
 
                     {showAll && (
                         <>
                             <View style={[styles.orderHeader, { marginTop: 0, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
-                                {/* <Image
-                                    source={require('../../assets/images/kandura.png')}
-                                    style={styles.productImage}
-                                /> */}
                                 <View style={{ flex: 1 }}>
-                                    <Text style={styles.productTitle}>Collar- 2334</Text>
-                                    <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                                    <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
+                                    <Text style={[styles.productTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Collar- 2334</Text>
+                                    <Text style={[styles.productInfo, { textAlign: isRTL ? 'right' : 'left' }]}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                                    <Text style={[styles.productPrice, { textAlign: isRTL ? 'right' : 'left' }]}>{currency}120.00</Text>
                                 </View>
                             </View>
 
                             <View style={[styles.orderHeader, { marginTop: 20, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
-                                {/* <Image
-                                    source={require('../../assets/images/kandura.png')}
-                                    style={styles.productImage}
-                                /> */}
                                 <View style={{ flex: 1 }}>
-                                    <Text style={styles.productTitle}>Collar- 2334</Text>
-                                    <Text style={styles.productInfo}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
-                                    <Text style={styles.productPrice}>{currency?.symbol}120.00</Text>
+                                    <Text style={[styles.productTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Collar- 2334</Text>
+                                    <Text style={[styles.productInfo, { textAlign: isRTL ? 'right' : 'left' }]}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
+                                    <Text style={[styles.productPrice, { textAlign: isRTL ? 'right' : 'left' }]}>{currency}120.00</Text>
                                 </View>
                             </View>
                         </>
                     )}
 
                     {!showAll && <TouchableOpacity onPress={() => setShowAll(true)}>
-                        <Text style={styles.viewAllText}>View All</Text>
+                        <Text style={[styles.viewAllText, { textAlign: isRTL ? 'right' : 'left' }]}>View All</Text>
                     </TouchableOpacity>}
                 </View>
 
@@ -126,14 +127,14 @@ export default function TrackOrderScreen({ navigation }) {
                 <View style={styles.divider} />
 
                 {/* Order Status Details */}
-                <Text style={styles.statusHeader}>Order Status Details</Text>
+                <Text style={[styles.statusHeader, { textAlign: isRTL ? 'right' : 'left' }]}>Order Status Details</Text>
 
                 {
                     trackingSteps.map((step, index) => (
                         <View
                             key={index}
                             style={[
-                                styles.statusItem,
+                                styles.statusItem, { flexDirection: isRTL ? 'row-reverse' : 'row' },
                                 { opacity: Boolean(step.completed) ? 1 : 0.5 }
                             ]}
                         >
@@ -157,7 +158,7 @@ export default function TrackOrderScreen({ navigation }) {
                         </View>
                     ))
                 }
-                <View style={styles.buttonContainer}>
+                <View style={[styles.buttonContainer,{ flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     <TouchableOpacity style={styles.downloadButton}>
                         <Text style={styles.downloadText}>Mark as Received</Text>
                     </TouchableOpacity>
@@ -210,17 +211,20 @@ const styles = StyleSheet.create({
     },
     productTitle: {
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     productInfo: {
         fontSize: 14,
         color: '#666',
-        marginVertical: 4
+        marginVertical: 4,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     productPrice: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: '#000'
+        color: '#000',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     iconsRow: {
         flexDirection: 'row',
@@ -263,10 +267,11 @@ const styles = StyleSheet.create({
     statusHeader: {
         fontSize: 22,
         fontWeight: 'bold',
-        marginBottom: 20
+        marginBottom: 20,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     statusItem: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         marginBottom: 20
     },
     statusIconContainer: {
@@ -307,7 +312,8 @@ const styles = StyleSheet.create({
     },
     statusTime: {
         fontSize: 12,
-        color: '#555'
+        color: '#555',
+        marginRight: '10'
     },
     statusLocation: {
         fontSize: 13,
@@ -315,7 +321,7 @@ const styles = StyleSheet.create({
         marginTop: 4
     },
     orderHeader: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         justifyContent: 'space-between',
         marginBottom: 10,
     },
@@ -328,7 +334,7 @@ const styles = StyleSheet.create({
         color: '#555',
     },
     viewAllText: {
-        textAlign: 'left',
+        textAlign: I18nManager.isRTL ? 'right' : 'left',
         fontSize: 16,
         color: Colors.black,
         fontWeight: '500',
@@ -345,12 +351,12 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     downloadText: {
-        color: '#fff',
+        color: '#000000ff',
         fontWeight: '600',
         fontSize: 16,
     },
     buttonContainer: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         alignItems: 'center',
         justifyContent: 'start',
         gap: 20

@@ -10,13 +10,21 @@ const AddNewAddressScreen = () => {
 
     const handleSave = () => {
         if (!label || !address) return;
-        // Here you would normally send this data to your backend or context
-        navigation.goBack(); // Return to previous screen
+        navigation.goBack();
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false} >
+                <View>
+                    <Text style={styles.label}>Address Name</Text>
+                    <TextInput
+                        placeholder=""
+                        value={label}
+                        onChangeText={setLabel}
+                        style={styles.input}
+                    />
+                </View>
                 <Text style={styles.label}>Address Line 1 (street, house/building no.)</Text>
                 <TextInput
                     placeholder=""
@@ -24,7 +32,7 @@ const AddNewAddressScreen = () => {
                     onChangeText={setLabel}
                     style={styles.input}
                 />
-                <Text style={styles.label}>Address Line 1 (street, house/building no.)</Text>
+                <Text style={styles.label}>Address Line 2</Text>
                 <TextInput
                     placeholder=""
                     value={label}
@@ -53,7 +61,7 @@ const AddNewAddressScreen = () => {
                     </View>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View style={{ width: '48%' }}>
                         <Text style={styles.label}>Postal / Zip Code</Text>
                         <TextInput
@@ -72,7 +80,7 @@ const AddNewAddressScreen = () => {
                             style={styles.input}
                         />
                     </View>
-                </View>
+                </View> */}
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1, borderColor: '#ddd', paddingTop: 20 }}>
                     <View style={{ width: '48%' }}>
@@ -152,7 +160,7 @@ const styles = StyleSheet.create({
         marginTop: 'auto',
     },
     saveText: {
-        color: '#fff',
+        color: '#000000ff',
         fontSize: 16,
         fontWeight: '600',
     },

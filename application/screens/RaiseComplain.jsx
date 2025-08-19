@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Picker } from '@react-native-picker/picker';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     View,
     Text,
@@ -15,14 +15,20 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Colors from '../src/constants/colors';
 import CustomerFilter from '../components/CustomerFilter';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { RoleContext } from '../context/RoleContext';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 const orderData = [
     { id: '#2344', order: "#233344", createdDate: "02/07/025", status: 'Pending', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' },
-    { id: '#2344', status: 'Complete', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' },
-    { id: '#2344', status: 'Complete', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' }
+    { id: '#2344', order: "#233344", createdDate: "02/07/025", status: 'Complete', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' },
+    { id: '#2344', order: "#233344", createdDate: "02/07/025", status: 'Complete', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.' }
 ];
 
 export default function RaiseComplainScreen({ navigation }) {
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
+    const { role } = useContext(RoleContext);
     const [visible, setVisible] = React.useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
@@ -45,12 +51,11 @@ export default function RaiseComplainScreen({ navigation }) {
             }
         });
     };
-
-
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
+
     return (
         <View style={styles.container}>
-            {/* <CustomerFilter /> */}
+            {role == 'sales' && <CustomerFilter />}
             <TouchableOpacity style={styles.button} onPress={showModal}>
                 <Icon name='plus' size={24} />
                 <Text style={styles.buttonText}>Make complain</Text>
@@ -58,19 +63,23 @@ export default function RaiseComplainScreen({ navigation }) {
             <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
                 {orderData.map((order, index) => (
                     <View key={index} style={styles.card}>
-                        <View style={styles.orderRow}>
+                        {role === 'sales' && <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                            <Text style={styles.label}>Customer Name</Text>
+                            <Text style={styles.value}>Sarah Smith</Text>
+                        </View>}
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.label}>Order</Text>
                             <Text style={styles.value}>{order.order}</Text>
                         </View>
-                        <View style={styles.orderRow}>
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.label}>Created Date</Text>
                             <Text style={styles.value}>{order.createdDate}</Text>
                         </View>
-                        <View style={styles.orderRow}>
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.label}>Ticket ID</Text>
                             <Text style={styles.value}>{order.id}</Text>
                         </View>
-                        <View style={styles.orderRow}>
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.label}>Status</Text>
                             <Text style={{
                                 fontSize: 15,
@@ -79,8 +88,8 @@ export default function RaiseComplainScreen({ navigation }) {
                             }}>{order.status}</Text>
                         </View>
                         <View style={styles.descriptionRow}>
-                            <Text style={styles.descriptionRowLabel}>Description</Text>
-                            <Text style={styles.descriptionRowLabelValue}>{order.description}</Text>
+                            <Text style={[styles.descriptionRowLabel, { textAlign: isRTL ? 'right' : 'left' }]}>Description</Text>
+                            <Text style={[styles.descriptionRowLabelValue, { textAlign: isRTL ? 'right' : 'left' }]}>{order.description}</Text>
                         </View>
                         <TouchableOpacity
                             style={[styles.submitBtn, { marginTop: 10 }]}
@@ -101,15 +110,15 @@ export default function RaiseComplainScreen({ navigation }) {
                     <Text style={styles.title}>Make complain</Text>
 
                     <TouchableOpacity
-                        style={styles.attachPhotoBtn}
+                        style={[styles.attachPhotoBtn, { flexDirection: isRTL ? 'row-reverse' : 'row', marginLeft: isRTL ? 'auto' : '0' }]}
                         onPress={handleAttachPhoto}
                     >
-                        <Icon name="camera" size={20} color="#ffffffff" />
+                        <Icon name="camera" size={20} color="#000000ff" />
                         <Text style={styles.attachPhotoText}>Attach Photo</Text>
                     </TouchableOpacity>
 
                     {/* Order Number Dropdown */}
-                    <Text style={styles.label}>Select Order Number</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Order Number</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={orderOptions}
@@ -127,9 +136,9 @@ export default function RaiseComplainScreen({ navigation }) {
 
 
                     {/* Complaint Textarea */}
-                    <Text style={styles.label}>Your Complaint</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Your Complaint</Text>
                     <TextInput
-                        style={styles.textarea}
+                        style={[styles.textarea, { textAlign: isRTL ? 'right' : 'left' }]}
                         value={complaint}
                         onChangeText={setComplaint}
                         multiline
@@ -165,9 +174,9 @@ export default function RaiseComplainScreen({ navigation }) {
                     <Text style={styles.title}>Feedback</Text>
 
                     {/* Message */}
-                    <Text style={styles.label}>Message</Text>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Message</Text>
                     <TextInput
-                        style={styles.textarea}
+                        style={[styles.textarea, { textAlign: isRTL ? 'right' : 'left' }]}
                         value={feedbackMessage}
                         onChangeText={setFeedbackMessage}
                         multiline
@@ -177,8 +186,10 @@ export default function RaiseComplainScreen({ navigation }) {
                     />
 
                     {/* Rating */}
-                    <Text style={styles.label}>Rating</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'start', gap: 10, marginBottom: 10 }}>
+                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Rating</Text>
+                    <View style={{
+                        flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'start', gap: 10, marginBottom: 10
+                    }}>
                         {[1, 2, 3, 4, 5].map((rating) => (
                             <TouchableOpacity
                                 key={rating}
@@ -191,7 +202,7 @@ export default function RaiseComplainScreen({ navigation }) {
                                 }}
                                 onPress={() => setFeedbackRating(rating)}
                             >
-                                <Text style={{ color: feedbackRating === rating ? '#fff' : '#000' }}>{rating}</Text>
+                                <Text style={{ color: feedbackRating === rating ? '#000000ff' : '#000' }}>{rating}</Text>
                             </TouchableOpacity>
                         ))}
                     </View>
@@ -293,7 +304,7 @@ const styles = StyleSheet.create({
         gap: 2,
     },
     ModalsubmitText: {
-        color: '#ffffffff',
+        color: '#000000ff',
         textAlign: 'center',
         fontSize: 14,
         fontWeight: '600',
@@ -403,7 +414,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start'
     },
     attachPhotoText: {
-        color: '#fff',
+        color: '#000000ff',
         fontSize: 14,
         fontWeight: '600',
     },

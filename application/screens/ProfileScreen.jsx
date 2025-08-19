@@ -21,8 +21,7 @@ export default function ProfilePage() {
     const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
     const { isRTL, toggleRTL, language } = useAppContext();
     const navigation = useNavigation();
-    const { currency } = useContext(CurrencyContext);
-
+    const currency = '$'
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -53,7 +52,7 @@ export default function ProfilePage() {
                         />
                     ), isRTL, navigation)} */}
                     {renderOption('public', t('profile.language'), 'LanguageScreen', language, isRTL, navigation)}
-                    {renderOption('money', t('profile.currency'), 'CurrencyScreen', currency?.symbol, isRTL, navigation)}
+                    {renderOption('money', t('profile.currency'), 'CurrencyScreen', currency, isRTL, navigation)}
                     {renderOption('pin', t('profile.address'), 'ShippingScreen', null, isRTL, navigation)}
                     {renderOption('notifications', t('profile.notification'), 'NotificationScreen', null, isRTL, navigation)}
                     {renderOption('lock', t('profile.privacy'), 'PrivacyScreen', null, isRTL, navigation)}

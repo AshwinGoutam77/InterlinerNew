@@ -5,7 +5,8 @@ import {
     TouchableOpacity,
     StyleSheet,
     ScrollView,
-    Image
+    Image,
+    I18nManager
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -13,45 +14,56 @@ import { Modal, Portal } from 'react-native-paper';
 import { t } from 'i18next';
 import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 
 const paymentMethods = [
     {
         title: 'Cheque',
-        icon: require('../../assets/images/cheque.png')
+        icon: require('../../assets/images/cheque.png'),
+        color: '#E3F2FD' // Light Blue
     },
     {
         title: 'Bank Transfer',
-        icon: require('../../assets/images/bank-transfer.png')
+        icon: require('../../assets/images/bank-transfer.png'),
+        color: '#E8F5E9' // Light Green
     },
     {
         title: 'My Wallet',
         subtitle: '$9,379',
-        icon: require('../../assets/images/wallet.png')
+        icon: require('../../assets/images/wallet.png'),
+        color: '#FFF3E0' // Light Orange
     },
     {
         title: 'Buy now pay later',
         subtitle: 'Your Credit Balance: $9,379',
-        icon: require('../../assets/images/buy-now.png')
+        icon: require('../../assets/images/buy-now.png'),
+        color: '#F3E5F5' // Light Purple
     },
     {
         title: 'Full Payment',
-        icon: require('../../assets/images/cash.png')
+        icon: require('../../assets/images/cash.png'),
+        color: '#E0F7FA' // Light Teal
     },
     {
         title: 'Part Payment',
-        icon: require('../../assets/images/partial-payment.png')
+        icon: require('../../assets/images/partial-payment.png'),
+        color: '#FFFDE7' // Light Yellow
     },
     {
         title: 'Online Link',
-        icon: require('../../assets/images/payment-link.png')
+        icon: require('../../assets/images/payment-link.png'),
+        color: '#FCE4EC' // Light Pink
     },
-
 ];
 
+
 export default function PaymentMethodScreen() {
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
     const navigation = useNavigation();
-    const { currency } = useContext(CurrencyContext);
+    const currency = '$'
     const [selected, setSelected] = useState(0);
     const [visible, setVisible] = React.useState(false);
 
@@ -78,13 +90,13 @@ export default function PaymentMethodScreen() {
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.paymentRow}>
                 <View>
-                    <Text style={styles.totalText}>Total Payment: {currency?.symbol} 3000</Text>
+                    <Text style={[styles.totalText, { textAlign: isRTL ? 'right' : 'left' }]}>Total Payment: {currency} 3000</Text>
                 </View>
-                <View style={styles.cardsWrapper}>
+                <View style={[styles.cardsWrapper, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     {paymentMethods.map((method, index) => (
                         <TouchableOpacity
                             key={index}
-                            style={styles.card(selected === index)}
+                            style={styles.card(selected === index, method.color)}
                             onPress={() => setSelected(index)}
                         >
                             <View style={styles.row}>
@@ -160,12 +172,12 @@ const styles = StyleSheet.create({
         paddingTop: 10
     },
     cardsWrapper: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between'
     },
-    card: (active) => ({
-        backgroundColor: '#fff',
+    card: (active, bgColor) => ({
+        backgroundColor: bgColor,
         borderRadius: 16,
         paddingVertical: 20,
         paddingHorizontal: 16,
@@ -176,8 +188,9 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 2,
         borderWidth: 1.5,
-        borderColor: active ? Colors.primary : 'transparent'
+        borderColor: active ? Colors.black : 'transparent'
     }),
+
 
     row: {
         flexDirection: 'column',
@@ -198,7 +211,7 @@ const styles = StyleSheet.create({
     },
     descText: {
         fontSize: 13,
-        color: '#777',
+        color: '#000000ff',
         textAlign: 'center'
     },
     radio: (selected) => ({
@@ -218,7 +231,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     confirmText: {
-        color: '#fff',
+        color: '#000000ff',
         fontWeight: 'bold',
         fontSize: 16
     },
@@ -227,5 +240,6 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: Colors.black,
         marginBottom: 20,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     }
 });

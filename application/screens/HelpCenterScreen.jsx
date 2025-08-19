@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
 import {
     View,
@@ -11,6 +12,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Colors from '../src/constants/colors';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 const categories = ['General', 'Account', 'Service', 'Payment'];
 const faqs = [
@@ -25,6 +28,8 @@ const faqs = [
 ];
 
 export default function HelpCenterScreen() {
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
     const [activeTab, setActiveTab] = useState('FAQ');
     const [selectedCategory, setSelectedCategory] = useState('General');
     const [expanded, setExpanded] = useState(null);
@@ -51,7 +56,7 @@ export default function HelpCenterScreen() {
             </View> */}
 
             {/* Category Buttons */}
-            <View style={styles.categoryContainer}>
+            <View style={[styles.categoryContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                 {categories.map((item, index) => (
                     <TouchableOpacity
                         key={index}
@@ -79,7 +84,7 @@ export default function HelpCenterScreen() {
                     <View key={index} style={styles.faqItem}>
                         <TouchableOpacity
                             onPress={() => setExpanded(expanded === index ? null : index)}
-                            style={styles.faqHeader}
+                            style={[styles.faqHeader, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
                         >
                             <Text style={styles.faqQuestion}>{item.question}</Text>
                             <Icon
@@ -89,7 +94,7 @@ export default function HelpCenterScreen() {
                             />
                         </TouchableOpacity>
                         {expanded === index && item.answer !== '' && (
-                            <Text style={styles.faqAnswer}>{item.answer}</Text>
+                            <Text style={[styles.faqAnswer, { textAlign: isRTL ? 'right' : 'left' }]}>{item.answer}</Text>
                         )}
                     </View>
                 ))}
@@ -97,12 +102,12 @@ export default function HelpCenterScreen() {
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={openWhatsApp}>
-                    <Icon name="logo-whatsapp" size={20} color="#fff" />
+                    <Icon name="logo-whatsapp" size={20} color="#000000ff" />
                     <Text style={styles.buttonText}>WhatsApp</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={makeCall}>
-                    <Icon name="call" size={20} color="#fff" />
+                    <Icon name="call" size={20} color="#000000ff" />
                     <Text style={styles.buttonText}>Phone</Text>
                 </TouchableOpacity>
             </View>
@@ -221,7 +226,7 @@ const styles = StyleSheet.create({
         width: '49%'
     },
     buttonText: {
-        color: '#fff',
+        color: '#000000ff',
         fontSize: 16,
         fontWeight: '600',
     },

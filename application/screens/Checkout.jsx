@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useContext } from 'react';
 import {
     View,
@@ -9,28 +10,33 @@ import {
     StatusBar,
     SafeAreaView,
     TextInput,
+    I18nManager,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 const Checkout = () => {
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
     const navigation = useNavigation();
-    const { currency } = useContext(CurrencyContext);
+    const currency = '$'
     const orderItems = [
         {
             id: 1,
-            name: 'Lawson Chair',
-            color: 'Blue Grey',
+            name: 'Collar-2334',
+            color: 'Off White | cut - 10 Rolls | UnCut - 2 Rolls | 36 Inch | 25 Meter',
             price: 120.00,
             quantity: 1,
             image: require('../../assets/images/kandura.png'),
         },
         {
             id: 2,
-            name: 'Parabolic Reflector',
-            color: 'Brown',
+            name: 'Shirt-45934',
+            color: 'Off White | cut - 10 Rolls | UnCut - 2 Rolls | 36 Inch | 25 Meter',
             price: 170.00,
             quantity: 2,
             image: require('../../assets/images/kandura.png'),
@@ -50,8 +56,8 @@ const Checkout = () => {
                 <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                     {/* Shipping Address */}
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Shipping Address</Text>
-                        <View style={styles.addressContainer}>
+                        <Text style={[styles.sectionTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Shipping Address</Text>
+                        <View style={[styles.addressContainer, { flexDirection: isRTL ? 'row-reverse' : 'row', gap: isRTL ? '10' : '0' }]}>
                             <View style={styles.locationIcon}>
                                 <Text style={styles.locationIconText}><Icon name='home' style={styles.locationIconText} /></Text>
                             </View>
@@ -68,14 +74,13 @@ const Checkout = () => {
 
                     {/* Order List */}
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Order List</Text>
+                        <Text style={[styles.sectionTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Order List</Text>
                         {orderItems.map((item) => (
-                            <View key={item.id} style={styles.orderItem}>
+                            <View key={item.id} style={[styles.orderItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                                 <Image source={item.image} style={styles.itemImage} />
                                 <View style={styles.itemInfo}>
                                     <Text style={styles.itemName}>{item.name}</Text>
                                     <View style={styles.colorContainer}>
-                                        <View style={[styles.colorDot, { backgroundColor: item.color === 'Blue Grey' ? '#87CEEB' : '#8B4513' }]} />
                                         <Text style={styles.colorText}>{item.color}</Text>
                                     </View>
                                     <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
@@ -87,68 +92,48 @@ const Checkout = () => {
                         ))}
                     </View>
 
-                    {/* Choose Shipping */}
-                    {/* <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Choose Shipping</Text>
-                        <View style={styles.shippingOption}>
-                            <View style={styles.shippingIcon}>
-                                <Text style={styles.shippingIconText}>📦</Text>
-                            </View>
-                            <View style={styles.shippingInfo}>
-                                <Text style={styles.shippingTitle}>Regular</Text>
-                                <Text style={styles.shippingDate}>Estimated ... Dec 20-22</Text>
-                            </View>
-                            <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate('AddShippingScreen')}>
-                                <Text style={styles.editIcon}><Icon name='chevron-right' style={styles.editIcon} /></Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View> */}
-
                     {/* Promo Code */}
                     <View style={styles.section}>
-                        <Text style={styles.sectionTitle}>Promo Code</Text>
+                        <Text style={[styles.sectionTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Promo Code</Text>
                         <TouchableOpacity style={styles.promoContainer} onPress={() => navigation.navigate('PromoCodeScreen')}>
-                            <View style={styles.promoTag}>
+                            <View style={[styles.promoTag, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                                     <Icon name='local-offer' size={20} color="#058f1aff" />
                                     <Text style={styles.promoText}>Discount 30% Off</Text>
                                 </View>
                                 <TouchableOpacity style={styles.removePromo}>
                                     <Text style={styles.removePromoText}>
-                                        <Icon name="chevron-right" size={22} style={{ color: '#058f1aff' }} />
+                                        <Icon name={isRTL ? "chevron-left" : "chevron-right"} size={22} style={{ color: '#058f1aff' }} />
                                     </Text>
                                 </TouchableOpacity>
                             </View>
-                            {/* <TouchableOpacity style={styles.addPromoButton}>
-                            <Text style={styles.addPromoText}>+</Text>
-                        </TouchableOpacity> */}
                         </TouchableOpacity>
                     </View>
 
                     {/* Order Summary */}
                     <View style={styles.summarySection}>
-                        <View style={styles.summaryRow}>
+                        <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.summaryLabel}>Amount</Text>
                             <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
                         </View>
-                        <View style={styles.summaryRow}>
+                        <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.summaryLabel}>Shipping</Text>
                             <Text style={styles.summaryValue}>${shipping.toFixed(2)}</Text>
                         </View>
-                        <View style={styles.summaryRow}>
+                        <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.summaryLabel}>Promo</Text>
                             <Text style={styles.summaryValue}>-${discount.toFixed(2)}</Text>
                         </View>
-                        <View style={[styles.summaryRow, styles.totalRow]}>
+                        <View style={[[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }], styles.totalRow]}>
                             <Text style={styles.summaryLabel}>Total</Text>
                             <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
                         </View>
                     </View>
                     <View>
-                        <Text style={styles.label}>Remark</Text>
+                        <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
                     </View>
                     <TextInput
-                        style={styles.textarea}
+                        style={[styles.textarea, { textAlign: isRTL ? 'right' : 'left' }]}
                         // value={feedbackMessage}
                         // onChangeText={setFeedbackMessage}
                         multiline
@@ -158,10 +143,10 @@ const Checkout = () => {
                     />
                 </ScrollView>
             </SafeAreaView>
-            <View style={styles.footer}>
+            <View style={[styles.footer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                 <View>
                     <Text style={styles.totalLabel}>Total price</Text>
-                    <Text style={styles.totalPrice}>{currency?.symbol}{total.toFixed(2)}</Text>
+                    <Text style={styles.totalPrice}>{currency}{total.toFixed(2)}</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.checkoutBtn}
@@ -185,10 +170,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // paddingHorizontal: 20,
-        // paddingVertical: 15,
         borderBottomWidth: 1,
-        // borderBottomColor: '#f0f0f0',
     },
     backButton: {
         width: 40,
@@ -223,13 +205,14 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
     },
     sectionTitle: {
-        fontSize: 22,
+        fontSize: 16,
         fontWeight: 'bold',
         color: '#000',
-        marginBottom: 15,
+        marginBottom: 5,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     addressContainer: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         backgroundColor: '#fff',
         alignItems: 'center',
         borderRadius: 8,
@@ -241,6 +224,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 5,
         elevation: 2,
+        gap: I18nManager.isRTL ? 20 : 0
     },
     locationIcon: {
         width: 40,
@@ -268,16 +252,18 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000',
         marginBottom: 4,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     addressText: {
         fontSize: 14,
         color: '#666',
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     editButton: {
         padding: 5,
     },
     orderItem: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         backgroundColor: '#fff',
         alignItems: 'center',
         borderRadius: 8,
@@ -375,12 +361,13 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     promoContainer: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         alignItems: 'center',
         width: '100%',
+        marginTop: 10
     },
     promoTag: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         alignItems: 'center',
         backgroundColor: '#bef8daff',
         paddingHorizontal: 15,
@@ -389,7 +376,6 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-between',
         marginRight: 10,
-        // marginRight: 10,
     },
     promoText: {
         color: '#058f1aff',
@@ -437,14 +423,14 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     summaryRow: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 10,
     },
     summaryLabel: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '500',
         color: '#000000',
     },
     summaryValue: {
@@ -497,10 +483,10 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        backgroundColor: '#fff',
+        backgroundColor: Colors.primary,
         padding: 26,
-        borderRadius: 10,
-        flexDirection: 'row',
+        // borderRadius: 10,
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         shadowColor: '#000',
@@ -511,13 +497,14 @@ const styles = StyleSheet.create({
     totalLabel: {
         fontSize: 14,
         color: '#000000',
+        fontWeight: '600'
     },
     totalPrice: {
         fontSize: 24,
         fontWeight: 'bold',
     },
     checkoutBtn: {
-        backgroundColor: Colors.primary,
+        backgroundColor: Colors.white,
         borderRadius: 5,
         paddingVertical: 16,
         paddingHorizontal: 48,
@@ -525,7 +512,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     checkoutText: {
-        color: '#fff',
+        color: '#000000ff',
         fontSize: 16,
         fontWeight: '800',
     },
@@ -559,6 +546,7 @@ const styles = StyleSheet.create({
         color: '#000000',
         marginBottom: 8,
         marginTop: 20,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     textarea: {
         height: 100,
@@ -569,6 +557,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         backgroundColor: '#ffffffff',
         marginBottom: 20,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
 });
 

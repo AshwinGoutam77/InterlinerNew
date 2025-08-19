@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useContext } from 'react';
 import {
     View,
@@ -7,13 +8,15 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
-    I18nManager,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
 import { CurrencyContext } from '../context/CurrencyContext';
+import { useAppContext } from '../context/RTLContext';
+import { RoleContext } from '../context/RoleContext';
 import CustomerFilter from '../components/CustomerFilter';
+// import CustomerFilter from '../components/CustomerFilter';
 
 const data = [
     {
@@ -124,32 +127,44 @@ const data = [
 
 const CategoryScreen = () => {
     const { t } = useTranslation();
-    const { currency } = useContext(CurrencyContext);
+    const { isRTL } = useAppContext();
     const navigation = useNavigation();
+    const { role } = useContext(RoleContext);
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            {/* <CustomerFilter show /> */}
-            <View style={styles.searchBox}>
+            {role == 'sales' && <CustomerFilter show />}
+            <View style={[
+                styles.searchBox,
+                { flexDirection: isRTL ? 'row-reverse' : 'row' }
+            ]}>
                 <Icon name='search' size={24} color='#999' />
                 <TextInput
                     placeholder={t('category.search_placeholder')}
-                    style={styles.input}
+                    style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
                     placeholderTextColor="#999"
                 />
             </View>
 
             {data.map((section, idx) => (
                 <View key={idx} style={styles.section}>
-                    <Text style={styles.sectionTitle}>
+                    <Text style={[
+                        styles.sectionTitle,
+                        { textAlign: isRTL ? 'right' : 'left' }
+                    ]}>
                         {t(`category.categories.${section.title}`)}
                     </Text>
+
                     <Image
                         source={section.banner}
                         style={styles.banner}
                         resizeMode="cover"
                     />
-                    <View style={styles.actionRow}>
+
+                    <View style={[
+                        styles.actionRow,
+                        { flexDirection: isRTL ? 'row-reverse' : 'row' }
+                    ]}>
                         {section.items.map((item, i) => (
                             <TouchableOpacity
                                 key={i}
@@ -160,7 +175,10 @@ const CategoryScreen = () => {
                                     source={item.icon}
                                     style={styles.icon}
                                 />
-                                <Text style={styles.label}>
+                                <Text style={[
+                                    styles.label,
+                                    { textAlign: isRTL ? 'right' : 'center' }
+                                ]}>
                                     {t(`category.categories.${item.label}`)}
                                 </Text>
                             </TouchableOpacity>
@@ -176,15 +194,8 @@ const styles = StyleSheet.create({
     container: {
         paddingTop: 20,
         padding: 20,
-        // paddingBottom: 100,
         backgroundColor: '#fdfdfd',
         flexGrow: 1,
-    },
-    heading: {
-        fontSize: 22,
-        fontWeight: '700',
-        marginBottom: 16,
-        textAlign: I18nManager.isRTL ? 'right' : 'left',
     },
     searchBox: {
         backgroundColor: '#f1f1f19c',
@@ -192,15 +203,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         marginBottom: 20,
         height: 50,
-        justifyContent: 'start',
-        flexDirection: 'row',
         alignItems: 'center',
-        gap: '10',
         marginTop: 12,
+        gap: 10,
     },
     input: {
         fontSize: 16,
-        textAlign: I18nManager.isRTL ? 'right' : 'left',
+        flex: 1,
     },
     section: {
         marginBottom: 30,
@@ -209,7 +218,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600',
         marginBottom: 12,
-        textAlign: I18nManager.isRTL ? 'right' : 'left',
     },
     banner: {
         width: '100%',
@@ -218,9 +226,8 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     actionRow: {
-        flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'left',
+        justifyContent: 'flex-start',
         gap: 40,
         rowGap: 20,
         borderBottomWidth: 1,
@@ -241,7 +248,6 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 15,
         fontWeight: '500',
-        textAlign: 'center',
     },
 });
 

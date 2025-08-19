@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
-import React from "react";
+import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -41,6 +41,8 @@ import TrackOrderListingScreen from "../screens/TrackOrdersListing";
 import OrderDetailsScreen from "../screens/OrderDetailsScreen";
 import Colors from "../src/constants/colors";
 import RepeatOrderScreen from "../screens/RepeatOrderScreen";
+import IncentiveScreen from "../screens/IncentiveScreen";
+import { RoleContext } from "../context/RoleContext";
 
 var styles = require("../../assets/files/Styles");
 
@@ -208,6 +210,49 @@ function HomeStack() {
                     header: () => <CustomHeader title="Profile" />,
                 }}
             />
+            <Stack.Screen
+                name="IncentiveScreen"
+                component={IncentiveScreen}
+                options={{
+                    header: () => <CustomHeader title="Incentive" />,
+                }}
+            />
+            <Stack.Screen
+                name="EditProfile"
+                component={EditProfileScreen}
+                options={{
+                    header: () => <CustomHeader title="Edit Profile" />,
+                }}
+            />
+            <Stack.Screen
+                name="LanguageScreen"
+                component={LanguageScreen}
+                options={{
+                    header: () => <CustomHeader title="Language" />,
+                }}
+            />
+            <Stack.Screen
+                name="CurrencyScreen"
+                component={CurrencyScreen}
+                options={{
+                    header: () => <CustomHeader title="Currency" />,
+                }}
+            />
+            <Stack.Screen
+                name="NotificationScreen"
+                component={NotificationScreen}
+                options={{
+                    header: () => <CustomHeader title="Notifications" />,
+                }}
+            />
+            <Stack.Screen
+                name="PrivacyScreen"
+                component={PrivacyScreen}
+                options={{
+                    header: () => <CustomHeader title="Privacy Policy" />,
+                }}
+            />
+            
         </Stack.Navigator>
     );
 }
@@ -357,8 +402,8 @@ function CartTab() {
                 }}
             />
             <Stack.Screen
-                name="TrackOrderListingScreen"
-                component={TrackOrderListingScreen}
+                name="TrackOrderScreen"
+                component={TrackOrderScreen}
                 options={{
                     header: () => <CustomHeader title="Track Order" />,
                 }}
@@ -453,13 +498,14 @@ const tabBarIcon = (route) => ({ color, size, focused }) => {
 
 export default function Logged() {
     const insets = useSafeAreaInsets();
+    const { role } = useContext(RoleContext);
 
     const getTabBarVisibility = (route, tabName) => {
         const routeName = getFocusedRouteNameFromRoute(route) ?? tabName;
 
         if ([
             'ProductDetailScreen', 'CartScreen', 'cart', 'CheckoutScreen', 'ShippingScreen', 'AddNewAddressScreen', 'AddShippingScreen',
-            'InquiryForm', 'AboutUs', 'PromoCodeScreen', 'PaymentMethodScreen', 'TrackOrderScreen', 'HistoryScreen', 'RaiseComplainScreen',
+            'InquiryForm', 'AboutUs', 'PromoCodeScreen', 'PaymentMethodScreen', 'TrackOrderScreen', 'RaiseComplainScreen',
             'PaymentScreen', 'ProfileScreen', 'EditProfile', 'LanguageScreen', 'TrackOrderListingScreen', 'OrderDetailsScreen'
         ].includes(routeName)) {
             return 'none';
@@ -523,7 +569,7 @@ export default function Logged() {
                 }}
             />
             <Tab.Screen name="helpCenter" component={PaymentTab} />
-            <Tab.Screen name="cart" component={CartTab} />
+            {role == 'customer' && <Tab.Screen name="cart" component={CartTab} />}
             <Tab.Screen name="profile" component={ProfileTab} />
         </Tab.Navigator>
     );

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, { useContext, useState } from 'react';
 import {
     View,
     Text,
@@ -18,13 +19,13 @@ import Colors from '../src/constants/colors';
 import { useTranslation } from 'react-i18next';
 import SupportModal from '../modals/SupportModal';
 import CreditInfoModal from '../modals/CreditInfoModal';
+import { RoleContext } from '../context/RoleContext';
 
 const { width } = Dimensions.get('window');
 
-
-
 const DashboardScreen = () => {
     const navigation = useNavigation();
+    const { role } = useContext(RoleContext);
     const { isRTL } = useAppContext();
     const { t } = useTranslation();
 
@@ -35,6 +36,7 @@ const DashboardScreen = () => {
         { key: 'creditInfo', icon: 'card-outline', label: t('dashboard.creditInfo'), screen: '' },
         { key: 'payment', icon: 'cash-outline', label: t('dashboard.payment'), screen: 'PaymentScreen' },
         { key: 'complain', icon: 'alert-circle-outline', label: t('dashboard.complain'), screen: 'RaiseComplainScreen' },
+        { key: 'incentive', icon: 'alert-circle-outline', label: t('dashboard.incentive'), screen: 'IncentiveScreen' },
     ];
 
 
@@ -67,22 +69,22 @@ const DashboardScreen = () => {
                         paginationStyle={{ bottom: 10 }}
                         height={180}
                     >
-                        <View style={styles.slide}>
+                        <TouchableOpacity style={styles.slide}>
                             <View style={styles.slideContent}>
                                 <Image
                                     source={require('../../assets/images/banner-add-1.png')}
                                     style={{ width: '100%', height: 190, borderRadius: 12 }}
                                 />
                             </View>
-                        </View>
-                        <View style={styles.slide}>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.slide}>
                             <View style={styles.slideContent}>
                                 <Image
                                     source={require('../../assets/images/banner-add-2.png')}
                                     style={{ width: '100%', height: 190, borderRadius: 12 }}
                                 />
                             </View>
-                        </View>
+                        </TouchableOpacity>
                     </Swiper>
                 </View>
 
@@ -94,37 +96,43 @@ const DashboardScreen = () => {
                 <View
                     style={[
                         styles.quickGrid,
-                        { flexDirection: isRTL ? 'row-reverse' : 'row' } // ⬅️ Dynamic override
+                        { flexDirection: isRTL ? 'row-reverse' : 'row' }
                     ]}
                 >
-                    {quickActions.map((action, index) => (
-                        <TouchableOpacity
-                            key={index}
-                            style={[
-                                styles.quickItem,
-                                { alignItems: isRTL ? 'flex-end' : 'flex-start' } // 👈 Direction fix
-                            ]}
-                            onPress={() => {
-                                if (action.key === 'creditInfo') {
-                                    setCreditModalVisible(true);
-                                } else if (action.key === 'support') {
-                                    setSupportModalVisible(true);
-                                } else {
-                                    navigation.navigate(action.screen);
-                                }
-                            }}
-                        >
-                            <Icon name={action.icon} size={28} color="#fff" />
-                            <Text
+                    {quickActions.map((action, index) => {
+                        if (action.key === 'incentive' && role !== 'sales') {
+                            return null;
+                        }
+                        return (
+                            <TouchableOpacity
+                                key={index}
                                 style={[
-                                    styles.quickLabel,
-                                    { textAlign: isRTL ? 'right' : 'left' }
+                                    styles.quickItem,
+                                    { alignItems: isRTL ? 'flex-end' : 'flex-start' }
                                 ]}
+                                onPress={() => {
+                                    if (action.key === 'creditInfo') {
+                                        setCreditModalVisible(true);
+                                    } else if (action.key === 'support') {
+                                        setSupportModalVisible(true);
+                                    } else {
+                                        navigation.navigate(action.screen);
+                                    }
+                                }}
                             >
-                                {action.label}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
+                                <Icon name={action.icon} size={28} color="#000000ff" />
+                                <Text
+                                    style={[
+                                        styles.quickLabel,
+                                        { textAlign: isRTL ? 'right' : 'left' }
+                                    ]}
+                                >
+                                    {action.label}
+                                </Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+
                 </View>
             </ScrollView>
             <CreditInfoModal visible={creditModalVisible} onClose={() => setCreditModalVisible(false)} />
@@ -185,7 +193,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     quickLabel: {
-        color: '#fff',
+        color: '#000000ff',
         marginTop: 10,
         textAlign: 'center',
         fontWeight: '700',

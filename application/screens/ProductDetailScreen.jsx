@@ -10,7 +10,8 @@ import {
     TouchableWithoutFeedback,
     KeyboardAvoidingView,
     Keyboard,
-    Platform
+    Platform,
+    I18nManager
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
@@ -19,14 +20,18 @@ import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
 import AddItemsModal from '../modals/AddItemsModal';
 import { Modal, Portal, Button } from "react-native-paper";
+import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../context/RTLContext';
 
 const shades = ['White', 'Off White', 'Blue White', 'Cream'];
 const widths = ['36 Inch', '44 Inch', '60 Inch'];
 const lengths = ['25 Mtr', '50 Mtr', '100 Mtr'];
 
 export default function ProductDetailScreen() {
+    const { t } = useTranslation();
+    const { isRTL } = useAppContext();
     const navigation = useNavigation();
-    const { currency } = useContext(CurrencyContext);
+    const currency = '$'
     const [selectedShade, setSelectedShade] = useState('White');
     const [isCut, setIsCut] = useState(false);
     const [selectedWidth, setSelectedWidth] = useState('36 Inch');
@@ -78,7 +83,7 @@ export default function ProductDetailScreen() {
                 keyboardShouldPersistTaps="handled"
             >
                 {/* Product Code Dropdown */}
-                <Text style={styles.label}>Choose Product Code</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Choose Product Code</Text>
                 <View style={styles.pickerWrapper}>
                     <Picker
                         selectedValue={selectedProductCode}
@@ -104,21 +109,20 @@ export default function ProductDetailScreen() {
                 </TouchableOpacity>
 
                 {/* Price */}
-                <View style={styles.rowBetween}>
+                <View style={[styles.rowBetween, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     <Text style={styles.code}>23666</Text>
-                    <Text style={styles.price}>{currency?.symbol}28</Text>
+                    <Text style={styles.price}>{currency}28</Text>
                 </View>
-                <View style={styles.label}>
-                    <Text>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
+                <View style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
+                    <Text style={[styles.labelText, { textAlign: isRTL ? 'right' : 'left' }]}>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
                 </View>
 
                 {/* Shade Selector */}
-                {/* Shade Selector */}
-                <Text style={styles.label}>Shade Selector</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Shade Selector</Text>
                 <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.shadeRow}
+                    contentContainerStyle={[styles.shadeRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
                 >
                     {shades.map((shade) => (
                         <TouchableOpacity
@@ -145,23 +149,9 @@ export default function ProductDetailScreen() {
                     ))}
                 </ScrollView>
 
-
-                {/* Cut / Un-Cut */}
-                {/* <View style={styles.rowBetween}>
-                            <Text style={styles.label}> </Text>
-                            <View style={styles.cutGroup}>
-                                <TouchableOpacity onPress={() => setIsCut(true)}>
-                                    <Text style={[styles.radioText, isCut && styles.boldText]}>Cut</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => setIsCut(false)}>
-                                    <Text style={[styles.radioText, !isCut && styles.boldText]}>Un-Cut</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View> */}
-
                 {/* Width Selector */}
-                <Text style={styles.label}>Select Width</Text>
-                <View style={styles.optionsRow}>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Width</Text>
+                <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     {widths.map((width) => (
                         <TouchableOpacity
                             key={width}
@@ -177,8 +167,8 @@ export default function ProductDetailScreen() {
                 </View>
 
                 {/* Length Selector */}
-                <Text style={styles.label}>Select Length</Text>
-                <View style={styles.optionsRow}>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Length</Text>
+                <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     {lengths.map((length) => (
                         <TouchableOpacity
                             key={length}
@@ -197,19 +187,19 @@ export default function ProductDetailScreen() {
                 </View>
 
                 {/* Number of Rolls */}
-                <Text style={styles.label}>Enter Number of Uncut Rolls</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Enter Number of Uncut Rolls</Text>
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
                     keyboardType="numeric"
                     value={rolls}
                     onChangeText={setRolls}
                 />
 
-                <Text style={styles.label}>Do you want Cut Rolls</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Do you want Cut Rolls</Text>
                 {["standard", "none"].map((id) => (
                     <TouchableOpacity
                         key={id}
-                        style={styles.radioContainer}
+                        style={[styles.radioContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
                         onPress={() => {
                             setSelectedOption(id);
                             if (id === "standard") {
@@ -226,25 +216,8 @@ export default function ProductDetailScreen() {
                     </TouchableOpacity>
                 ))}
 
-
-                {/* {selectedOption !== 'none' && <View>
-                    <Text style={styles.label}>Choose Customised Size</Text>
-                    <View style={styles.pickerWrapper}>
-                        <Picker
-                            selectedValue={SelectCustomSize}
-                            onValueChange={(itemValue) => setSelectCustomSize(itemValue)}
-                            style={styles.picker}
-                            dropdownIconColor="#666"
-                        >
-                            <Picker.Item label="12" value="12" />
-                            <Picker.Item label="15" value="15" />
-                            <Picker.Item label="20" value="20" />
-                        </Picker>
-                    </View>
-                </View>} */}
-
                 {/* Remark */}
-                <Text style={styles.label}>Remark</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
                 <View style={styles.remarkRow}>
                     <TextInput
                         style={[styles.remarkInput, { height: 100, textAlignVertical: 'top' }]}
@@ -336,6 +309,10 @@ const styles = StyleSheet.create({
         marginTop: 16,
         fontWeight: '600',
         fontSize: 16,
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
+    },
+    labelText: {
+        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     dropdown: {
         flexDirection: 'row',
@@ -366,7 +343,7 @@ const styles = StyleSheet.create({
         color: Colors.black,
     },
     rowBetween: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         justifyContent: 'space-between',
         marginTop: 16,
         alignItems: 'center',
@@ -381,7 +358,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     optionsRow: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         flexWrap: 'wrap',
         marginTop: 8,
         gap: 8,
@@ -393,6 +370,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#f0f0f0',
         marginRight: 8,
         marginBottom: 8,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     selectedOption: {
         backgroundColor: Colors.primary,
@@ -425,7 +405,7 @@ const styles = StyleSheet.create({
         marginTop: 6,
     },
     remarkRow: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         alignItems: 'top',
         borderWidth: 1,
         borderRadius: 8,
@@ -508,7 +488,7 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     radioContainer: {
-        flexDirection: 'row',
+        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         alignItems: 'center',
         marginTop: 10,
     },

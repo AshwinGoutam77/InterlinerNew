@@ -46,7 +46,7 @@ export default function ShippingScreen() {
                             <View style={{ marginLeft: 10, flex: 1 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={styles.label}>{item.label}</Text>
-                                    {item.default && <Text style={styles.defaultTag}>Default</Text>}
+                                    {item.default && <Text style={styles.defaultTag}>Regular</Text>}
                                 </View>
                                 <Text style={styles.address}>{item.address}</Text>
                             </View>
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     addNewText: {
         fontSize: 16,
         fontWeight: '700',
-        color: '#fff'
+        color: '#000000ff'
     },
     applyBtn: {
         backgroundColor: Colors.primary,
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         marginBottom: 0
     },
     applyText: {
-        color: '#fff',
+        color: '#000000ff',
         fontWeight: 'bold',
         fontSize: 16
     },

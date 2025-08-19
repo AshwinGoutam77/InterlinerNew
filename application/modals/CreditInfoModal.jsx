@@ -43,11 +43,11 @@ const CreditInfoModal = ({ visible, onClose }) => {
                         <Text style={styles.value}>2000</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>{t('dashboard.creditAvailableAmount')}</Text>
+                        <Text style={[styles.label, { color: 'red' }]}>{t('dashboard.creditAvailableAmount')}</Text>
                         <Text style={styles.value}>10 Days</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.label}>{t('dashboard.creditPeriod')}</Text>
+                        <Text style={[styles.label, { color: 'red' }]}>{t('dashboard.creditPeriod')}</Text>
                         <Text style={styles.value}>10 Days</Text>
                     </View>
                     <View style={styles.row}>
@@ -107,9 +107,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     buttonText: {
-        color: '#fff',
+        color: '#000000ff',
         textAlign: 'center',
-        fontSize: 13
+        fontSize: 13,
+        fontWeight: '600'
     },
 });
 

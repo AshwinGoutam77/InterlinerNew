@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { PaperProvider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 import Logged from './application/navigations/Logged';
 import WalkthroughScreen from './application/screens/WalkthroughScreen';
 import './application/src/i18n/i18n';
@@ -16,49 +15,38 @@ import i18n from './application/src/i18n/i18n';
 import { CurrencyProvider } from './application/context/CurrencyContext';
 import ForgotPassword from './application/screens/ForgotPassword';
 import { UserProvider } from './application/context/UserContext';
+import { RoleProvider } from './application/context/RoleContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const RootStack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
   const [showWalkthrough, setShowWalkthrough] = useState(true);
 
-  // useEffect(() => {
-  //   const checkWalkthrough = async () => {
-  //     const value = await AsyncStorage.getItem('hasSeenWalkthrough');
-  //     if (value === 'true') {
-  //       setShowWalkthrough(false);
-  //     }
-  //   };
-  //   checkWalkthrough();
-  // }, []);
-
   return (
-    <NavigationContainer>
-      <PaperProvider>
-        <AppProvider>
-          <CurrencyProvider>
-            <UserProvider>
-              <I18nextProvider i18n={i18n}>
-                {/* <RootStack.Navigator screenOptions={{ headerShown: false }}>
-          {showWalkthrough ? (
-            <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
-          ) : (
-            <RootStack.Screen name="MainApp" component={Logged} />
-          )}
-        </RootStack.Navigator> */}
-                <RootStack.Navigator screenOptions={{ headerShown: false }}>
-                  <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
-                  <RootStack.Screen name="Login" component={LoginScreen} />
-                  <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
-                  <RootStack.Screen name="Register" component={RegisterScreen} />
-                  <RootStack.Screen name="MainApp" component={Logged} />
-                </RootStack.Navigator>
-              </I18nextProvider>
-            </UserProvider>
-          </CurrencyProvider>
-        </AppProvider>
-      </PaperProvider>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <PaperProvider>
+          <AppProvider>
+            <CurrencyProvider>
+              <UserProvider>
+                <RoleProvider>
+                  <I18nextProvider i18n={i18n}>
+                    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+                      <RootStack.Screen name="Walkthrough" component={WalkthroughScreen} />
+                      <RootStack.Screen name="Login" component={LoginScreen} />
+                      <RootStack.Screen name="ForgotPassword" component={ForgotPassword} />
+                      <RootStack.Screen name="Register" component={RegisterScreen} />
+                      <RootStack.Screen name="MainApp" component={Logged} />
+                    </RootStack.Navigator>
+                  </I18nextProvider>
+                </RoleProvider>
+              </UserProvider>
+            </CurrencyProvider>
+          </AppProvider>
+        </PaperProvider>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 export default App;
