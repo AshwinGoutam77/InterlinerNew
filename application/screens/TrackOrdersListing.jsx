@@ -7,14 +7,16 @@ import {
     Image,
     ScrollView,
     TouchableOpacity,
-    I18nManager
+    I18nManager,
+    FlatList
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Entypo';
 import { CurrencyContext } from '../context/CurrencyContext';
 import CustomerFilter from '../components/CustomerFilter';
 import { RoleContext } from '../context/RoleContext';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
+import Colors from '../src/constants/colors';
 
 export default function TrackOrderListingScreen({ navigation }) {
     const currency = '$'
@@ -22,57 +24,55 @@ export default function TrackOrderListingScreen({ navigation }) {
     const { t } = useTranslation();
     const { isRTL } = useAppContext();
 
+    const orders = [
+        { id: "1", number: "#223341", total: 120, customer: "Sarah Smith" },
+        { id: "2", number: "#223342", total: 220, customer: "John Doe" },
+        { id: "3", number: "#223343", total: 320, customer: "Emma Brown" },
+        { id: "4", number: "#223344", total: 420, customer: "David Lee" },
+        { id: "5", number: "#223345", total: 520, customer: "Sophia Johnson" },
+    ];
+
+    const renderItem = ({ item }) => (
+        <TouchableOpacity
+            style={[
+                styles.card,
+                { flexDirection: isRTL ? "row-reverse" : "row" },
+            ]}
+            onPress={() => navigation.navigate("TrackOrderScreen", { orderId: item.id })}
+        >
+            <View style={[styles.row, { flexDirection: isRTL ? "row-reverse" : "row" },]}>
+                <View style={styles.productImageContainer}>
+                    <Image
+                        source={require("../../assets/images/orders.png")}
+                        style={styles.productImage}
+                    />
+                </View>
+                <View>
+                    <Text style={[styles.productTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Order Number - {item.number}</Text>
+                    <Text style={[styles.productPrice, { textAlign: isRTL ? 'right' : 'left' }]}>
+                        Total - {currency}
+                        {item.total}.00
+                    </Text>
+                    {role === "sales" && (
+                        <Text style={[styles.productPrice, { textAlign: isRTL ? 'right' : 'left' }]}>
+                            Customer Name - {item.customer}
+                        </Text>
+                    )}
+                </View>
+            </View>
+            <TouchableOpacity>
+                <Icon name={isRTL ? 'chevron-left' : 'chevron-right'} size={28} color={Colors.primary} />
+            </TouchableOpacity>
+        </TouchableOpacity>
+    );
+
     return (
         <View style={styles.container}>
-            {/* <CustomerFilter /> */}
-            <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
-                {role === 'sales' && <CustomerFilter />}
-                {/* Product Card */}
-                <TouchableOpacity style={[styles.card, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('TrackOrderScreen')} >
-                    <Image
-                        source={require('../../assets/images/kandura.png')}
-                        style={styles.productImage}
-                    />
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.productTitle}>Order Number - #223344</Text>
-                        <Text style={styles.productPrice}>Total - {currency}120.00</Text>
-                        {role == 'sales' && <Text style={styles.productPrice}>Customer Name - Sarah Smith</Text>}
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.card, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('TrackOrderScreen')} >
-                    <Image
-                        source={require('../../assets/images/kandura.png')}
-                        style={styles.productImage}
-                    />
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.productTitle}>Order Number - #223344</Text>
-                        <Text style={styles.productPrice}>Total - {currency}120.00</Text>
-                        {role == 'sales' && <Text style={styles.productPrice}>Customer Name - Sarah Smith</Text>}
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.card, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('TrackOrderScreen')} >
-                    <Image
-                        source={require('../../assets/images/kandura.png')}
-                        style={styles.productImage}
-                    />
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.productTitle}>Order Number - #223344</Text>
-                        <Text style={styles.productPrice}>Total - {currency}120.00</Text>
-                        {role == 'sales' && <Text style={styles.productPrice}>Customer Name - Sarah Smith</Text>}
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.card, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('TrackOrderScreen')} >
-                    <Image
-                        source={require('../../assets/images/kandura.png')}
-                        style={styles.productImage}
-                    />
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.productTitle}>Order Number - #223344</Text>
-                        <Text style={styles.productPrice}>Total - {currency}120.00</Text>
-                        {role == 'sales' && <Text style={styles.productPrice}>Customer Name - Sarah Smith</Text>}
-                    </View>
-                </TouchableOpacity>
-            </ScrollView>
+            <FlatList
+                data={orders}
+                keyExtractor={(item) => item.id}
+                renderItem={renderItem}
+            />
         </View>
     );
 }
@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     card: {
-        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         backgroundColor: '#fff',
         borderRadius: 8,
         padding: 16,
@@ -111,11 +112,26 @@ const styles = StyleSheet.create({
         borderColor: '#FAFAFA',
         gap: '10'
     },
+    row: {
+        flexDirection: 'row',
+        alignContent: 'center',
+        justifyContent: 'center',
+        gap: 16
+    },
+    productImageContainer: {
+        backgroundColor: Colors.primary,
+        padding: 0,
+        width: 50,
+        height: 50,
+        borderRadius: 100,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     productImage: {
-        width: 80,
-        height: 80,
-        marginRight: 12,
-        borderRadius: 8
+        width: 26,
+        height: 26,
+        borderRadius: 100,
     },
     productTitle: {
         fontSize: 16,

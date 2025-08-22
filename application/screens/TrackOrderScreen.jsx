@@ -158,10 +158,10 @@ export default function TrackOrderScreen({ navigation }) {
                         </View>
                     ))
                 }
-                <View style={[styles.buttonContainer,{ flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                    <TouchableOpacity style={styles.downloadButton}>
+                <View style={[styles.buttonContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                    {role === 'customer' && <TouchableOpacity style={styles.downloadButton}>
                         <Text style={styles.downloadText}>Mark as Received</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                     <TouchableOpacity style={styles.downloadButton}>
                         <Text style={styles.downloadText}>Download Invoice</Text>
                     </TouchableOpacity>
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     downloadText: {
-        color: '#000000ff',
+        color: Colors.white,
         fontWeight: '600',
         fontSize: 16,
     },

@@ -22,8 +22,7 @@ import CustomerFilter from '../components/CustomerFilter';
 import { RoleContext } from '../context/RoleContext';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
-
-const tabs = ['Payment records', 'Pay by order', 'Make Payment',];
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const transactionData = [
     {
@@ -59,6 +58,9 @@ export default function PaymentScreen({ route }) {
     const { t } = useTranslation();
     const { isRTL } = useAppContext();
     const { role } = useContext(RoleContext);
+    const tabs = role === "sales"
+        ? ["Payment records", "Pay by order", "Credit Info"]
+        : ["Payment records", "Pay by order", "Make Payment"];
     const paymentType = route?.params?.paymentType ?? null;
     const currency = '$'
     const [activeTab, setActiveTab] = useState(paymentType ? 'Make Payment' : 'Payment records');
@@ -74,23 +76,25 @@ export default function PaymentScreen({ route }) {
         { label: '#2346', value: '2346' },
     ]);
     const [paymentTypes, setPaymentTypes] = useState("full");
-
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
 
-    const renderTab = (tab) => (
-        <TouchableOpacity
-            key={tab}
-            style={[
-                styles.tabButton,
-                activeTab === tab && styles.activeTabButton,
-            ]}
-            onPress={() => setActiveTab(tab)}
-        >
-            <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
-                {tab}
-            </Text>
-        </TouchableOpacity>
-    );
+    const renderTab = (tab) => {
+        return (
+            <TouchableOpacity
+                key={tab}
+                style={[
+                    styles.tabButton,
+                    activeTab === tab && styles.activeTabButton,
+                ]}
+                onPress={() => setActiveTab(tab)}
+            >
+                <Text style={[styles.tabText, activeTab === tab && styles.activeTabText]}>
+                    {tab}
+                </Text>
+            </TouchableOpacity>
+        );
+    };
+
 
     const orderData = [
         { id: '#2344', status: 'Pending', totalAmount: '30', AmountPaid: '20', DueAmount: '10', DueDate: '21/11/2025', paidVia: 'Cash', description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum ' },
@@ -151,9 +155,9 @@ export default function PaymentScreen({ route }) {
                         <Text style={[styles.descriptionRowLabel, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
                         <Text style={[styles.descriptionRowLabelValue, { textAlign: isRTL ? 'right' : 'left' }]}>{order.description}</Text>
                     </View>
-                    <TouchableOpacity style={[styles.button, { marginLeft: isRTL ? 'auto' : '0' }]} onPress={showModal}>
+                    {role === 'customer' && <TouchableOpacity style={[styles.button, { marginLeft: isRTL ? 'auto' : '0' }]} onPress={showModal}>
                         <Text style={styles.buttonText}>Pay Now</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
             ))
             }
@@ -235,6 +239,8 @@ export default function PaymentScreen({ route }) {
                     </TouchableOpacity>
                 </View>
 
+                {paymentTypes === "full" && <Text style={styles.offerText}>Receive a 10% credit when you make full payments.</Text>}
+
                 {paymentTypes === "part" && (
                     <>
                         <Text
@@ -295,22 +301,62 @@ export default function PaymentScreen({ route }) {
         )
     }
 
+    const CreditInfo = () => {
+        return (
+            <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+                {orderData.map((order, index) => (
+                    <View key={index} style={styles.card}>
+                        {role == 'sales' && <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                            <Text style={styles.label}>Customer Name</Text>
+                            <Text style={styles.value}>Sarah Smith</Text>
+                        </View>}
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                            <Text style={styles.label}>Amount Paid</Text>
+                            <Text style={styles.value}>$299</Text>
+                        </View>
+                        <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                            <Text style={styles.label}>Amount Due</Text>
+                            <Text style={styles.value}>$20</Text>
+                        </View>
+                    </View>
+                ))
+                }
+            </ScrollView >
+        )
+    }
+
     const getContentForTab = () => {
         switch (activeTab) {
-            case 'Payment records':
-                return <FlatList data={transactionData} keyExtractor={(item) => item.id.toString()} renderItem={renderTransaction} />;
-            case 'Pay by order':
+            case "Payment records":
+                return (
+                    <FlatList
+                        data={transactionData}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={renderTransaction}
+                    />
+                );
+            case "Pay by order":
                 return <DueByOrder />;
-            case 'Make Payment':
-                return <DirectPay />
+            case "Credit Info":
+                return role === "sales" ? <CreditInfo /> : null; // Only for sales
+            case "Make Payment":
+                return role === "customer" ? <DirectPay /> : null; // Only for customer
             default:
                 return null;
         }
     };
 
+    const handleAttachPhoto = () => {
+        launchImageLibrary({ mediaType: 'photo', quality: 0.7 }, (response) => {
+            if (!response.didCancel && !response.errorCode) {
+                console.log("Selected image:", response.assets[0].uri);
+            }
+        });
+    };
+
     return (
         <View style={styles.container}>
-            {role == 'sales' && <CustomerFilter />}
+            {role === 'sales' && <CustomerFilter />}
             <View style={styles.tabContainer}>{tabs.map(renderTab)}</View>
             <View style={styles.contentContainer}>{getContentForTab()}</View>
 
@@ -322,6 +368,14 @@ export default function PaymentScreen({ route }) {
                     </TouchableOpacity>
 
                     <Text style={styles.title}>Pay Due By Orders</Text>
+
+                    <TouchableOpacity
+                        style={[styles.attachPhotoBtn, { flexDirection: isRTL ? 'row-reverse' : 'row', marginLeft: isRTL ? 'auto' : '0' }]}
+                        onPress={handleAttachPhoto}
+                    >
+                        <Icon name="camera" size={20} color={Colors.white} />
+                        <Text style={styles.attachPhotoText}>Attach Photo</Text>
+                    </TouchableOpacity>
 
                     {/* Order Number Dropdown */}
                     <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Payment Via</Text>
@@ -482,6 +536,11 @@ const styles = StyleSheet.create({
         color: '#000000',
         textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
+    offerText: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: Colors.secondary,
+    },
     duePaymentText: {
         fontWeight: 800,
         fontSize: 16,
@@ -522,7 +581,7 @@ const styles = StyleSheet.create({
         marginLeft: I18nManager.isRTL ? 'auto' : '0'
     },
     buttonText: {
-        color: '#000000ff',
+        color: Colors.white,
         textAlign: 'center',
         fontSize: 13,
         fontWeight: '600'
@@ -569,12 +628,12 @@ const styles = StyleSheet.create({
     submitBtn: {
         backgroundColor: Colors.primary,
         borderRadius: 8,
-        paddingVertical: 12,
+        paddingVertical: 16,
         alignItems: 'center',
         marginTop: 20,
     },
     submitText: {
-        color: '#000000ff',
+        color: Colors.white,
         fontSize: 16,
         fontWeight: '600',
     },
@@ -627,4 +686,20 @@ const styles = StyleSheet.create({
     },
     optionText: { color: "#333", fontWeight: "500" },
     optionTextActive: { color: Colors.black },
+    attachPhotoBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: Colors.primary,
+        paddingVertical: 10,
+        paddingHorizontal: 14,
+        borderRadius: 8,
+        gap: 10,
+        marginTop: 16,
+        alignSelf: 'flex-start',
+    },
+    attachPhotoText: {
+        color: Colors.white,
+        fontSize: 14,
+        fontWeight: '600',
+    },
 });

@@ -496,12 +496,13 @@ const styles = StyleSheet.create({
     },
     totalLabel: {
         fontSize: 14,
-        color: '#000000',
+        color: Colors.white,
         fontWeight: '600'
     },
     totalPrice: {
         fontSize: 24,
         fontWeight: 'bold',
+        color: Colors.white
     },
     checkoutBtn: {
         backgroundColor: Colors.white,

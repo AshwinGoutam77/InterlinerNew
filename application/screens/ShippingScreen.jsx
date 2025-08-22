@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     addNewText: {
         fontSize: 16,
         fontWeight: '700',
-        color: '#000000ff'
+        color: Colors.white
     },
     applyBtn: {
         backgroundColor: Colors.primary,
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         marginBottom: 0
     },
     applyText: {
-        color: '#000000ff',
+        color: Colors.white,
         fontWeight: 'bold',
         fontSize: 16
     },

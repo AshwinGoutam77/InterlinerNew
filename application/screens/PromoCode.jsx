@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         borderRadius: 8
     },
     applyText: {
-        color: '#000000ff',
+        color: Colors.white,
         fontWeight: '600',
         fontSize: 16
     }

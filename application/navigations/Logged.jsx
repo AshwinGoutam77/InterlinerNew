@@ -41,8 +41,8 @@ import TrackOrderListingScreen from "../screens/TrackOrdersListing";
 import OrderDetailsScreen from "../screens/OrderDetailsScreen";
 import Colors from "../src/constants/colors";
 import RepeatOrderScreen from "../screens/RepeatOrderScreen";
-import IncentiveScreen from "../screens/IncentiveScreen";
 import { RoleContext } from "../context/RoleContext";
+import ReportsScreen from "../screens/ReportsScreen";
 
 var styles = require("../../assets/files/Styles");
 
@@ -211,10 +211,10 @@ function HomeStack() {
                 }}
             />
             <Stack.Screen
-                name="IncentiveScreen"
-                component={IncentiveScreen}
+                name="ReportsScreen"
+                component={ReportsScreen}
                 options={{
-                    header: () => <CustomHeader title="Incentive" />,
+                    header: () => <CustomHeader title="Reports" />,
                 }}
             />
             <Stack.Screen
@@ -252,7 +252,7 @@ function HomeStack() {
                     header: () => <CustomHeader title="Privacy Policy" />,
                 }}
             />
-            
+
         </Stack.Navigator>
     );
 }
@@ -505,8 +505,7 @@ export default function Logged() {
 
         if ([
             'ProductDetailScreen', 'CartScreen', 'cart', 'CheckoutScreen', 'ShippingScreen', 'AddNewAddressScreen', 'AddShippingScreen',
-            'InquiryForm', 'AboutUs', 'PromoCodeScreen', 'PaymentMethodScreen', 'TrackOrderScreen', 'RaiseComplainScreen',
-            'PaymentScreen', 'ProfileScreen', 'EditProfile', 'LanguageScreen', 'TrackOrderListingScreen', 'OrderDetailsScreen'
+            'PromoCodeScreen', 'PaymentMethodScreen', 'EditProfile'
         ].includes(routeName)) {
             return 'none';
         }

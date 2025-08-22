@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         marginTop: 'auto',
     },
     saveText: {
-        color: '#000000ff',
+        color: Colors.white,
         fontSize: 16,
         fontWeight: '600',
     },

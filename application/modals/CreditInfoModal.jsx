@@ -1,15 +1,19 @@
 // modals/CreditInfoModal.js
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useTranslation } from 'react-i18next';
 import Colors from '../src/constants/colors';
 import { useNavigation } from '@react-navigation/native';
+import { useAppContext } from '../context/RTLContext';
+import { RoleContext } from '../context/RoleContext';
 
 const CreditInfoModal = ({ visible, onClose }) => {
     const { t } = useTranslation();
+    const { isRTL } = useAppContext();
     const navigation = useNavigation();
+    const { role } = useContext(RoleContext);
 
     const containerStyle = {
         backgroundColor: 'white',
@@ -34,28 +38,32 @@ const CreditInfoModal = ({ visible, onClose }) => {
                 <Text style={styles.title}>{t('dashboard.creditLimit')}</Text>
 
                 <View>
-                    <View style={styles.row}>
+                    <View style={[styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.label}>{t('dashboard.creditAvailable')}</Text>
                         <Text style={styles.value}>4000</Text>
                     </View>
-                    <View style={styles.row}>
+                    <View style={[styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.label}>{t('dashboard.creditUsed')}</Text>
                         <Text style={styles.value}>2000</Text>
                     </View>
-                    <View style={styles.row}>
+                    <View style={[styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={[styles.label, { color: 'red' }]}>{t('dashboard.creditAvailableAmount')}</Text>
+                        <Text style={styles.value}>1000</Text>
+                    </View>
+                    <View style={[styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                        <Text style={[styles.label]}>{t('dashboard.totalCreditPeriod')}</Text>
                         <Text style={styles.value}>10 Days</Text>
                     </View>
-                    <View style={styles.row}>
+                    <View style={[styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={[styles.label, { color: 'red' }]}>{t('dashboard.creditPeriod')}</Text>
-                        <Text style={styles.value}>10 Days</Text>
+                        <Text style={styles.value}>8 Days</Text>
                     </View>
-                    <View style={styles.row}>
+                    <View style={[styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.label}>{t('dashboard.dueDate')}</Text>
                         <Text style={styles.value}>24/8/2025</Text>
                     </View>
 
-                    <TouchableOpacity
+                    {role === 'customer' && <TouchableOpacity
                         style={styles.button}
                         onPress={() => {
                             onClose();
@@ -63,7 +71,7 @@ const CreditInfoModal = ({ visible, onClose }) => {
                         }}
                     >
                         <Text style={styles.buttonText}>Make Payment</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
 
                 </View>
             </Modal>
@@ -107,7 +115,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     buttonText: {
-        color: '#000000ff',
+        color: Colors.white,
         textAlign: 'center',
         fontSize: 13,
         fontWeight: '600'

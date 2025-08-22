@@ -10,12 +10,13 @@ import {
     TextInput
 } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../src/constants/colors';
 import { RoleContext } from '../context/RoleContext';
 import CustomerFilter from '../components/CustomerFilter';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const orderData = [
     { id: '#2344', paid: 24, due: 2, total: 26, date: '24/09/25' },
@@ -50,6 +51,14 @@ export default function HistoryScreen({ navigation }) {
         { label: '#2346', value: '2346' },
     ]);
 
+    const handleAttachPhoto = () => {
+        launchImageLibrary({ mediaType: 'photo', quality: 0.7 }, (response) => {
+            if (!response.didCancel && !response.errorCode) {
+                console.log("Selected image:", response.assets[0].uri);
+            }
+        });
+    };
+
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'start', gap: 10, justifyContent: 'center' };
 
     return (
@@ -69,8 +78,11 @@ export default function HistoryScreen({ navigation }) {
                             <Text style={styles.value}>{order.date}</Text>
                         </View>
                         <TouchableOpacity style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]} onPress={() => navigation.navigate('OrderDetailsScreen')}>
-                            <Text style={styles.label}>Order Number</Text>
-                            <Text style={[styles.value, { color: Colors.primary }]}>{order.id}</Text>
+                            <Text style={[styles.label, { color: Colors.primary, fontWeight: '600' }]}>Order Number</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={[styles.value, { color: Colors.primary }]}>{order.id}</Text>
+                                <Icon name='chevron-right' size={20} />
+                            </View>
                         </TouchableOpacity>
                         <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.label}>Total Amount</Text>
@@ -86,11 +98,17 @@ export default function HistoryScreen({ navigation }) {
                         </View>
 
                         <View style={[styles.buttonGrid, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                            <TouchableOpacity style={styles.button} onPress={showModalPay}>
+                            {role === 'customer' && <TouchableOpacity style={styles.button} onPress={showModalPay}>
                                 <Text style={styles.buttonText}>Pay Due Payments</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity>}
                             <TouchableOpacity style={styles.button} onPress={showRepeat}>
                                 <Text style={styles.buttonText}>Repeat Order</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.buttonText}>Download Recipet</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.buttonText}>Download Invoice</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.button} onPress={showModal}>
                                 <Text style={styles.buttonText}>Complain</Text>
@@ -112,6 +130,14 @@ export default function HistoryScreen({ navigation }) {
                     </TouchableOpacity>
 
                     <Text style={styles.title}>Raise a Complaint</Text>
+
+                    <TouchableOpacity
+                        style={[styles.attachPhotoBtn, { flexDirection: isRTL ? 'row-reverse' : 'row', marginLeft: isRTL ? 'auto' : '0' }]}
+                        onPress={handleAttachPhoto}
+                    >
+                        <Icon name="camera-alt" size={20} color={Colors.white} />
+                        <Text style={styles.attachPhotoText}>Attach Photo</Text>
+                    </TouchableOpacity>
 
                     {/* Order Number Dropdown */}
                     <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Order Number</Text>
@@ -233,9 +259,9 @@ export default function HistoryScreen({ navigation }) {
                         <TouchableOpacity style={styles.RepeatSubmitBtn} onPress={() => { navigation.navigate('CartScreen'), hideRepeat() }}>
                             <Text style={styles.submitText}>Place Order</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.RepeatSubmitBtn} onPress={() => { hideRepeat() }}>
-                            <Text style={styles.submitText}>Cancle</Text>
-                        </TouchableOpacity>
+                        {/* <TouchableOpacity style={styles.RepeatSubmitBtn} onPress={() => { hideRepeat() }}>
+                            <Text style={styles.submitText}>Cancel</Text>
+                        </TouchableOpacity> */}
                     </View>
                 </Modal>
             </Portal>
@@ -287,7 +313,9 @@ const styles = StyleSheet.create({
     value: {
         fontSize: 15,
         fontWeight: 'bold',
-        color: '#000'
+        color: '#000',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     input: {
         height: 48,
@@ -312,7 +340,7 @@ const styles = StyleSheet.create({
         marginVertical: 4
     },
     buttonText: {
-        color: '#000000ff',
+        color: Colors.white,
         textAlign: 'center',
         fontSize: 13,
         fontWeight: '600'
@@ -363,7 +391,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     submitText: {
-        color: '#000000ff',
+        color: Colors.white,
         fontSize: 16,
         fontWeight: '600',
     },
@@ -402,7 +430,7 @@ const styles = StyleSheet.create({
     },
     RepeatButtonGrid: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
     },
     picker: {
         height: 50,
@@ -428,7 +456,24 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 12,
         alignItems: 'center',
-        marginTop: 20,
+        // marginTop: 20,
         width: '48%',
+    },
+
+    attachPhotoBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: Colors.primary,
+        paddingVertical: 10,
+        paddingHorizontal: 14,
+        borderRadius: 8,
+        gap: 10,
+        // marginTop: 8,
+        alignSelf: 'flex-start'
+    },
+    attachPhotoText: {
+        color: Colors.white,
+        fontSize: 14,
+        fontWeight: '600',
     },
 });

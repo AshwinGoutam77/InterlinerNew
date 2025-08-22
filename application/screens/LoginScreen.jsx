@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useState, useContext } from 'react';
 import {
     View,
@@ -50,7 +51,7 @@ const LoginScreen = () => {
                             style={styles.logo}
                             resizeMode="contain"
                         />
-                        <Text style={styles.title}>Brought to you by</Text>
+                        <Text style={[styles.title, { marginTop: 20 }]}>Brought to you by</Text>
                         <Image
                             source={require('../../assets/images/logo.png')}
                             style={styles.MainLogo}
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     },
     loginBanner: {
         width: 350,
-        height: 200,
+        height: 100,
         borderRadius: 5,
         objectFit: 'cover',
     },
@@ -175,6 +176,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: '#000',
         marginVertical: 20,
+        marginTop: 80
     },
     inputWrapper: {
         flexDirection: 'row',

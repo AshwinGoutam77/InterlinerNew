@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useContext, useState } from 'react';
 import {
     View,
@@ -141,8 +142,7 @@ export default function PaymentMethodScreen() {
                 </Modal>
             </Portal>
             <TouchableOpacity
-                style={styles.confirmBtn}
-                // onPress={() => navigation.navigate('CheckoutScreen')}
+                style={[styles.confirmBtn, { marginTop: 10, marginBottom: 20 }]}
                 onPress={showModal}
             >
                 <Text style={styles.confirmText}>Confirm Payment</Text>
@@ -188,9 +188,8 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 2,
         borderWidth: 1.5,
-        borderColor: active ? Colors.black : 'transparent'
+        borderColor: active ? Colors.primary : 'transparent'
     }),
-
 
     row: {
         flexDirection: 'column',
@@ -231,7 +230,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     confirmText: {
-        color: '#000000ff',
+        color: Colors.white,
         fontWeight: 'bold',
         fontSize: 16
     },

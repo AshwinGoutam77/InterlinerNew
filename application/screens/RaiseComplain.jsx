@@ -47,7 +47,6 @@ export default function RaiseComplainScreen({ navigation }) {
         launchImageLibrary({ mediaType: 'photo', quality: 0.7 }, (response) => {
             if (!response.didCancel && !response.errorCode) {
                 console.log("Selected image:", response.assets[0].uri);
-                // You can store the URI in state if you want to preview it
             }
         });
     };
@@ -55,7 +54,7 @@ export default function RaiseComplainScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            {role == 'sales' && <CustomerFilter />}
+            {role === 'sales' && <CustomerFilter />}
             <TouchableOpacity style={styles.button} onPress={showModal}>
                 <Icon name='plus' size={24} />
                 <Text style={styles.buttonText}>Make complain</Text>
@@ -100,6 +99,7 @@ export default function RaiseComplainScreen({ navigation }) {
                     </View>
                 ))}
             </ScrollView>
+
             <Portal>
                 <Modal visible={visible} transparent animationType="slide" contentContainerStyle={containerStyle}>
                     {/* Close Button */}
@@ -113,7 +113,7 @@ export default function RaiseComplainScreen({ navigation }) {
                         style={[styles.attachPhotoBtn, { flexDirection: isRTL ? 'row-reverse' : 'row', marginLeft: isRTL ? 'auto' : '0' }]}
                         onPress={handleAttachPhoto}
                     >
-                        <Icon name="camera" size={20} color="#000000ff" />
+                        <Icon name="camera" size={20} color={Colors.white} />
                         <Text style={styles.attachPhotoText}>Attach Photo</Text>
                     </TouchableOpacity>
 
@@ -202,7 +202,7 @@ export default function RaiseComplainScreen({ navigation }) {
                                 }}
                                 onPress={() => setFeedbackRating(rating)}
                             >
-                                <Text style={{ color: feedbackRating === rating ? '#000000ff' : '#000' }}>{rating}</Text>
+                                <Text style={{ color: feedbackRating === rating ? Colors.white : '#000', fontWeight: '600' }}>{rating}</Text>
                             </TouchableOpacity>
                         ))}
                     </View>
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     ModalsubmitBtn: {
         width: '48%',
         backgroundColor: Colors.primary,
-        paddingVertical: 12,
+        paddingVertical: 14,
         borderRadius: 6,
         marginVertical: 4,
         marginLeft: 'auto',
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
         gap: 2,
     },
     ModalsubmitText: {
-        color: '#000000ff',
+        color: Colors.white,
         textAlign: 'center',
         fontSize: 14,
         fontWeight: '600',
@@ -410,11 +410,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 14,
         borderRadius: 8,
         gap: 10,
-        marginTop: 8,
+        // marginTop: 8,
         alignSelf: 'flex-start'
     },
     attachPhotoText: {
-        color: '#000000ff',
+        color: Colors.white,
         fontSize: 14,
         fontWeight: '600',
     },

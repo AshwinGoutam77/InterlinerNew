@@ -102,12 +102,12 @@ export default function HelpCenterScreen() {
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={openWhatsApp}>
-                    <Icon name="logo-whatsapp" size={20} color="#000000ff" />
+                    <Icon name="logo-whatsapp" size={20} color={Colors.white} />
                     <Text style={styles.buttonText}>WhatsApp</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.button} onPress={makeCall}>
-                    <Icon name="call" size={20} color="#000000ff" />
+                    <Icon name="call" size={20} color={Colors.white} />
                     <Text style={styles.buttonText}>Phone</Text>
                 </TouchableOpacity>
             </View>
@@ -162,14 +162,15 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 24,
         paddingHorizontal: 16,
-        paddingVertical: 6,
+        paddingVertical: 8,
     },
     categoryButtonActive: {
-        backgroundColor: '#000',
+        backgroundColor: Colors.primary,
     },
     categoryText: {
         fontSize: 14,
         color: '#000',
+        fontWeight: '600'
     },
     categoryTextActive: {
         color: '#fff',
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
         width: '49%'
     },
     buttonText: {
-        color: '#000000ff',
+        color: Colors.white,
         fontSize: 16,
         fontWeight: '600',
     },

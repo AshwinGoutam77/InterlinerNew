@@ -72,8 +72,8 @@ const ProductsPage = () => {
             <View style={styles.productCard}>
                 <Image source={item.image} style={styles.productImage} />
                 <View style={[styles.productDescription]}>
-                    <Text style={styles.productName}>{item.title}</Text>
-                    <Text style={styles.productSubName}>{item.name}</Text>
+                    <Text style={styles.productName}>{item.name}</Text>
+                    {/* <Text style={styles.productSubName}>{item.name}</Text> */}
                     <Text style={styles.productPrice}>{currency} {item.price}</Text>
                 </View>
             </View>

@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, TextInput } from 'react-native';
 import Colors from '../src/constants/colors';
@@ -42,20 +43,28 @@ const OrderDetailsScreen = () => {
         },
     ];
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-
-            {/* Buttons at the top */}
-            <View style={styles.buttonContainer}>
+        <ScrollView
+            style={styles.container}
+            contentContainerStyle={{ paddingBottom: 40 }}
+            showsVerticalScrollIndicator={false}
+        >
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.buttonContainer}
+            >
                 <TouchableOpacity style={styles.actionButton}>
                     <Text style={styles.buttonText}>Mark as Received</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.actionButton}>
                     <Text style={styles.buttonText}>Download Invoice</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.actionButton} onPress={showModal}>
                     <Text style={styles.buttonText}>Complain</Text>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
 
             {/* Order Info */}
             <View style={styles.card}>
@@ -181,8 +190,8 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 20,
         backgroundColor: '#fdfdfd',
-        paddingTop: 20,
-        height: '100%',
+        paddingTop: 0,
+        flex: 1,
     },
     card: {
         backgroundColor: '#fff',
@@ -280,16 +289,17 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        marginBottom: 16,
+        gap: 10,
+        paddingVertical: 28,
     },
     actionButton: {
         backgroundColor: Colors.primary,
         paddingVertical: 12,
+        paddingHorizontal: 20,
         borderRadius: 8,
         alignItems: 'center',
-        width: '32%',
+        justifyContent: 'center',
+        minWidth: 140,
     },
     buttonText: {
         color: '#fff',

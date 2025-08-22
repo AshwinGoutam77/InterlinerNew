@@ -269,15 +269,15 @@ export default function ProductDetailScreen() {
                     <View>
                         <View style={styles.inchRow}>
                             <Text style={styles.totalText}>Total: 33 Inches</Text>
-                            <Text style={styles.totalText}>No. of Rolls: 1</Text>
+                            <Text style={styles.totalText}>No. of Coils: 1</Text>
                         </View>
-                        <Button
+                        <TouchableOpacity
                             mode="contained"
                             onPress={handleSaveCutRolls}
                             style={styles.SaveBtn}
                         >
-                            Save
-                        </Button>
+                            <Text style={styles.saveBtnText}>Save</Text>
+                        </TouchableOpacity>
                     </View>
                 </Modal>
             </Portal>
@@ -420,9 +420,14 @@ const styles = StyleSheet.create({
     SaveBtn: {
         backgroundColor: Colors.primary,
         borderRadius: 8,
-        paddingVertical: 5,
+        paddingVertical: 18,
         alignItems: 'center',
         // marginTop: 16,
+    },
+    saveBtnText: {
+        color: Colors.white,
+        fontWeight: '600',
+        fontSize: 16,
     },
     cartBtn: {
         position: 'absolute',

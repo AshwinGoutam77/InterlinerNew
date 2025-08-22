@@ -36,7 +36,7 @@ const DashboardScreen = () => {
         { key: 'creditInfo', icon: 'card-outline', label: t('dashboard.creditInfo'), screen: '' },
         { key: 'payment', icon: 'cash-outline', label: t('dashboard.payment'), screen: 'PaymentScreen' },
         { key: 'complain', icon: 'alert-circle-outline', label: t('dashboard.complain'), screen: 'RaiseComplainScreen' },
-        { key: 'incentive', icon: 'alert-circle-outline', label: t('dashboard.incentive'), screen: 'IncentiveScreen' },
+        { key: 'incentive', icon: 'alert-circle-outline', label: t('dashboard.incentive'), screen: 'ReportsScreen' },
     ];
 
 
@@ -100,7 +100,7 @@ const DashboardScreen = () => {
                     ]}
                 >
                     {quickActions.map((action, index) => {
-                        if (action.key === 'incentive' && role !== 'sales') {
+                        if (action.key === 'incentive' && role !== 'sales' || (action.key === 'creditInfo' && role === 'sales')) {
                             return null;
                         }
                         return (
@@ -120,7 +120,7 @@ const DashboardScreen = () => {
                                     }
                                 }}
                             >
-                                <Icon name={action.icon} size={28} color="#000000ff" />
+                                <Icon name={action.icon} size={28} color={Colors.white} />
                                 <Text
                                     style={[
                                         styles.quickLabel,
@@ -193,8 +193,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     quickLabel: {
-        color: '#000000ff',
-        marginTop: 10,
+        color: Colors.white,
+        marginTop: 12,
         textAlign: 'center',
         fontWeight: '700',
         fontSize: 16,
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
         marginLeft: 'auto'
     },
     buttonText: {
-        color: '#fff',
+        color: Colors.white,
         textAlign: 'center',
         fontSize: 13
     },

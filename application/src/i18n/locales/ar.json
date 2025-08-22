@@ -8,10 +8,12 @@
         "complain": "شكوى",
         "payment": "الدفع",
         "repeatOrder": "إعادة الطلب",
-        "incentive": "حافز",
+        "incentive": "تقرير",
         "support": "الدعم",
         "creditLimit": "حد الائتمان",
         "creditAvailable": "الائتمان المتاح",
+        "totalCreditPeriod": "إجمالي فترة الائتمان",
+        "creditAvailableAmount": "الرصيد المتاح من الائتمان",
         "creditUsed": "المبلغ المستخدم",
         "creditPeriod": "فترة الائتمان",
         "dueDate": "تاريخ الاستحقاق"
