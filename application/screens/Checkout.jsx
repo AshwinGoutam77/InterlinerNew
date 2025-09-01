@@ -18,6 +18,7 @@ import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
+import GlobalStyles from '../src/constants/globalStyles';
 
 const Checkout = () => {
     const { t } = useTranslation();
@@ -50,13 +51,12 @@ const Checkout = () => {
 
     return (
         <>
-            <SafeAreaView style={styles.container}>
-                <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+            <SafeAreaView style={[GlobalStyles.container, { paddingBottom: 120 }]}>
 
                 <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                     {/* Shipping Address */}
                     <View style={styles.section}>
-                        <Text style={[styles.sectionTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Shipping Address</Text>
+                        <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>Shipping Address</Text>
                         <View style={[styles.addressContainer, { flexDirection: isRTL ? 'row-reverse' : 'row', gap: isRTL ? '10' : '0' }]}>
                             <View style={styles.locationIcon}>
                                 <Text style={styles.locationIconText}><Icon name='home' style={styles.locationIconText} /></Text>
@@ -74,7 +74,7 @@ const Checkout = () => {
 
                     {/* Order List */}
                     <View style={styles.section}>
-                        <Text style={[styles.sectionTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Order List</Text>
+                        <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>Order List</Text>
                         {orderItems.map((item) => (
                             <View key={item.id} style={[styles.orderItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                                 <Image source={item.image} style={styles.itemImage} />
@@ -94,7 +94,7 @@ const Checkout = () => {
 
                     {/* Promo Code */}
                     <View style={styles.section}>
-                        <Text style={[styles.sectionTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Promo Code</Text>
+                        <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>Promo Code</Text>
                         <TouchableOpacity style={styles.promoContainer} onPress={() => navigation.navigate('PromoCodeScreen')}>
                             <View style={[styles.promoTag, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
@@ -112,19 +112,19 @@ const Checkout = () => {
 
                     {/* Order Summary */}
                     <View style={styles.summarySection}>
-                        <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                        <View style={[GlobalStyles.flexRow, { marginBottom: 10, flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.summaryLabel}>Amount</Text>
                             <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
                         </View>
-                        <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                        <View style={[GlobalStyles.flexRow, { marginBottom: 10, flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.summaryLabel}>Shipping</Text>
                             <Text style={styles.summaryValue}>${shipping.toFixed(2)}</Text>
                         </View>
-                        <View style={[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                        <View style={[GlobalStyles.flexRow, { marginBottom: 10, flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <Text style={styles.summaryLabel}>Promo</Text>
                             <Text style={styles.summaryValue}>-${discount.toFixed(2)}</Text>
                         </View>
-                        <View style={[[styles.summaryRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }], styles.totalRow]}>
+                        <View style={[[GlobalStyles.flexRow, { marginBottom: 10, flexDirection: isRTL ? 'row-reverse' : 'row' }], styles.totalRow]}>
                             <Text style={styles.summaryLabel}>Total</Text>
                             <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
                         </View>
@@ -160,48 +160,10 @@ const Checkout = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fdfdfd',
-        paddingHorizontal: 20,
-        paddingBottom: 120
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottomWidth: 1,
-    },
-    backButton: {
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    backArrow: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#000',
-    },
-    menuButton: {
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    menuDots: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
     scrollView: {
         flex: 1,
     },
     section: {
-        // paddingHorizontal: 20,
         paddingVertical: 15,
     },
     sectionTitle: {
@@ -209,7 +171,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000',
         marginBottom: 5,
-        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     addressContainer: {
         flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
@@ -224,7 +185,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 5,
         elevation: 2,
-        gap: I18nManager.isRTL ? 20 : 0
+        gap: I18nManager.isRTL ? 20 : 0,
     },
     locationIcon: {
         width: 40,
@@ -239,7 +200,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 20,
     },
-
+    editButton: {
+        padding: 5,
+    },
     editIcon: {
         color: '#000',
         fontSize: 16,
@@ -252,15 +215,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000',
         marginBottom: 4,
-        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     addressText: {
         fontSize: 14,
         color: '#666',
-        textAlign: I18nManager.isRTL ? 'right' : 'left'
-    },
-    editButton: {
-        padding: 5,
     },
     orderItem: {
         flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
@@ -279,7 +237,6 @@ const styles = StyleSheet.create({
     itemImage: {
         width: 60,
         height: 60,
-        objectFit: 'cover',
         borderRadius: 8,
         marginRight: 15,
     },
@@ -296,12 +253,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 5,
-    },
-    colorDot: {
-        width: 12,
-        height: 12,
-        borderRadius: 6,
-        marginRight: 8,
     },
     colorText: {
         fontSize: 14,
@@ -321,50 +272,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#000',
     },
-    shippingOption: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#f8f8f8',
-        padding: 15,
-        borderRadius: 12,
-    },
-    shippingIcon: {
-        width: 40,
-        height: 40,
-        backgroundColor: '#000',
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 15,
-    },
-    shippingIconText: {
-        color: '#fff',
-        fontSize: 16,
-    },
-    shippingInfo: {
-        flex: 1,
-    },
-    shippingTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#000',
-        marginBottom: 4,
-    },
-    shippingDate: {
-        fontSize: 14,
-        color: '#666',
-    },
-    shippingPrice: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#000',
-        marginRight: 10,
-    },
     promoContainer: {
         flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         alignItems: 'center',
         width: '100%',
-        marginTop: 10
+        marginTop: 10,
     },
     promoTag: {
         flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
@@ -390,33 +302,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     removePromoText: {
-        color: '#fff',
         fontSize: 16,
-        fontWeight: 'bold',
-    },
-    addPromoButton: {
-        width: 40,
-        height: 40,
-        backgroundColor: '#000',
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    addPromoText: {
-        color: '#fff',
-        fontSize: 20,
         fontWeight: 'bold',
     },
     summarySection: {
         paddingHorizontal: 20,
         paddingVertical: 15,
         backgroundColor: '#fff',
-        // alignItems: 'center',
         borderRadius: 8,
         padding: 16,
         marginVertical: 10,
         marginHorizontal: 1,
-        // alignItems: 'center',
         shadowColor: '#ccc',
         shadowOpacity: 1,
         shadowRadius: 5,
@@ -431,7 +327,7 @@ const styles = StyleSheet.create({
     summaryLabel: {
         fontSize: 16,
         fontWeight: '500',
-        color: '#000000',
+        color: '#000',
     },
     summaryValue: {
         fontSize: 16,
@@ -444,39 +340,10 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         marginTop: 10,
     },
-    // totalLabel: {
-    //     fontSize: 20,
-    //     fontWeight: 'bold',
-    //     color: '#000',
-    // },
     totalValue: {
         fontSize: 18,
         fontWeight: 'bold',
         color: '#000',
-    },
-    buttonContainer: {
-        paddingHorizontal: 20,
-        paddingVertical: 20,
-        backgroundColor: '#fff',
-    },
-    continueButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: Colors.primary,
-        paddingVertical: 18,
-        borderRadius: 8,
-    },
-    continueButtonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginRight: 10,
-    },
-    continueArrow: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
     },
     footer: {
         position: 'absolute',
@@ -485,7 +352,6 @@ const styles = StyleSheet.create({
         right: 0,
         backgroundColor: Colors.primary,
         padding: 26,
-        // borderRadius: 10,
         flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -497,12 +363,12 @@ const styles = StyleSheet.create({
     totalLabel: {
         fontSize: 14,
         color: Colors.white,
-        fontWeight: '600'
+        fontWeight: '600',
     },
     totalPrice: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: Colors.white
+        color: Colors.white,
     },
     checkoutBtn: {
         backgroundColor: Colors.white,
@@ -513,41 +379,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     checkoutText: {
-        color: '#000000ff',
+        color: '#000',
         fontSize: 16,
         fontWeight: '800',
-    },
-    bottomNav: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: 60,
-        backgroundColor: '#fff',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        borderTopColor: '#eee',
-        borderTopWidth: 1,
-    },
-    navItem: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    navText: {
-        fontSize: 10,
-        marginTop: 2,
-    },
-    activeNav: {
-        color: '#000',
     },
     label: {
         fontSize: 15,
         fontWeight: '600',
-        color: '#000000',
+        color: '#000',
         marginBottom: 8,
         marginTop: 20,
-        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     textarea: {
         height: 100,
@@ -556,10 +397,10 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 16,
         fontSize: 14,
-        backgroundColor: '#ffffffff',
+        backgroundColor: '#fff',
         marginBottom: 20,
-        textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
 });
+
 
 export default Checkout;

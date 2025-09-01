@@ -15,6 +15,7 @@ import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
+import GlobalStyles from '../src/constants/globalStyles';
 
 const initialCartItems = [
     {
@@ -119,7 +120,7 @@ export default function CartScreen() {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={GlobalStyles.container}>
             {/* Cart List */}
             <FlatList
                 data={cartItems}
@@ -147,11 +148,6 @@ export default function CartScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fdfdfd',
-        paddingHorizontal: 20,
-    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',

@@ -33,7 +33,6 @@ const CustomHeader = ({ title, canGoBack, itemCount = 4, onSupportPress, onCartP
                         <Text style={{
                             color: Colors.black,
                             fontSize: 24,
-
                             paddingTop: 0,
                             fontWeight: '800',
                             fontFamily: 'Poppins-Regular'

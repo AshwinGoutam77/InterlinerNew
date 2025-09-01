@@ -5,7 +5,6 @@ import {
     StyleSheet,
     TouchableOpacity,
     Image,
-    Switch,
     ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -13,17 +12,15 @@ import { useAppContext } from '../context/RTLContext';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import { useTranslation } from 'react-i18next';
-import { CurrencyContext } from '../context/CurrencyContext';
+import GlobalStyles from '../src/constants/globalStyles';
 
 export default function ProfilePage() {
     const { t } = useTranslation();
-    const [isDarkMode, setIsDarkMode] = React.useState(false);
-    const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
-    const { isRTL, toggleRTL, language } = useAppContext();
+    const { isRTL, language } = useAppContext();
     const navigation = useNavigation();
     const currency = '$'
     return (
-        <View style={styles.container}>
+        <View style={GlobalStyles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 {/* Profile Image and Info */}
                 <View style={styles.profileSection}>
@@ -40,17 +37,8 @@ export default function ProfilePage() {
                     <Text style={styles.phone}>+1 111 467 378 399</Text>
                 </View>
 
-                <View style={styles.optionsList}>
+                <View>
                     {renderOption('edit', t('profile.editProfile'), 'EditProfile', null, isRTL, navigation)}
-                    {/* {renderOption('public', t('profile.rtl'), 'ProfileScreen', (
-                        <Switch
-                            value={isRTL}
-                            onValueChange={toggleRTL}
-                            trackColor={{ false: '#ccc', true: Colors.primary }}
-                            thumbColor={isRTL ? '#ffffff' : '#ffffff'}
-                            ios_backgroundColor="#ccc"
-                        />
-                    ), isRTL, navigation)} */}
                     {renderOption('public', t('profile.language'), 'LanguageScreen', language, isRTL, navigation)}
                     {renderOption('money', t('profile.currency'), 'CurrencyScreen', currency, isRTL, navigation)}
                     {renderOption('pin', t('profile.address'), 'ShippingScreen', null, isRTL, navigation)}
@@ -91,37 +79,7 @@ function renderOption(icon, title, link, value = null, isRTL = false, navigation
 
 
 
-function renderDarkModeOption(enabled, toggle) {
-    return (
-        <View style={styles.option}>
-            <View style={styles.left}>
-                <Icon name="eye" size={18} color="#111827" style={styles.optionIcon} />
-                <Text style={styles.optionText}>Dark Mode</Text>
-            </View>
-            <Switch
-                value={enabled}
-                onValueChange={toggle}
-                thumbColor={enabled ? '#111827' : '#f4f3f4'}
-                trackColor={{ false: '#D1D5DB', true: '#9CA3AF' }}
-            />
-        </View>
-    );
-}
-
-function renderTab(icon, label, active = false) {
-    return (
-        <TouchableOpacity style={styles.tab}>
-            <Icon name={icon} size={20} color={active ? '#111827' : '#9CA3AF'} />
-            <Text style={[styles.tabLabel, active && { color: '#111827' }]}>{label}</Text>
-        </TouchableOpacity>
-    );
-}
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fdfdfd',
-    },
     scrollContent: {
         paddingBottom: 100,
     },
@@ -156,9 +114,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#6B7280',
         marginTop: 4,
-    },
-    optionsList: {
-        paddingHorizontal: 16,
     },
     option: {
         paddingVertical: 14,

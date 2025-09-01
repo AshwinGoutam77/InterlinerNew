@@ -16,6 +16,7 @@ import CustomerFilter from '../components/CustomerFilter';
 import { RoleContext } from '../context/RoleContext';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
+import GlobalStyles from '../src/constants/globalStyles';
 
 const trackingSteps = [
     {
@@ -63,10 +64,8 @@ export default function TrackOrderScreen({ navigation }) {
     const currency = '$'
 
     return (
-        <View style={styles.container}>
+        <View style={GlobalStyles.container}>
             <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
-                {/* Product Card */}
-                {/* {role == 'sales' && <CustomerFilter />} */}
                 <View style={styles.card}>
                     <View style={[styles.orderHeader, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                         <Text style={styles.orderId}>Order: #2234</Text>
@@ -75,10 +74,6 @@ export default function TrackOrderScreen({ navigation }) {
                         </Text>
                     </View>
                     <View style={[styles.orderHeader, { marginTop: 0, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
-                        {/* <Image
-                            source={require('../../assets/images/kandura.png')}
-                            style={styles.productImage}
-                        /> */}
                         <View style={{ flex: 1 }}>
                             <Text style={[styles.productTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Collar- 2334</Text>
                             <Text style={[styles.productInfo, { textAlign: isRTL ? 'right' : 'left' }]}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
@@ -87,10 +82,6 @@ export default function TrackOrderScreen({ navigation }) {
                     </View>
 
                     <View style={[styles.orderHeader, { marginTop: 20, borderTopWidth: 1, borderColor: '#eee', paddingTop: 20 }]}>
-                        {/* <Image
-                            source={require('../../assets/images/kandura.png')}
-                            style={styles.productImage}
-                        /> */}
                         <View style={{ flex: 1 }}>
                             <Text style={[styles.productTitle, { textAlign: isRTL ? 'right' : 'left' }]}>Collar- 2334</Text>
                             <Text style={[styles.productInfo, { textAlign: isRTL ? 'right' : 'left' }]}>● Off White | Qty = 1 | Cut | 36 Inch | 25 Meter</Text>
@@ -127,7 +118,7 @@ export default function TrackOrderScreen({ navigation }) {
                 <View style={styles.divider} />
 
                 {/* Order Status Details */}
-                <Text style={[styles.statusHeader, { textAlign: isRTL ? 'right' : 'left' }]}>Order Status Details</Text>
+                <Text style={[GlobalStyles.title, { marginBottom: 20, textAlign: isRTL ? 'right' : 'left' }]}>Order Status Details</Text>
 
                 {
                     trackingSteps.map((step, index) => (
@@ -172,22 +163,6 @@ export default function TrackOrderScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#fdfdfd',
-        flex: 1,
-        // paddingTop: 20,
-        paddingHorizontal: 20
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 24
-    },
-    headerText: {
-        fontSize: 20,
-        fontWeight: 'bold'
-    },
     card: {
         flexDirection: 'column',
         backgroundColor: '#fff',
@@ -202,12 +177,6 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 2,
         marginBottom: 20
-    },
-    productImage: {
-        width: 80,
-        height: 80,
-        marginRight: 12,
-        borderRadius: 8
     },
     productTitle: {
         fontSize: 16,
@@ -353,7 +322,7 @@ const styles = StyleSheet.create({
     downloadText: {
         color: Colors.white,
         fontWeight: '600',
-        fontSize: 16,
+        fontSize: 14,
     },
     buttonContainer: {
         flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',

@@ -23,6 +23,7 @@ import { RoleContext } from '../context/RoleContext';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import GlobalStyles from '../src/constants/globalStyles';
 
 const transactionData = [
     {
@@ -104,7 +105,7 @@ export default function PaymentScreen({ route }) {
     const renderTransaction = ({ item }) => (
         <View style={[styles.itemContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
             <View>
-                <Text style={[styles.title, { textAlign: isRTL ? 'right' : 'left' }]}>{item.title}</Text>
+                <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>{item.title}</Text>
                 <Text style={styles.date}>{item.date}</Text>
                 {role == 'sales' && <Text style={styles.date}>Sarah Smith</Text>}
             </View>
@@ -128,28 +129,28 @@ export default function PaymentScreen({ route }) {
             {orderData.map((order, index) => (
                 <View key={index} style={styles.card}>
                     {role == 'sales' && <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <Text style={styles.label}>Customer Name</Text>
-                        <Text style={styles.value}>Sarah Smith</Text>
+                        <Text style={GlobalStyles.label}>Customer Name</Text>
+                        <Text style={GlobalStyles.value}>Sarah Smith</Text>
                     </View>}
                     <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <Text style={styles.label}>Order Date</Text>
-                        <Text style={styles.value}>{order.DueDate}</Text>
+                        <Text style={GlobalStyles.label}>Order Date</Text>
+                        <Text style={GlobalStyles.value}>{order.DueDate}</Text>
                     </View>
                     <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <Text style={styles.label}>Order Number</Text>
-                        <Text style={styles.value}>{order.id}</Text>
+                        <Text style={GlobalStyles.label}>Order Number</Text>
+                        <Text style={GlobalStyles.value}>{order.id}</Text>
                     </View>
                     <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <Text style={styles.label}>Total Amount</Text>
-                        <Text style={styles.value}>{currency} {order.totalAmount}</Text>
+                        <Text style={GlobalStyles.label}>Total Amount</Text>
+                        <Text style={GlobalStyles.value}>{currency} {order.totalAmount}</Text>
                     </View>
                     <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <Text style={styles.label}>Paid Amount</Text>
-                        <Text style={styles.value}>{currency} {order.AmountPaid}</Text>
+                        <Text style={GlobalStyles.label}>Paid Amount</Text>
+                        <Text style={GlobalStyles.value}>{currency} {order.AmountPaid}</Text>
                     </View>
                     <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                        <Text style={styles.label}>Balance Due</Text>
-                        <Text style={styles.value}>{currency} {order.DueAmount}</Text>
+                        <Text style={GlobalStyles.label}>Balance Due</Text>
+                        <Text style={GlobalStyles.value}>{currency} {order.DueAmount}</Text>
                     </View>
                     <View style={styles.descriptionRow}>
                         <Text style={[styles.descriptionRowLabel, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
@@ -173,7 +174,7 @@ export default function PaymentScreen({ route }) {
                 <Text style={styles.duePaymentText}>Payment Due - $230</Text>
                 <Text
                     style={[
-                        styles.label,
+                        GlobalStyles.label,
                         { marginBottom: 10 },
                         { textAlign: isRTL ? "right" : "left" },
                     ]}
@@ -196,7 +197,7 @@ export default function PaymentScreen({ route }) {
 
                 <Text
                     style={[
-                        styles.label,
+                        GlobalStyles.label,
                         { marginBottom: 10, marginTop: 10 },
                         { textAlign: isRTL ? "right" : "left" },
                     ]}
@@ -245,7 +246,7 @@ export default function PaymentScreen({ route }) {
                     <>
                         <Text
                             style={[
-                                styles.label,
+                                GlobalStyles.label,
                                 { marginBottom: 10 },
                                 { textAlign: isRTL ? "right" : "left" },
                             ]}
@@ -266,7 +267,7 @@ export default function PaymentScreen({ route }) {
                 {/* Remark */}
                 <Text
                     style={[
-                        styles.label,
+                        GlobalStyles.label,
                         { marginBottom: 10, marginTop: 10 },
                         { textAlign: isRTL ? "right" : "left" },
                     ]}
@@ -307,16 +308,16 @@ export default function PaymentScreen({ route }) {
                 {orderData.map((order, index) => (
                     <View key={index} style={styles.card}>
                         {role == 'sales' && <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                            <Text style={styles.label}>Customer Name</Text>
-                            <Text style={styles.value}>Sarah Smith</Text>
+                            <Text style={GlobalStyles.label}>Customer Name</Text>
+                            <Text style={GlobalStyles.value}>Sarah Smith</Text>
                         </View>}
                         <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                            <Text style={styles.label}>Amount Paid</Text>
-                            <Text style={styles.value}>$299</Text>
+                            <Text style={GlobalStyles.label}>Amount Paid</Text>
+                            <Text style={GlobalStyles.value}>$299</Text>
                         </View>
                         <View style={[styles.orderRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                            <Text style={styles.label}>Amount Due</Text>
-                            <Text style={styles.value}>$20</Text>
+                            <Text style={GlobalStyles.label}>Amount Due</Text>
+                            <Text style={GlobalStyles.value}>$20</Text>
                         </View>
                     </View>
                 ))
@@ -355,7 +356,7 @@ export default function PaymentScreen({ route }) {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={GlobalStyles.container}>
             {role === 'sales' && <CustomerFilter />}
             <View style={styles.tabContainer}>{tabs.map(renderTab)}</View>
             <View style={styles.contentContainer}>{getContentForTab()}</View>
@@ -367,7 +368,7 @@ export default function PaymentScreen({ route }) {
                         <Icon name="close" size={24} color="#000" />
                     </TouchableOpacity>
 
-                    <Text style={styles.title}>Pay Due By Orders</Text>
+                    <Text style={GlobalStyles.title}>Pay Due By Orders</Text>
 
                     <TouchableOpacity
                         style={[styles.attachPhotoBtn, { flexDirection: isRTL ? 'row-reverse' : 'row', marginLeft: isRTL ? 'auto' : '0' }]}
@@ -378,7 +379,7 @@ export default function PaymentScreen({ route }) {
                     </TouchableOpacity>
 
                     {/* Order Number Dropdown */}
-                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Payment Via</Text>
+                    <Text style={[GlobalStyles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Payment Via</Text>
                     <View style={styles.pickerWrapper}>
                         <Picker
                             selectedValue={orderOptions}
@@ -396,7 +397,7 @@ export default function PaymentScreen({ route }) {
 
 
                     {/* Complaint Textarea */}
-                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Amount</Text>
+                    <Text style={[GlobalStyles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Amount</Text>
                     <TextInput
                         style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
                         value={complaint}
@@ -407,7 +408,7 @@ export default function PaymentScreen({ route }) {
                         textAlignVertical="center"
                     />
 
-                    <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
+                    <Text style={[GlobalStyles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
                     <TextInput
                         style={[styles.textarea, { textAlign: isRTL ? 'right' : 'left' }]}
                         value={complaint}
@@ -433,10 +434,6 @@ export default function PaymentScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fdfdfd', paddingHorizontal: 20
-    },
     tabContainer: {
         flexDirection: 'row',
         backgroundColor: '#F3F4F6',
@@ -530,12 +527,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: 4
     },
-    label: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#000000',
-        textAlign: I18nManager.isRTL ? 'right' : 'left'
-    },
     offerText: {
         fontSize: 15,
         fontWeight: '600',
@@ -552,12 +543,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '600',
         color: '#000000',
-        textAlign: I18nManager.isRTL ? 'right' : 'left'
-    },
-    value: {
-        fontSize: 15,
-        fontWeight: 'bold',
-        color: '#000',
         textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     descriptionRowLabelValue: {

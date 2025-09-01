@@ -4,13 +4,14 @@ import Colors from './colors';
 const GlobalStyles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
-        backgroundColor: Colors.background,
+        backgroundColor: '#fdfdfd',
+        paddingHorizontal: 20
     },
     title: {
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: 'bold',
-        color: Colors.primary,
+        color: '#000',
+        marginBottom: 5,
     },
     paragraph: {
         fontSize: 16,
@@ -26,6 +27,21 @@ const GlobalStyles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    label: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#000000'
+    },
+    value: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: '#000000ff'
+    },
+    flexRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 10
+    }
 });
 
 export default GlobalStyles;

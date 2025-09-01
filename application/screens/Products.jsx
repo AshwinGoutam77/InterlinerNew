@@ -18,6 +18,7 @@ import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
+import GlobalStyles from '../src/constants/globalStyles';
 
 const categories = [
     { id: '1', label: 'Collar', icon: require('../../assets/images/shirt-collar.png') },
@@ -81,7 +82,7 @@ const ProductsPage = () => {
     );
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={[GlobalStyles.container, { paddingTop: 20 }]}>
             <FlatList
                 horizontal
                 inverted={I18nManager.isRTL}
@@ -109,12 +110,6 @@ const ProductsPage = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 20,
-        paddingHorizontal: 20,
-        backgroundColor: '#fdfdfd',
-    },
     backText: {
         fontSize: 16,
         fontWeight: '600',
@@ -135,7 +130,7 @@ const styles = StyleSheet.create({
     categoryItem: {
         alignItems: 'center',
         marginHorizontal: 15,
-        marginTop: 10
+        marginTop: 10,
     },
     categoryImage: {
         width: 64,
@@ -164,7 +159,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         elevation: 2,
         shadowColor: '#dadadaff',
-        shadowOpacity: 1
+        shadowOpacity: 1,
     },
     productImage: {
         width: '100%',
@@ -186,9 +181,9 @@ const styles = StyleSheet.create({
         textAlign: I18nManager.isRTL ? 'right' : 'left'
     },
     productDescription: {
-        // flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-        alignItems: 'left',
-        justifyContent: 'start',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         paddingHorizontal: 5
     },
     productPrice: {

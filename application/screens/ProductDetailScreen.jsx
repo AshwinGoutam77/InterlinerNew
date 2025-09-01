@@ -22,6 +22,7 @@ import AddItemsModal from '../modals/AddItemsModal';
 import { Modal, Portal, Button } from "react-native-paper";
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
+import GlobalStyles from '../src/constants/globalStyles';
 
 const shades = ['White', 'Off White', 'Blue White', 'Cream'];
 const widths = ['36 Inch', '44 Inch', '60 Inch'];
@@ -75,7 +76,7 @@ export default function ProductDetailScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[GlobalStyles.container, { paddingTop: 10 }]}>
             <ScrollView
                 style={{ flex: 1 }}
                 contentContainerStyle={{ paddingBottom: 160 }}
@@ -285,42 +286,14 @@ export default function ProductDetailScreen() {
     );
 }
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fdfdfd',
-        paddingHorizontal: 20,
-        paddingTop: 10
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 12,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: '600',
-    },
-    rightIcons: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
     label: {
         marginTop: 16,
         fontWeight: '600',
         fontSize: 16,
-        textAlign: I18nManager.isRTL ? 'right' : 'left'
+        textAlign: I18nManager.isRTL ? 'right' : 'left',
     },
     labelText: {
-        textAlign: I18nManager.isRTL ? 'right' : 'left'
-    },
-    dropdown: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderWidth: 1,
-        padding: 10,
-        borderRadius: 8,
-        marginTop: 4,
+        textAlign: I18nManager.isRTL ? 'right' : 'left',
     },
     image: {
         width: '100%',
@@ -372,30 +345,21 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     selectedOption: {
         backgroundColor: Colors.primary,
         borderColor: Colors.primary,
         borderWidth: 1,
-        color: 'white',
     },
     selectedOptionText: {
         color: '#fff',
         fontWeight: '600',
     },
-    cutGroup: {
-        flexDirection: 'row',
-        gap: 20,
-    },
     radioText: {
         fontSize: 14,
         color: '#666',
-        paddingRight: 20
-    },
-    boldText: {
-        fontWeight: '600',
-        color: '#000',
+        paddingRight: 20,
     },
     input: {
         borderWidth: 1,
@@ -406,7 +370,6 @@ const styles = StyleSheet.create({
     },
     remarkRow: {
         flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-        alignItems: 'top',
         borderWidth: 1,
         borderRadius: 8,
         borderColor: '#ccc',
@@ -422,7 +385,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 18,
         alignItems: 'center',
-        // marginTop: 16,
     },
     saveBtnText: {
         color: Colors.white,
@@ -460,9 +422,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 12,
-        gap: '12'
+        gap: 12,
     },
-
     shadeBox: {
         alignItems: 'center',
         borderWidth: 1,
@@ -471,23 +432,19 @@ const styles = StyleSheet.create({
         padding: 8,
         width: 90,
     },
-
     shadeBoxSelected: {
         borderColor: Colors.primary,
     },
-
     shadeSwatch: {
         width: 70,
         height: 50,
         borderRadius: 6,
         marginBottom: 6,
     },
-
     shadeText: {
         fontSize: 12,
         color: '#333',
     },
-
     shadeTextSelected: {
         fontWeight: '600',
         color: '#000',
@@ -514,20 +471,19 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary,
     },
     modalContainer: {
-        backgroundColor: "white",
+        backgroundColor: 'white',
         padding: 20,
         marginHorizontal: 20,
         borderRadius: 10,
     },
     modalTitle: {
         fontSize: 18,
-        fontWeight: "600",
-        // marginBottom: 12,
+        fontWeight: '600',
     },
     inchRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 10,
         marginTop: 10,
     },
@@ -536,19 +492,16 @@ const styles = StyleSheet.create({
     },
     inchInput: {
         borderWidth: 1,
-        borderColor: "#ccc",
+        borderColor: '#ccc',
         borderRadius: 6,
         width: 80,
         padding: 6,
-        textAlign: "center",
+        textAlign: 'center',
     },
     totalText: {
         fontSize: 16,
         fontWeight: '600',
         marginTop: 10,
     },
-    // inchRow: {
-    //     flexDirection: 'row',
-    //     justifyContent: 'space-between'
-    // }
 });
+

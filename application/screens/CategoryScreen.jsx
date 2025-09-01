@@ -16,6 +16,7 @@ import { CurrencyContext } from '../context/CurrencyContext';
 import { useAppContext } from '../context/RTLContext';
 import { RoleContext } from '../context/RoleContext';
 import CustomerFilter from '../components/CustomerFilter';
+import GlobalStyles from '../src/constants/globalStyles';
 // import CustomerFilter from '../components/CustomerFilter';
 
 const data = [
@@ -132,7 +133,7 @@ const CategoryScreen = () => {
     const { role } = useContext(RoleContext);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={GlobalStyles.container}>
             {role == 'sales' && <CustomerFilter show />}
             <View style={[
                 styles.searchBox,
@@ -191,12 +192,6 @@ const CategoryScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 20,
-        padding: 20,
-        backgroundColor: '#fdfdfd',
-        flexGrow: 1,
-    },
     searchBox: {
         backgroundColor: '#f1f1f19c',
         borderRadius: 8,
@@ -204,7 +199,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         height: 50,
         alignItems: 'center',
-        marginTop: 12,
+        marginTop: 20,
         gap: 10,
     },
     input: {

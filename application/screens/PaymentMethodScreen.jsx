@@ -17,6 +17,7 @@ import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
+import GlobalStyles from '../src/constants/globalStyles';
 
 
 const paymentMethods = [
@@ -88,7 +89,7 @@ export default function PaymentMethodScreen() {
 
 
     return (
-        <View style={styles.container}>
+        <View style={[GlobalStyles.container, { paddingTop: 10 }]}>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.paymentRow}>
                 <View>
                     <Text style={[styles.totalText, { textAlign: isRTL ? 'right' : 'left' }]}>Total Payment: {currency} 3000</Text>
@@ -152,16 +153,6 @@ export default function PaymentMethodScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fdfdfd',
-        paddingHorizontal: 20,
-        paddingVertical: 20
-    },
-    title: {
-        fontSize: 22,
-        fontWeight: 'bold'
-    },
     subtitle: {
         fontSize: 16,
         fontWeight: '500',
