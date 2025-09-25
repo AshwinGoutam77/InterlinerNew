@@ -37,10 +37,10 @@ export default function RaiseComplainScreen({ navigation }) {
     return (
         <View style={GlobalStyles.container}>
             {role === 'sales' && <CustomerFilter />}
-            <TouchableOpacity style={styles.button} onPress={() => setComplaintVisible(true)}>
+            {role === 'customer' && <TouchableOpacity style={styles.button} onPress={() => setComplaintVisible(true)}>
                 <Icon name='plus' size={24} />
                 <Text style={styles.buttonText}>Make complain</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
             <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
                 {orderData.map((order, index) => (
                     <View key={index} style={styles.card}>
@@ -72,12 +72,12 @@ export default function RaiseComplainScreen({ navigation }) {
                             <Text style={[styles.descriptionRowLabel, { textAlign: isRTL ? 'right' : 'left' }]}>Description</Text>
                             <Text style={[styles.descriptionRowLabelValue, { textAlign: isRTL ? 'right' : 'left' }]}>{order.description}</Text>
                         </View>
-                        <TouchableOpacity
+                        {role === 'customer' && <TouchableOpacity
                             style={[styles.submitBtn, { marginTop: 10 }]}
                             onPress={() => setFeedbackVisible(true)}
                         >
                             <Text style={styles.submitText}>Give Feedback</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
                     </View>
                 ))}
             </ScrollView>

@@ -20,35 +20,35 @@ import GlobalStyles from '../src/constants/globalStyles';
 
 const trackingSteps = [
     {
-        title: 'Order In Transit',
+        title: 'Order Placed',
         date: 'Dec 17',
         time: '15:20 PM',
         location: '32 Manchester Ave. Ringgold, GA 30736',
         completed: true
     },
     {
-        title: 'Order ... Customs Port',
+        title: 'Order Packed',
         date: 'Dec 16',
         time: '14:40 PM',
         location: '4 Evergreen Street Lake Zurich, IL 60047',
         completed: true
     },
     {
-        title: 'Orders are ... Shipped',
+        title: 'Shipped',
         date: 'Dec 15',
         time: '11:30 AM',
         location: '9177 Hillcrest Street Wheeling, WV 26003',
         completed: false
     },
     {
-        title: 'Order is in Packing',
+        title: 'Out for Delivery',
         date: 'Dec 15',
         time: '10:25 AM',
         location: '891 Glen Ridge St. Gainesville, VA 20155',
         completed: false
     },
     {
-        title: 'Verified Payments',
+        title: 'Delivered',
         date: 'Dec 15',
         time: '10:04 AM',
         location: '55 Summerhouse Dr. Apopka, FL 32703',
@@ -118,7 +118,7 @@ export default function TrackOrderScreen({ navigation }) {
                 <View style={styles.divider} />
 
                 {/* Order Status Details */}
-                <Text style={[GlobalStyles.title, { marginBottom: 20, textAlign: isRTL ? 'right' : 'left' }]}>Order Status Details</Text>
+                <Text style={[GlobalStyles.title, { marginBottom: 20, textAlign: isRTL ? 'right' : 'left' }]}>Order Journey</Text>
 
                 {
                     trackingSteps.map((step, index) => (

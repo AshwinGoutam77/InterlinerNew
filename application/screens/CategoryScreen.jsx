@@ -133,7 +133,7 @@ const CategoryScreen = () => {
     const { role } = useContext(RoleContext);
 
     return (
-        <ScrollView contentContainerStyle={GlobalStyles.container}>
+        <ScrollView style={styles.container}>
             {role == 'sales' && <CustomerFilter show />}
             <View style={[
                 styles.searchBox,
@@ -192,6 +192,11 @@ const CategoryScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fdfdfd',
+        paddingHorizontal: 20
+    },
     searchBox: {
         backgroundColor: '#f1f1f19c',
         borderRadius: 8,

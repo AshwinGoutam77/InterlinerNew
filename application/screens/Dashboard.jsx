@@ -77,7 +77,7 @@ const DashboardScreen = () => {
 
     return (
         <View style={GlobalStyles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContent}>
+            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
                 {/* Swiper Banner */}
                 <View style={styles.swiperContainer}>
                     <Swiper

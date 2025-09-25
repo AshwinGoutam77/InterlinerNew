@@ -7,7 +7,8 @@ import {
     StyleSheet,
     ScrollView,
     Image,
-    I18nManager
+    I18nManager,
+    TextInput
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -68,6 +69,9 @@ export default function PaymentMethodScreen() {
     const currency = '$'
     const [selected, setSelected] = useState(0);
     const [visible, setVisible] = React.useState(false);
+    const [showBankModal, setShowBankModal] = useState(false);
+    const [accountNumber, setAccountNumber] = useState('');
+    const [ifscCode, setIfscCode] = useState('');
 
     const showModal = () => setVisible(true);
     const hideModal = () => {
@@ -86,7 +90,23 @@ export default function PaymentMethodScreen() {
     };
 
     const containerStyle = { backgroundColor: 'white', padding: 20, margin: 20, borderRadius: 10, textAlign: 'center', flexDirection: 'column', alignItems: 'center', gap: 10, justifyContent: 'center' };
+    const handleConfirmPayment = () => {
+        const selectedMethod = paymentMethods[selected].title;
 
+        if (selectedMethod === 'Cheque' || selectedMethod === 'Bank Transfer') {
+            setShowBankModal(true); // ask for bank details
+        } else {
+            showModal(); // show thank you modal
+        }
+    };
+    const submitBankDetails = () => {
+        if (!accountNumber || !ifscCode) {
+            alert('Please enter all bank details.');
+            return;
+        }
+        setShowBankModal(false);
+        showModal(); // proceed to thank you modal
+    };
 
     return (
         <View style={[GlobalStyles.container, { paddingTop: 10 }]}>
@@ -117,6 +137,12 @@ export default function PaymentMethodScreen() {
                             </View>
                         </TouchableOpacity>
                     ))}
+
+                    <View>
+                        <Text style={[styles.totalText, { marginTop: 20 }]}>You will receive
+                            <Text style={{ color: '#00a753cc' }}>10% credit </Text>
+                            on making a full payment!</Text>
+                    </View>
                 </View>
             </ScrollView>
 
@@ -141,13 +167,52 @@ export default function PaymentMethodScreen() {
                         <Text style={styles.confirmText}>Track Order</Text>
                     </TouchableOpacity>
                 </Modal>
+
+                {/* bank modal */}
+                <Modal visible={showBankModal} onDismiss={() => setShowBankModal(false)}
+                    contentContainerStyle={[containerStyle, { textAlign: 'left', alignItems: 'start' }]}
+                >
+                    <View style={GlobalStyles.flexRow}>
+                        <Text style={GlobalStyles.title}>Enter Bank Details</Text>
+                        <TouchableOpacity onPress={() => setShowBankModal(false)}>
+                            <Icon name="close" size={24} color="#000" />
+                        </TouchableOpacity>
+                    </View>
+
+                    <Text style={GlobalStyles.label}>Account Number</Text>
+                    <TextInput
+                        value={accountNumber}
+                        onChangeText={setAccountNumber}
+                        placeholder="Enter Account Number"
+                        style={styles.input}
+                    />
+
+                    <Text style={GlobalStyles.label}>IFSC Code</Text>
+                    <TextInput
+                        value={ifscCode}
+                        onChangeText={setIfscCode}
+                        placeholder="Enter IFSC Code"
+                        style={styles.input}
+                    />
+
+                    <TouchableOpacity style={[styles.confirmBtn]} onPress={submitBankDetails}>
+                        <Text style={styles.confirmText}>Submit Details</Text>
+                    </TouchableOpacity>
+                </Modal>
             </Portal>
-            <TouchableOpacity
-                style={[styles.confirmBtn, { marginTop: 10, marginBottom: 20 }]}
+            {/* <TouchableOpacity
+                style={[styles.confirmBtn, { marginTop: 10, marginBottom: 40 }]}
                 onPress={showModal}
             >
                 <Text style={styles.confirmText}>Confirm Payment</Text>
+            </TouchableOpacity> */}
+            <TouchableOpacity
+                style={[styles.confirmBtn, { marginTop: 10, marginBottom: 40 }]}
+                onPress={handleConfirmPayment}
+            >
+                <Text style={styles.confirmText}>Confirm Payment</Text>
             </TouchableOpacity>
+
         </View>
     );
 }
@@ -215,9 +280,9 @@ const styles = StyleSheet.create({
     }),
     confirmBtn: {
         backgroundColor: Colors.primary,
-        padding: 18,
+        padding: 16,
         alignItems: 'center',
-        borderRadius: 12,
+        borderRadius: 8,
         width: '100%',
     },
     confirmText: {
@@ -231,5 +296,14 @@ const styles = StyleSheet.create({
         color: Colors.black,
         marginBottom: 20,
         textAlign: I18nManager.isRTL ? 'right' : 'left'
-    }
+    },
+    input: {
+        width: '100%',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 10,
+        marginBottom: 12
+    },
+
 });
