@@ -19,11 +19,13 @@ import { CurrencyContext } from '../context/CurrencyContext';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
 import GlobalStyles from '../src/constants/globalStyles';
+import { RoleContext } from '../context/RoleContext';
 
 const Checkout = () => {
     const { t } = useTranslation();
     const { isRTL } = useAppContext();
     const navigation = useNavigation();
+    const { role } = useContext(RoleContext);
     const currency = '$'
     const orderItems = [
         {
@@ -62,7 +64,7 @@ const Checkout = () => {
                                 <Text style={styles.locationIconText}><Icon name='home' style={styles.locationIconText} /></Text>
                             </View>
                             <View style={styles.addressInfo}>
-                                <Text style={styles.addressTitle}>Home</Text>
+                                <Text style={styles.addressTitle}>Office Address</Text>
                                 <Text style={styles.addressText}>61480 Sunbrook Park, PC 5679</Text>
                             </View>
                             <TouchableOpacity style={styles.editButton}
@@ -148,12 +150,12 @@ const Checkout = () => {
                     <Text style={styles.totalLabel}>Total price</Text>
                     <Text style={styles.totalPrice}>{currency}{total.toFixed(2)}</Text>
                 </View>
-                <TouchableOpacity
+                {role !== 'sales' && <TouchableOpacity
                     style={styles.checkoutBtn}
                     onPress={() => navigation.navigate('PaymentMethodScreen')}
                 >
                     <Text style={styles.checkoutText}>Confirm Order</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </View>
         </>
     );
@@ -350,6 +352,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
+        paddingBottom: 50,
         backgroundColor: Colors.primary,
         padding: 26,
         flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',

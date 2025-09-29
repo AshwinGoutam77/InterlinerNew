@@ -142,19 +142,20 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 20,
+        gap: 0,
     },
     logoContainer: {
         alignItems: 'center',
         marginVertical: 12,
     },
     MainLogo: {
-        width: 100,
+        width: 200,
         height: 100,
         // margin: 'auto'
+        marginBottom: 20
     },
     logo: {
-        width: 300,
+        width: 250,
         height: 100,
         // margin: 'auto'
     },

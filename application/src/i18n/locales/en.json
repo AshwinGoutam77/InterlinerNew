@@ -37,13 +37,16 @@
             "Jackets Blazer": "Jackets Blazer",
             "Articles": "Articles",
             "essentials": "Essentials",
-            "Women’s Clothes": "Women’s Clothes",
-            "Dresses": "Dresses",
+            "Women’s Clothes": "Womens Clothes",
+            "Dresses": "tops",
             "Shirt": "Shirt",
             "Jackets": "Jackets",
-            "Skirts ": "Skirts",
+            "Skirts ": "Blazers",
             "T-Shirt & Hoodies": "T-Shirt & Hoodies",
-            "Non-woven": "Non-woven"
+            "Non-woven": "Non-woven",
+            "T-Shirts": "T-Shirts",
+            "Embroidery Backing": "Embroidery Backing",
+            "Leather Jackets": "Leather Jackets"
         }
     },
     "language": {

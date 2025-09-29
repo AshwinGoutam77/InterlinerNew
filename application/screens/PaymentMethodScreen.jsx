@@ -140,7 +140,7 @@ export default function PaymentMethodScreen() {
 
                     <View>
                         <Text style={[styles.totalText, { marginTop: 20 }]}>You will receive
-                            <Text style={{ color: '#00a753cc' }}>10% credit </Text>
+                            <Text style={{ color: '#00a753cc' }}> 10% discount </Text>
                             on making a full payment!</Text>
                     </View>
                 </View>

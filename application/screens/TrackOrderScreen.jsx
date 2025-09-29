@@ -153,9 +153,9 @@ export default function TrackOrderScreen({ navigation }) {
                     {role === 'customer' && <TouchableOpacity style={styles.downloadButton}>
                         <Text style={styles.downloadText}>Mark as Received</Text>
                     </TouchableOpacity>}
-                    <TouchableOpacity style={styles.downloadButton}>
+                    {role !== 'sales' && <TouchableOpacity style={styles.downloadButton}>
                         <Text style={styles.downloadText}>Download Invoice</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
             </ScrollView >
         </View >

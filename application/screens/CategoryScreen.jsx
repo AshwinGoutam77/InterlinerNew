@@ -115,14 +115,22 @@ const data = [
         ],
     },
     {
-        title: 'T-Shirt & Hoodies',
-        banner: require('../../assets/images/t-shirts-and-hoodies.jpg'),
-        items: [],
-    },
-    {
         title: 'Non-woven',
         banner: require('../../assets/images/non-woven.jpg'),
-        items: [],
+        items: [
+            {
+                label: 'T-Shirts',
+                icon: require('../../assets/images/shirt-collar.png'),
+            },
+            {
+                label: 'Embroidery Backing',
+                icon: require('../../assets/images/shirt-cuffs.png'),
+            },
+            {
+                label: 'Leather Jackets',
+                icon: require('../../assets/images/shirt-placket.png'),
+            },
+        ],
     },
 ];
 
@@ -156,34 +164,40 @@ const CategoryScreen = () => {
                         {t(`category.categories.${section.title}`)}
                     </Text>
 
-                    <Image
-                        source={section.banner}
-                        style={styles.banner}
-                        resizeMode="cover"
-                    />
+                    <View style={styles.categorySection}>
+                        <Image
+                            source={section.banner}
+                            style={styles.banner}
+                            resizeMode="cover"
+                        />
 
-                    <View style={[
-                        styles.actionRow,
-                        { flexDirection: isRTL ? 'row-reverse' : 'row' }
-                    ]}>
-                        {section.items.map((item, i) => (
-                            <TouchableOpacity
-                                key={i}
-                                style={styles.actionItem}
-                                onPress={() => navigation.navigate('ProductsPage')}
-                            >
-                                <Image
-                                    source={item.icon}
-                                    style={styles.icon}
-                                />
-                                <Text style={[
-                                    styles.label,
-                                    { textAlign: isRTL ? 'right' : 'center' }
-                                ]}>
-                                    {t(`category.categories.${item.label}`)}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={[
+                                styles.actionRow,
+                                { flexDirection: isRTL ? 'row-reverse' : 'row' }
+                            ]}
+                        >
+                            {section.items.map((item, i) => (
+                                <TouchableOpacity
+                                    key={i}
+                                    style={styles.actionItem}
+                                    onPress={() => navigation.navigate('ProductsPage')}
+                                >
+                                    <Image
+                                        source={item.icon}
+                                        style={styles.icon}
+                                    />
+                                    <Text style={[
+                                        styles.label,
+                                        { textAlign: isRTL ? 'right' : 'center' }
+                                    ]}>
+                                        {t(`category.categories.${item.label}`)}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
                     </View>
                 </View>
             ))}
@@ -225,16 +239,19 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 12,
     },
+    categorySection: {
+        borderBottomWidth: 0.6,
+        borderColor: '#00000028',
+        paddingBottom: 30,
+    },
     actionRow: {
         flexWrap: 'wrap',
         justifyContent: 'flex-start',
         gap: 40,
         rowGap: 20,
-        borderBottomWidth: 1,
-        borderColor: '#0000003d',
-        paddingBottom: 30
     },
     actionItem: {
+        flexWrap: 'nowrap',
         alignItems: 'center',
     },
     icon: {

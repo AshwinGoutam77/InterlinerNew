@@ -246,6 +246,7 @@ const styles = StyleSheet.create({
         right: 0,
         backgroundColor: Colors.primary,
         padding: 26,
+        paddingBottom: 50,
         borderRadius: 0,
         flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
         justifyContent: 'space-between',

@@ -43,6 +43,10 @@ export default function ProductDetailScreen() {
     const [SelectCustomSize, setSelectCustomSize] = useState('12')
     const [selectedOption, setSelectedOption] = useState('none');
     const [Visible, setVisible] = useState(false)
+    // const [cutRollsVisible, setCutRollsVisible] = useState(false);
+    const [step, setStep] = useState(1); // step 1 = ask count, step 2 = enter details
+    const [cutRollsCount, setCutRollsCount] = useState('');
+
 
     const options = [
         { id: 'standard', label: 'yes' },
@@ -73,6 +77,7 @@ export default function ProductDetailScreen() {
     const handleSaveCutRolls = () => {
         console.log("Cut Rolls Data:", inchQuantities);
         setCutRollsVisible(false);
+        setStep(1)
     };
 
     return (
@@ -240,48 +245,87 @@ export default function ProductDetailScreen() {
             <Portal>
                 <Modal
                     visible={cutRollsVisible}
-                    onDismiss={() => setCutRollsVisible(false)}
+                    onDismiss={() => {
+                        setCutRollsVisible(false);
+                        setStep(1); // reset step when closing
+                    }}
                     contentContainerStyle={styles.modalContainer}
                 >
-                    <View style={styles.inchRow}>
-                        <Text style={styles.modalTitle}>Enter Pieces for Each Size</Text>
-                        <TouchableOpacity onPress={() => setCutRollsVisible(false)} style={styles.closeIcon}>
-                            <Icon name="close" size={24} color="#000" />
-                        </TouchableOpacity>
-                    </View>
-                    <ScrollView style={{ maxHeight: 450 }}>
-                        {inchesList.map((inch) => (
-                            <View key={inch} style={styles.inchRow}>
-                                <Text style={styles.inchLabel}>{inch}</Text>
-                                <TextInput
-                                    style={styles.inchInput}
-                                    keyboardType="numeric"
-                                    value={inchQuantities[inch]}
-                                    onChangeText={(value) =>
-                                        setInchQuantities((prev) => ({
-                                            ...prev,
-                                            [inch]: value,
-                                        }))
-                                    }
-                                />
+                    {step === 1 ? (
+                        // Step 1: Ask for number of cut rolls
+                        <View>
+                            <View style={styles.inchRow}>
+                                <Text style={styles.modalTitle}>How many cut rolls do you want?</Text>
+                                <TouchableOpacity onPress={() => setCutRollsVisible(false)} style={styles.closeIcon}>
+                                    <Icon name="close" size={24} color="#000" />
+                                </TouchableOpacity>
                             </View>
-                        ))}
-                    </ScrollView>
-                    <View>
-                        <View style={styles.inchRow}>
-                            <Text style={styles.totalText}>Total: 33 Inches</Text>
-                            <Text style={styles.totalText}>No. of Coils: 1</Text>
+
+                            <TextInput
+                                style={styles.inchInput2}
+                                keyboardType="numeric"
+                                placeholder="Enter number of cut rolls"
+                                value={cutRollsCount}
+                                onChangeText={setCutRollsCount}
+                            />
+
+                            <TouchableOpacity
+                                onPress={() => {
+                                    if (cutRollsCount && Number(cutRollsCount) > 0) {
+                                        setStep(2);
+                                    }
+                                }}
+                                style={styles.SaveBtn}
+                            >
+                                <Text style={styles.saveBtnText}>Next</Text>
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
-                            mode="contained"
-                            onPress={handleSaveCutRolls}
-                            style={styles.SaveBtn}
-                        >
-                            <Text style={styles.saveBtnText}>Save</Text>
-                        </TouchableOpacity>
-                    </View>
+                    ) : (
+                        // Step 2: Enter pieces per size
+                        <View>
+                            <View style={styles.inchRow}>
+                                <Text style={styles.modalTitle}>Enter Pieces for Each Size</Text>
+                                <TouchableOpacity onPress={() => setCutRollsVisible(false)} style={styles.closeIcon}>
+                                    <Icon name="close" size={24} color="#000" />
+                                </TouchableOpacity>
+                            </View>
+
+                            <ScrollView style={{ maxHeight: 450 }}>
+                                {inchesList.map((inch) => (
+                                    <View key={inch} style={styles.inchRow}>
+                                        <Text style={styles.inchLabel}>{inch}</Text>
+                                        <TextInput
+                                            style={styles.inchInput}
+                                            keyboardType="numeric"
+                                            value={inchQuantities[inch]}
+                                            onChangeText={(value) =>
+                                                setInchQuantities((prev) => ({
+                                                    ...prev,
+                                                    [inch]: value,
+                                                }))
+                                            }
+                                        />
+                                    </View>
+                                ))}
+                            </ScrollView>
+
+                            <View>
+                                <View style={styles.inchRow}>
+                                    <Text style={styles.totalText}>Total: 33 Inches</Text>
+                                    <Text style={styles.totalText}>No. of Coils: {cutRollsCount}</Text>
+                                </View>
+                                <TouchableOpacity
+                                    onPress={handleSaveCutRolls}
+                                    style={styles.SaveBtn}
+                                >
+                                    <Text style={styles.saveBtnText}>Save</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    )}
                 </Modal>
             </Portal>
+
         </View>
     );
 }
@@ -383,7 +427,7 @@ const styles = StyleSheet.create({
     SaveBtn: {
         backgroundColor: Colors.primary,
         borderRadius: 8,
-        paddingVertical: 18,
+        paddingVertical: 12,
         alignItems: 'center',
     },
     saveBtnText: {
@@ -495,8 +539,20 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 6,
         width: 80,
-        padding: 6,
+        padding: 10,
         textAlign: 'center',
+        // width: '100%',
+        // marginBottom: 20
+    },
+    inchInput2: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 6,
+        // width: 80,
+        padding: 10,
+        textAlign: 'center',
+        width: '100%',
+        marginVertical: 10
     },
     totalText: {
         fontSize: 16,

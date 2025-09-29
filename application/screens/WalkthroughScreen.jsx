@@ -26,7 +26,7 @@ const slides = [
     {
         id: '2',
         image: require('../../assets/images/onbording-banner-2.jpg'),
-        title: 'Precision and premium interlining your standards are our benchmark.',
+        title: 'Precision and premium interlining – your standards are our benchmark',
     },
     {
         id: '3',
