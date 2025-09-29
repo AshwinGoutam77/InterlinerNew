@@ -21,7 +21,7 @@ export default function ProfilePage() {
     const currency = '$'
     return (
         <View style={GlobalStyles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContent}>
+            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 {/* Profile Image and Info */}
                 <View style={styles.profileSection}>
                     <View style={styles.avatarContainer}>
