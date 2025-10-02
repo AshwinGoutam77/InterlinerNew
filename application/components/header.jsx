@@ -9,11 +9,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Colors from "../src/constants/colors";
 import LanguageModal from "../screens/languageModal";
+import { useAppContext } from "../context/RTLContext";
 
 const CustomHeader = ({ title, canGoBack, itemCount = 4, onSupportPress, onCartPress }) => {
     const navigation = useNavigation();
     const route = useRoute();
     const { i18n } = useTranslation();
+    const { isRTL } = useAppContext();
 
     const [langModalVisible, setLangModalVisible] = useState(false);
 
@@ -26,11 +28,11 @@ const CustomHeader = ({ title, canGoBack, itemCount = 4, onSupportPress, onCartP
             <SafeAreaView edges={['top']} style={{ backgroundColor: '#ffffffff' }}>
                 <View style={[
                     styles.header,
-                    { paddingBottom: route.name === 'Dashboard' ? 20 : 20 }
+                    { paddingBottom: route.name === 'Dashboard' ? 20 : 20, flexDirection: isRTL ? 'row-reverse' : 'row' }
                 ]}>
                     {route.name == 'Dashboard' && !canGoBack ? (
                         <Text style={{ color: Colors.black, fontSize: 24, paddingTop: 4, fontWeight: '800', fontFamily: 'Poppins-Regular' }}>
-                            Interliners
+                            {title}
                         </Text>
                     ) : <TouchableOpacity
                         onPress={() => route?.name == 'TrackOrderScreen' ? navigation.navigate('Dashboard') : navigation.goBack()}

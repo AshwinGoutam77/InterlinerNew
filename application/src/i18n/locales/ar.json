@@ -1,4 +1,53 @@
 {
+    "dashboardScreen": {
+        "title": "إنترلِينر"
+    },
+    "categoryScreen": {
+        "title": "الفئات"
+    },
+    "products": {
+        "title": "طوق",
+        "detail": "تفاصيل المنتج"
+    },
+    "cart": {
+        "title": "سلة التسوق"
+    },
+    "checkout": {
+        "title": "الدفع"
+    },
+    "shipping": {
+        "title": "عنوان الشحن",
+        "choose": "اختر الشحن"
+    },
+    "address": {
+        "new": "عنوان جديد"
+    },
+    "promo": {
+        "title": "كود الخصم"
+    },
+    "payment": {
+        "title": "الدفع"
+    },
+    "trackOrder": {
+        "title": "تتبع الطلب"
+    },
+    "history": {
+        "title": "الطلبات السابقة"
+    },
+    "complain": {
+        "title": "شكوى"
+    },
+    "help": {
+        "title": "مركز المساعدة"
+    },
+    "profileScreen": {
+        "title": "الملف الشخصي",
+        "editProfile": "تعديل الملف الشخصي",
+        "language": "اللغة",
+        "currency": "العملة",
+        "notification": "الإشعارات",
+        "privacy": "سياسة الخصوصية"
+    },
     "dashboard": {
         "quickActions": "إجراءات سريعة",
         "startNewOrder": "بدء طلب جديد",
@@ -69,5 +118,81 @@
         "privacy": "سياسة الخصوصية",
         "help": "مركز المساعدة",
         "logout": "تسجيل الخروج"
+    },
+    "productDetail": {
+        "chooseProductCode": "اختر رمز المنتج",
+        "shadeSelector": "اختيار الظل",
+        "selectWidth": "اختر العرض",
+        "selectLength": "اختر الطول",
+        "enterUncutRolls": "أدخل عدد اللفات غير المقسمة",
+        "cutRollsQuestion": "هل تريد لفات مقطعة؟",
+        "remark": "ملاحظات",
+        "remarkPlaceholder": "أدخل ملاحظاتك",
+        "downloadSpecs": "تحميل المواصفات",
+        "addToCart": "أضف إلى السلة",
+        "yes": "نعم",
+        "no": "لا",
+        "cutRollsModal": {
+            "step1Title": "كم عدد اللفات المقطعة التي تريدها؟",
+            "step1Placeholder": "أدخل عدد اللفات المقطعة",
+            "step2Title": "أدخل عدد القطع لكل حجم"
+        },
+        "totalInches": "المجموع",
+        "noOfCoils": "عدد الملفات"
+    },
+    "cartModal": {
+        "message": "تمت إضافة العنصر إلى سلة التسوق الخاصة بك. يمكنك متابعة التسوق أو إتمام الطلب في أي وقت.",
+        "addMore": "أضف المزيد من العناصر",
+        "confirmOrder": "تأكيد الطلب"
+    },
+    "cartScreen": {
+        "totalPrice": "السعر الإجمالي",
+        "continue": "متابعة",
+        "remove": "إزالة",
+        "productDetails": "أوف وايت | مقطوعة - 10 لفات | غير مقطوعة - 2 لفة | 36 بوصة | 25 متر"
+    },
+    "checkoutScreen": {
+        "shippingAddress": "عنوان الشحن",
+        "officeAddress": "عنوان المكتب",
+        "orderList": "قائمة الطلبات",
+        "promoCode": "رمز الخصم",
+        "discountText": "خصم 30٪",
+        "amount": "المبلغ",
+        "shipping": "الشحن",
+        "promo": "الخصم",
+        "total": "الإجمالي",
+        "remark": "ملاحظة",
+        "remarkPlaceholder": "أدخل ملاحظتك...",
+        "totalPrice": "السعر الإجمالي",
+        "confirmOrder": "تأكيد الطلب"
+    },
+    "paymentScreen": {
+        "totalPayment": "إجمالي الدفع",
+        "discountMessage": "سوف تحصل على",
+        "discountHighlight": "خصم 10%",
+        "discountSuffix": "عند الدفع الكامل!",
+        "thankYou": "شكرًا لتسوقك معنا.",
+        "continueShopping": "متابعة التسوق",
+        "trackOrder": "تتبع الطلب",
+        "enterBankDetails": "أدخل تفاصيل البنك",
+        "accountNumber": "رقم الحساب",
+        "enterAccountNumber": "أدخل رقم الحساب",
+        "ifscCode": "رمز IFSC",
+        "enterIfscCode": "أدخل رمز IFSC",
+        "submitDetails": "إرسال التفاصيل",
+        "confirmPayment": "تأكيد الدفع"
+    },
+    "paymentMethods": {
+        "cheque": "شيك",
+        "bankTransfer": "تحويل بنكي",
+        "myWallet": "محفظتي",
+        "buyNowPayLater": "اشتر الآن وادفع لاحقًا",
+        "fullPayment": "الدفع الكامل",
+        "partPayment": "الدفع الجزئي",
+        "onlineLink": "رابط الدفع",
+        "subtitles": {
+            "myWallet": "${{amount}}",
+            "buyNowPayLater": "رصيدك المتاح: ${{amount}}"
+        }
     }
 }

@@ -58,13 +58,15 @@ const Checkout = () => {
                 <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
                     {/* Shipping Address */}
                     <View style={styles.section}>
-                        <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>Shipping Address</Text>
+                        <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>
+                            {t("checkoutScreen.shippingAddress")}
+                        </Text>
                         <View style={[styles.addressContainer, { flexDirection: isRTL ? 'row-reverse' : 'row', gap: isRTL ? '10' : '0' }]}>
                             <View style={styles.locationIcon}>
                                 <Text style={styles.locationIconText}><Icon name='home' style={styles.locationIconText} /></Text>
                             </View>
                             <View style={styles.addressInfo}>
-                                <Text style={styles.addressTitle}>Office Address</Text>
+                                <Text style={styles.addressTitle}>{t("checkoutScreen.officeAddress")}</Text>
                                 <Text style={styles.addressText}>61480 Sunbrook Park, PC 5679</Text>
                             </View>
                             <TouchableOpacity style={styles.editButton}
@@ -76,7 +78,9 @@ const Checkout = () => {
 
                     {/* Order List */}
                     <View style={styles.section}>
-                        <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>Order List</Text>
+                        <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>
+                            {t("checkoutScreen.orderList")}
+                        </Text>
                         {orderItems.map((item) => (
                             <View key={item.id} style={[styles.orderItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                                 <Image source={item.image} style={styles.itemImage} />
@@ -96,12 +100,14 @@ const Checkout = () => {
 
                     {/* Promo Code */}
                     <View style={styles.section}>
-                        <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>Promo Code</Text>
+                        <Text style={[GlobalStyles.title, { textAlign: isRTL ? 'right' : 'left' }]}>
+                            {t("checkoutScreen.promoCode")}
+                        </Text>
                         <TouchableOpacity style={styles.promoContainer} onPress={() => navigation.navigate('PromoCodeScreen')}>
                             <View style={[styles.promoTag, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                                     <Icon name='local-offer' size={20} color="#058f1aff" />
-                                    <Text style={styles.promoText}>Discount 30% Off</Text>
+                                    <Text style={styles.promoText}>{t("checkoutScreen.discountText")}</Text>
                                 </View>
                                 <TouchableOpacity style={styles.removePromo}>
                                     <Text style={styles.removePromoText}>
@@ -115,46 +121,46 @@ const Checkout = () => {
                     {/* Order Summary */}
                     <View style={styles.summarySection}>
                         <View style={[GlobalStyles.flexRow, { marginBottom: 10, flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                            <Text style={styles.summaryLabel}>Amount</Text>
+                            <Text style={styles.summaryLabel}>{t("checkoutScreen.amount")}</Text>
                             <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
                         </View>
                         <View style={[GlobalStyles.flexRow, { marginBottom: 10, flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                            <Text style={styles.summaryLabel}>Shipping</Text>
+                            <Text style={styles.summaryLabel}>{t("checkoutScreen.shipping")}</Text>
                             <Text style={styles.summaryValue}>${shipping.toFixed(2)}</Text>
                         </View>
                         <View style={[GlobalStyles.flexRow, { marginBottom: 10, flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                            <Text style={styles.summaryLabel}>Promo</Text>
+                            <Text style={styles.summaryLabel}>{t("checkoutScreen.promo")}</Text>
                             <Text style={styles.summaryValue}>-${discount.toFixed(2)}</Text>
                         </View>
                         <View style={[[GlobalStyles.flexRow, { marginBottom: 10, flexDirection: isRTL ? 'row-reverse' : 'row' }], styles.totalRow]}>
-                            <Text style={styles.summaryLabel}>Total</Text>
+                            <Text style={styles.summaryLabel}>{t("checkoutScreen.total")}</Text>
                             <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
                         </View>
                     </View>
                     <View>
-                        <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
+                        <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
+                            {t("checkoutScreen.remark")}
+                        </Text>
                     </View>
                     <TextInput
                         style={[styles.textarea, { textAlign: isRTL ? 'right' : 'left' }]}
-                        // value={feedbackMessage}
-                        // onChangeText={setFeedbackMessage}
+                        placeholder={t("checkoutScreen.remarkPlaceholder")}
                         multiline
                         numberOfLines={4}
-                        placeholder="Enter your feedback..."
                         textAlignVertical="top"
                     />
                 </ScrollView>
             </SafeAreaView>
             <View style={[styles.footer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                 <View>
-                    <Text style={styles.totalLabel}>Total price</Text>
+                    <Text style={styles.totalLabel}>{t("checkoutScreen.totalPrice")}</Text>
                     <Text style={styles.totalPrice}>{currency}{total.toFixed(2)}</Text>
                 </View>
                 {role !== 'sales' && <TouchableOpacity
                     style={styles.checkoutBtn}
                     onPress={() => navigation.navigate('PaymentMethodScreen')}
                 >
-                    <Text style={styles.checkoutText}>Confirm Order</Text>
+                    <Text style={styles.checkoutText}>{t("checkoutScreen.confirmOrder")}</Text>
                 </TouchableOpacity>}
             </View>
         </>

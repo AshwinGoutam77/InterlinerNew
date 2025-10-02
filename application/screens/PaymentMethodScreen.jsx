@@ -23,41 +23,41 @@ import GlobalStyles from '../src/constants/globalStyles';
 
 const paymentMethods = [
     {
-        title: 'Cheque',
+        title: t("paymentMethods.cheque"),
         icon: require('../../assets/images/cheque.png'),
-        color: '#E3F2FD' // Light Blue
+        color: '#E3F2FD',
     },
     {
-        title: 'Bank Transfer',
+        title: t("paymentMethods.bankTransfer"),
         icon: require('../../assets/images/bank-transfer.png'),
-        color: '#E8F5E9' // Light Green
+        color: '#E8F5E9',
     },
     {
-        title: 'My Wallet',
-        subtitle: '$9,379',
+        title: t("paymentMethods.myWallet"),
+        subtitle: t("paymentMethods.subtitles.myWallet", { amount: "9,379" }),
         icon: require('../../assets/images/wallet.png'),
-        color: '#FFF3E0' // Light Orange
+        color: '#FFF3E0',
     },
     {
-        title: 'Buy now pay later',
-        subtitle: 'Your Credit Balance: $9,379',
+        title: t("paymentMethods.buyNowPayLater"),
+        subtitle: t("paymentMethods.subtitles.buyNowPayLater", { amount: "9,379" }),
         icon: require('../../assets/images/buy-now.png'),
-        color: '#F3E5F5' // Light Purple
+        color: '#F3E5F5',
     },
     {
-        title: 'Full Payment',
+        title: t("paymentMethods.fullPayment"),
         icon: require('../../assets/images/cash.png'),
-        color: '#E0F7FA' // Light Teal
+        color: '#E0F7FA',
     },
     {
-        title: 'Part Payment',
+        title: t("paymentMethods.partPayment"),
         icon: require('../../assets/images/partial-payment.png'),
-        color: '#FFFDE7' // Light Yellow
+        color: '#FFFDE7',
     },
     {
-        title: 'Online Link',
+        title: t("paymentMethods.onlineLink"),
         icon: require('../../assets/images/payment-link.png'),
-        color: '#FCE4EC' // Light Pink
+        color: '#FCE4EC',
     },
 ];
 
@@ -112,7 +112,8 @@ export default function PaymentMethodScreen() {
         <View style={[GlobalStyles.container, { paddingTop: 10 }]}>
             <ScrollView showsVerticalScrollIndicator={false} style={styles.paymentRow}>
                 <View>
-                    <Text style={[styles.totalText, { textAlign: isRTL ? 'right' : 'left' }]}>Total Payment: {currency} 3000</Text>
+                    {/* <Text style={[styles.totalText, { textAlign: isRTL ? 'right' : 'left' }]}>Total Payment: {currency} 3000</Text> */}
+                    <Text style={[styles.totalText, { textAlign: isRTL ? 'right' : 'left' }]}>{t("paymentScreen.totalPayment")} : {currency} 3000</Text>
                 </View>
                 <View style={[styles.cardsWrapper, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     {paymentMethods.map((method, index) => (
@@ -139,9 +140,14 @@ export default function PaymentMethodScreen() {
                     ))}
 
                     <View>
-                        <Text style={[styles.totalText, { marginTop: 20 }]}>You will receive
+                        {/* <Text style={[styles.totalText, { marginTop: 20 }]}>You will receive
                             <Text style={{ color: '#00a753cc' }}> 10% discount </Text>
-                            on making a full payment!</Text>
+                            on making a full payment!</Text> */}
+                        <Text style={[styles.totalText, { marginTop: 20 }]}>
+                            {t("paymentScreen.discountMessage")}
+                            <Text style={{ color: '#00a753cc' }}> {t("paymentScreen.discountHighlight")} </Text>
+                            {t("paymentScreen.discountSuffix")}
+                        </Text>
                     </View>
                 </View>
             </ScrollView>
@@ -152,19 +158,19 @@ export default function PaymentMethodScreen() {
                         source={require('../../assets/images/check.png')}
                         style={{ width: 100, height: 100, resizeMode: 'contain', margin: 'auto' }}
                     />
-                    <Text style={{ textAlign: 'center', fontSize: 18 }}>Thank you for shopping with us.</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 18 }}>{t("paymentScreen.thankYou")}</Text>
                     <TouchableOpacity
                         style={styles.confirmBtn}
                         // onPress={() => navigation.navigate('CategoryScreen')}
                         onPress={ContinueShopping}
                     >
-                        <Text style={styles.confirmText}>Continue Shopping</Text>
+                        <Text style={styles.confirmText}>{t("paymentScreen.continueShopping")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.confirmBtn}
                         onPress={TrackOrder}
                     >
-                        <Text style={styles.confirmText}>Track Order</Text>
+                        <Text style={styles.confirmText}>{t("paymentScreen.trackOrder")}</Text>
                     </TouchableOpacity>
                 </Modal>
 
@@ -173,30 +179,30 @@ export default function PaymentMethodScreen() {
                     contentContainerStyle={[containerStyle, { textAlign: 'left', alignItems: 'start' }]}
                 >
                     <View style={GlobalStyles.flexRow}>
-                        <Text style={GlobalStyles.title}>Enter Bank Details</Text>
+                        <Text style={GlobalStyles.title}>{t("paymentScreen.enterBankDetails")}</Text>
                         <TouchableOpacity onPress={() => setShowBankModal(false)}>
                             <Icon name="close" size={24} color="#000" />
                         </TouchableOpacity>
                     </View>
 
-                    <Text style={GlobalStyles.label}>Account Number</Text>
+                    <Text style={GlobalStyles.label}>{t("paymentScreen.accountNumber")}</Text>
                     <TextInput
                         value={accountNumber}
                         onChangeText={setAccountNumber}
-                        placeholder="Enter Account Number"
+                        placeholder={t("paymentScreen.enterAccountNumber")}
                         style={styles.input}
                     />
 
-                    <Text style={GlobalStyles.label}>IFSC Code</Text>
+                    <Text style={GlobalStyles.label}>{t("paymentScreen.ifscCode")}</Text>
                     <TextInput
                         value={ifscCode}
                         onChangeText={setIfscCode}
-                        placeholder="Enter IFSC Code"
+                        placeholder={t("paymentScreen.enterIfscCode")}
                         style={styles.input}
                     />
 
                     <TouchableOpacity style={[styles.confirmBtn]} onPress={submitBankDetails}>
-                        <Text style={styles.confirmText}>Submit Details</Text>
+                        <Text style={styles.confirmText}>{t("paymentScreen.submitDetails")}</Text>
                     </TouchableOpacity>
                 </Modal>
             </Portal>
@@ -210,7 +216,7 @@ export default function PaymentMethodScreen() {
                 style={[styles.confirmBtn, { marginTop: 10, marginBottom: 40 }]}
                 onPress={handleConfirmPayment}
             >
-                <Text style={styles.confirmText}>Confirm Payment</Text>
+                <Text style={styles.confirmText}>{t("paymentScreen.confirmPayment")}</Text>
             </TouchableOpacity>
 
         </View>

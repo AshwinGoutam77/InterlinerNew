@@ -27,14 +27,16 @@ const AddItemsModal = ({ visible, onClose }) => {
                 contentContainerStyle={containerStyle}
             >
                 <View style={styles.row}>
-                    <Text style={styles.label}>The item has been added to your cart. You can continue shopping or checkout anytime.</Text>
+                    <Text style={styles.label}>
+                        {t("cartModal.message")}
+                    </Text>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={styles.cartBtn} onPress={() => (navigation.navigate('CategoryScreen'), onClose())}>
-                        <Text style={styles.cartText}>Add More Items</Text>
+                        <Text style={styles.cartText}>{t("cartModal.addMore")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.cartBtn} onPress={() => (navigation.navigate('CartScreen'), onClose())}>
-                        <Text style={styles.cartText}>Confirm Order</Text>
+                        <Text style={styles.cartText}>{t("cartModal.confirmOrder")}</Text>
                     </TouchableOpacity>
                 </View>
             </Modal>

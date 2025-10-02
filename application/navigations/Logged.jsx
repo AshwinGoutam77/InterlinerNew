@@ -36,6 +36,7 @@ import Colors from "../src/constants/colors";
 import RepeatOrderScreen from "../screens/RepeatOrderScreen";
 import { RoleContext } from "../context/RoleContext";
 import ReportsScreen from "../screens/ReportsScreen";
+import { useTranslation } from "react-i18next";
 
 var styles = require("../../assets/files/Styles");
 
@@ -58,362 +59,282 @@ const navigationOptions = {
     headerBackTitleVisible: false,
 };
 
-// Stack for Home Tab
-function HomeStack() {
+const getHeader = (key) => () => {
+    const { t } = useTranslation();
+    return <CustomHeader title={t(key)} />;
+};
+
+export function HomeStack({ navigationOptions }) {
     return (
         <Stack.Navigator screenOptions={navigationOptions}>
             <Stack.Screen
                 name="Dashboard"
                 component={DashboardScreen}
-                options={{
-                    header: () => <CustomHeader title="Interliner" />,
-                }}
+                options={{ header: getHeader("dashboardScreen.title") }}
             />
             <Stack.Screen
                 name="CategoryScreen"
                 component={CategoryScreen}
-                options={{
-                    header: () => <CustomHeader title="Categories" />,
-                }}
+                options={{ header: getHeader("categoryScreen.title") }}
             />
             <Stack.Screen
                 name="ProductsPage"
                 component={ProductsPage}
-                options={{
-                    header: () => <CustomHeader title="Collar" />,
-                }}
+                options={{ header: getHeader("products.title") }}
             />
             <Stack.Screen
                 name="ProductDetailScreen"
                 component={ProductDetailScreen}
-                options={({ route }) => ({
-                    header: () => <CustomHeader title={route.params?.productName || 'Product Detail'} />,
-                })}
+                options={{ header: getHeader("products.detail") }}
             />
-
             <Stack.Screen
                 name="CartScreen"
                 component={CartScreen}
-                options={{
-                    header: () => <CustomHeader title="Shopping Bag" />,
-                }}
+                options={{ header: getHeader("cart.title") }}
             />
             <Stack.Screen
                 name="CheckoutScreen"
                 component={Checkout}
-                options={{
-                    header: () => <CustomHeader title="Checkout" />,
-                }}
+                options={{ header: getHeader("checkout.title") }}
             />
             <Stack.Screen
                 name="ShippingScreen"
                 component={ShippingScreen}
-                options={{
-                    header: () => <CustomHeader title="Shipping Address" />,
-                }}
+                options={{ header: getHeader("shipping.title") }}
             />
             <Stack.Screen
                 name="AddNewAddressScreen"
                 component={AddNewAddressScreen}
-                options={{
-                    header: () => <CustomHeader title="New Address" />,
-                }}
+                options={{ header: getHeader("address.new") }}
             />
             <Stack.Screen
                 name="AddShippingScreen"
                 component={AddShippingScreen}
-                options={{
-                    header: () => <CustomHeader title="Choose Shipping" />,
-                }}
+                options={{ header: getHeader("shipping.choose") }}
             />
             <Stack.Screen
                 name="PromoCodeScreen"
                 component={PromoCodeScreen}
-                options={{
-                    header: () => <CustomHeader title="Promo Code" />,
-                }}
+                options={{ header: getHeader("promo.title") }}
             />
             <Stack.Screen
                 name="PaymentMethodScreen"
                 component={PaymentMethodScreen}
-                options={{
-                    header: () => <CustomHeader title="Payment" />,
-                }}
+                options={{ header: getHeader("payment.title") }}
             />
             <Stack.Screen
                 name="TrackOrderListingScreen"
                 component={TrackOrderListingScreen}
-                options={{
-                    header: () => <CustomHeader title="Track Order" />,
-                }}
+                options={{ header: getHeader("trackOrder.title") }}
             />
             <Stack.Screen
                 name="RepeatOrderScreen"
                 component={RepeatOrderScreen}
-                options={{
-                    header: () => <CustomHeader title="Repeat Order" />,
-                }}
+                options={{ header: getHeader("repeatOrder.title") }}
             />
             <Stack.Screen
                 name="TrackOrderScreen"
                 component={TrackOrderScreen}
-                options={{
-                    header: () => <CustomHeader title="Track Order" />,
-                }}
+                options={{ header: getHeader("trackOrder.title") }}
             />
             <Stack.Screen
                 name="OrderDetailsScreen"
                 component={OrderDetailsScreen}
-                options={{
-                    header: () => <CustomHeader title="Order Detail" />,
-                }}
+                options={{ header: getHeader("orderDetail.title") }}
             />
             <Stack.Screen
                 name="HistoryScreen"
                 component={HistoryScreen}
-                options={{
-                    header: () => <CustomHeader title="Previous Orders" />,
-                }}
+                options={{ header: getHeader("history.title") }}
             />
             <Stack.Screen
                 name="RaiseComplainScreen"
                 component={RaiseComplainScreen}
-                options={{
-                    header: () => <CustomHeader title="Complain" />,
-                }}
+                options={{ header: getHeader("complain.title") }}
             />
             <Stack.Screen
                 name="PaymentScreen"
                 component={PaymentScreen}
-                options={{
-                    header: () => <CustomHeader title="Payment" />,
-                }}
+                options={{ header: getHeader("payment.title") }}
             />
             <Stack.Screen
                 name="HelpCenterScreen"
                 component={HelpCenterScreen}
-                options={{
-                    header: () => <CustomHeader title="Help Center" />,
-                }}
+                options={{ header: getHeader("help.title") }}
             />
             <Stack.Screen
                 name="ProfileScreen"
                 component={ProfilePage}
-                options={{
-                    header: () => <CustomHeader title="Profile" />,
-                }}
+                options={{ header: getHeader("profile.title") }}
             />
             <Stack.Screen
                 name="ReportsScreen"
                 component={ReportsScreen}
-                options={{
-                    header: () => <CustomHeader title="Reports" />,
-                }}
+                options={{ header: getHeader("reports.title") }}
             />
             <Stack.Screen
                 name="EditProfile"
                 component={EditProfileScreen}
-                options={{
-                    header: () => <CustomHeader title="Edit Profile" />,
-                }}
+                options={{ header: getHeader("profile.editProfile") }}
             />
             <Stack.Screen
                 name="LanguageScreen"
                 component={LanguageScreen}
-                options={{
-                    header: () => <CustomHeader title="Language" />,
-                }}
+                options={{ header: getHeader("profile.language") }}
             />
             <Stack.Screen
                 name="CurrencyScreen"
                 component={CurrencyScreen}
-                options={{
-                    header: () => <CustomHeader title="Currency" />,
-                }}
+                options={{ header: getHeader("profile.currency") }}
             />
             <Stack.Screen
                 name="NotificationScreen"
                 component={NotificationScreen}
-                options={{
-                    header: () => <CustomHeader title="Notifications" />,
-                }}
+                options={{ header: getHeader("profile.notification") }}
             />
             <Stack.Screen
                 name="PrivacyScreen"
                 component={PrivacyScreen}
-                options={{
-                    header: () => <CustomHeader title="Privacy Policy" />,
-                }}
+                options={{ header: getHeader("profile.privacy") }}
             />
-
         </Stack.Navigator>
     );
 }
 
-function ProfileTab() {
+export function ProfileTab({ navigationOptions }) {
     return (
         <Stack.Navigator screenOptions={navigationOptions}>
             <Stack.Screen
                 name="ProfileScreen"
                 component={ProfilePage}
-                options={{
-                    header: () => <CustomHeader title="Profile" />,
-                }}
+                options={{ header: getHeader("profileScreen.title") }}
             />
             <Stack.Screen
                 name="EditProfile"
                 component={EditProfileScreen}
-                options={{
-                    header: () => <CustomHeader title="Edit Profile" />,
-                }}
+                options={{ header: getHeader("profileScreen.editProfile") }}
             />
-
             <Stack.Screen
                 name="ShippingScreen"
                 component={ShippingScreen}
-                options={{
-                    header: () => <CustomHeader title="Shipping Address" />,
-                }}
+                options={{ header: getHeader("shipping.title") }}
             />
             <Stack.Screen
                 name="CheckoutScreen"
                 component={Checkout}
-                options={{
-                    header: () => <CustomHeader title="Checkout" />,
-                }}
+                options={{ header: getHeader("checkout.title") }}
             />
             <Stack.Screen
                 name="CartScreen"
                 component={CartScreen}
-                options={{
-                    header: () => <CustomHeader title="Shopping Bag" />,
-                }}
+                options={{ header: getHeader("cart.title") }}
             />
             <Stack.Screen
                 name="AddNewAddressScreen"
                 component={AddNewAddressScreen}
-                options={{
-                    header: () => <CustomHeader title="New Address" />,
-                }}
+                options={{ header: getHeader("address.new") }}
             />
             <Stack.Screen
                 name="PaymentMethodScreen"
                 component={PaymentMethodScreen}
-                options={{
-                    header: () => <CustomHeader title="Payment" />,
-                }}
+                options={{ header: getHeader("payment.title") }}
             />
             <Stack.Screen
                 name="PrivacyScreen"
                 component={PrivacyScreen}
-                options={{
-                    header: () => <CustomHeader title="Privacy Policy" />,
-                }}
+                options={{ header: getHeader("profile.privacy") }}
             />
             <Stack.Screen
                 name="LanguageScreen"
                 component={LanguageScreen}
-                options={{
-                    header: () => <CustomHeader title="Language" />,
-                }}
+                options={{ header: getHeader("profile.language") }}
             />
             <Stack.Screen
                 name="CurrencyScreen"
                 component={CurrencyScreen}
-                options={{
-                    header: () => <CustomHeader title="Currency" />,
-                }}
+                options={{ header: getHeader("profile.currency") }}
             />
             <Stack.Screen
                 name="HelpCenterScreen"
                 component={HelpCenterScreen}
-                options={{
-                    header: () => <CustomHeader title="Help Center" />,
-                }}
+                options={{ header: getHeader("help.title") }}
             />
             <Stack.Screen
                 name="NotificationScreen"
                 component={NotificationScreen}
-                options={{
-                    header: () => <CustomHeader title="Notifications" />,
-                }}
+                options={{ header: getHeader("profile.notification") }}
             />
         </Stack.Navigator>
-    )
+    );
 }
 
 function CartTab() {
     return (
         <Stack.Navigator screenOptions={navigationOptions}>
             <Stack.Screen
-                name="cart"
+                name="CartScreen"
                 component={CartScreen}
-                options={{
-                    header: () => <CustomHeader title="Shopping Bag" />,
-                }}
+                options={{ header: getHeader("cart.title") }}
             />
             <Stack.Screen
                 name="CheckoutScreen"
                 component={Checkout}
-                options={{
-                    header: () => <CustomHeader title="Checkout" />,
-                }}
+                options={{ header: getHeader("checkout.title") }}
             />
             <Stack.Screen
                 name="ShippingScreen"
                 component={ShippingScreen}
-                options={{
-                    header: () => <CustomHeader title="Shipping Address" />,
-                }}
+                options={{ header: getHeader("shipping.title") }}
             />
             <Stack.Screen
                 name="AddNewAddressScreen"
                 component={AddNewAddressScreen}
-                options={{
-                    header: () => <CustomHeader title="New Address" />,
-                }}
+                options={{ header: getHeader("address.new") }}
             />
             <Stack.Screen
                 name="AddShippingScreen"
                 component={AddShippingScreen}
-                options={{
-                    header: () => <CustomHeader title="Choose Shipping" />,
-                }}
+                options={{ header: getHeader("shipping.choose") }}
             />
             <Stack.Screen
                 name="PromoCodeScreen"
                 component={PromoCodeScreen}
-                options={{
-                    header: () => <CustomHeader title="Promo Code" />,
-                }}
+                options={{ header: getHeader("promo.title") }}
             />
             <Stack.Screen
                 name="PaymentMethodScreen"
                 component={PaymentMethodScreen}
-                options={{
-                    header: () => <CustomHeader title="Payment" />,
-                }}
+                options={{ header: getHeader("payment.title") }}
+            />
+            <Stack.Screen
+                name="TrackOrderListingScreen"
+                component={TrackOrderListingScreen}
+                options={{ header: getHeader("trackOrder.title") }}
+            />
+            <Stack.Screen
+                name="RepeatOrderScreen"
+                component={RepeatOrderScreen}
+                options={{ header: getHeader("repeatOrder.title") }}
             />
             <Stack.Screen
                 name="TrackOrderScreen"
                 component={TrackOrderScreen}
-                options={{
-                    header: () => <CustomHeader title="Track Order" />,
-                }}
+                options={{ header: getHeader("trackOrder.title") }}
+            />
+            <Stack.Screen
+                name="OrderDetailsScreen"
+                component={OrderDetailsScreen}
+                options={{ header: getHeader("orderDetail.title") }}
             />
             <Stack.Screen
                 name="Dashboard"
                 component={DashboardScreen}
-                options={{
-                    header: () => <CustomHeader title="Interliner" />,
-                }}
+                options={{ header: getHeader("dashboardScreen.title") }}
             />
             <Stack.Screen
                 name="CategoryScreen"
                 component={CategoryScreen}
-                options={{
-                    header: () => <CustomHeader title="Categories" />,
-                }}
+                options={{ header: getHeader("categoryScreen.title") }}
             />
         </Stack.Navigator>
     )
@@ -425,9 +346,10 @@ function PaymentTab() {
             <Stack.Screen
                 name="HelpCenterScreen"
                 component={HelpCenterScreen}
-                options={{
-                    header: () => <CustomHeader title="Help Center" />,
-                }}
+                // options={{
+                //     header: () => <CustomHeader title="Help Center" />,
+                // }}
+                options={{ header: getHeader("help.title") }}
             />
         </Stack.Navigator>
     )

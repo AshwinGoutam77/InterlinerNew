@@ -1,4 +1,53 @@
 {
+    "dashboardScreen": {
+        "title": "Interliners"
+    },
+    "categoryScreen": {
+        "title": "Categories"
+    },
+    "products": {
+        "title": "Collar",
+        "detail": "Product Detail"
+    },
+    "cart": {
+        "title": "Shopping Bag"
+    },
+    "checkout": {
+        "title": "Checkout"
+    },
+    "shipping": {
+        "title": "Shipping Address",
+        "choose": "Choose Shipping"
+    },
+    "address": {
+        "new": "New Address"
+    },
+    "promo": {
+        "title": "Promo Code"
+    },
+    "payment": {
+        "title": "Payment"
+    },
+    "trackOrder": {
+        "title": "Track Order"
+    },
+    "history": {
+        "title": "Previous Orders"
+    },
+    "complain": {
+        "title": "Complain"
+    },
+    "help": {
+        "title": "Help Center"
+    },
+    "profileScreen": {
+        "title": "Profile",
+        "editProfile": "Edit Profile",
+        "language": "Language",
+        "currency": "Currency",
+        "notification": "Notifications",
+        "privacy": "Privacy Policy"
+    },
     "dashboard": {
         "quickActions": "Quick Actions",
         "startNewOrder": "Start New Orders",
@@ -72,5 +121,81 @@
         "privacy": "Privacy Policy",
         "help": "Help Center",
         "logout": "Logout"
+    },
+    "productDetail": {
+        "chooseProductCode": "Choose Product Code",
+        "shadeSelector": "Shade Selector",
+        "selectWidth": "Select Width",
+        "selectLength": "Select Length",
+        "enterUncutRolls": "Enter Number of Uncut Rolls",
+        "cutRollsQuestion": "Do you want Cut Rolls",
+        "remark": "Remark",
+        "remarkPlaceholder": "Enter your remark",
+        "downloadSpecs": "Download Specs",
+        "addToCart": "Add to Cart",
+        "yes": "Yes",
+        "no": "No",
+        "cutRollsModal": {
+            "step1Title": "How many cut rolls do you want?",
+            "step1Placeholder": "Enter number of cut rolls",
+            "step2Title": "Enter Pieces for Each Size"
+        },
+        "totalInches": "Total",
+        "noOfCoils": "No. of Coils"
+    },
+    "cartModal": {
+        "message": "The item has been added to your cart. You can continue shopping or checkout anytime.",
+        "addMore": "Add More Items",
+        "confirmOrder": "Confirm Order"
+    },
+    "cartScreen": {
+        "totalPrice": "Total price",
+        "continue": "Continue",
+        "remove": "Remove",
+        "productDetails": "Off White | cut - 10 Rolls | UnCut - 2 Rolls | 36 Inch | 25 Meter"
+    },
+    "checkoutScreen": {
+        "shippingAddress": "Shipping Address",
+        "officeAddress": "Office Address",
+        "orderList": "Order List",
+        "promoCode": "Promo Code",
+        "discountText": "Discount 30% Off",
+        "amount": "Amount",
+        "shipping": "Shipping",
+        "promo": "Promo",
+        "total": "Total",
+        "remark": "Remark",
+        "remarkPlaceholder": "Enter your feedback...",
+        "totalPrice": "Total price",
+        "confirmOrder": "Confirm Order"
+    },
+    "paymentScreen": {
+        "totalPayment": "Total Payment",
+        "discountMessage": "You will receive",
+        "discountHighlight": "10% discount",
+        "discountSuffix": "on making a full payment!",
+        "thankYou": "Thank you for shopping with us.",
+        "continueShopping": "Continue Shopping",
+        "trackOrder": "Track Order",
+        "enterBankDetails": "Enter Bank Details",
+        "accountNumber": "Account Number",
+        "enterAccountNumber": "Enter Account Number",
+        "ifscCode": "IFSC Code",
+        "enterIfscCode": "Enter IFSC Code",
+        "submitDetails": "Submit Details",
+        "confirmPayment": "Confirm Payment"
+    },
+    "paymentMethods": {
+        "cheque": "Cheque",
+        "bankTransfer": "Bank Transfer",
+        "myWallet": "My Wallet",
+        "buyNowPayLater": "Buy now pay later",
+        "fullPayment": "Full Payment",
+        "partPayment": "Part Payment",
+        "onlineLink": "Online Link",
+        "subtitles": {
+            "myWallet": "${{amount}}",
+            "buyNowPayLater": "Your Credit Balance: ${{amount}}"
+        }
     }
 }

@@ -89,7 +89,10 @@ export default function ProductDetailScreen() {
                 keyboardShouldPersistTaps="handled"
             >
                 {/* Product Code Dropdown */}
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Choose Product Code</Text>
+                {/* <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Choose Product Code</Text> */}
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
+                    {t("productDetail.chooseProductCode")}
+                </Text>
                 <View style={styles.pickerWrapper}>
                     <Picker
                         selectedValue={selectedProductCode}
@@ -110,8 +113,11 @@ export default function ProductDetailScreen() {
                     style={styles.image}
                     resizeMode="cover"
                 />
-                <TouchableOpacity style={styles.downloadBtn}>
+                {/* <TouchableOpacity style={styles.downloadBtn}>
                     <Text style={styles.downloadText}>Download Specs</Text>
+                </TouchableOpacity> */}
+                <TouchableOpacity style={styles.downloadBtn}>
+                    <Text style={styles.downloadText}>{t("productDetail.downloadSpecs")}</Text>
                 </TouchableOpacity>
 
                 {/* Price */}
@@ -124,7 +130,10 @@ export default function ProductDetailScreen() {
                 </View>
 
                 {/* Shade Selector */}
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Shade Selector</Text>
+                {/* <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Shade Selector</Text> */}
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
+                    {t("productDetail.shadeSelector")}
+                </Text>
                 <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
@@ -156,7 +165,7 @@ export default function ProductDetailScreen() {
                 </ScrollView>
 
                 {/* Width Selector */}
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Width</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("productDetail.selectWidth")}</Text>
                 <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     {widths.map((width) => (
                         <TouchableOpacity
@@ -173,7 +182,7 @@ export default function ProductDetailScreen() {
                 </View>
 
                 {/* Length Selector */}
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Length</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("productDetail.selectLength")}</Text>
                 <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     {lengths.map((length) => (
                         <TouchableOpacity
@@ -193,7 +202,10 @@ export default function ProductDetailScreen() {
                 </View>
 
                 {/* Number of Rolls */}
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Enter Number of Uncut Rolls</Text>
+                {/* <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Enter Number of Uncut Rolls</Text> */}
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
+                    {t("productDetail.enterUncutRolls")}
+                </Text>
                 <TextInput
                     style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
                     keyboardType="numeric"
@@ -201,7 +213,7 @@ export default function ProductDetailScreen() {
                     onChangeText={setRolls}
                 />
 
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Do you want Cut Rolls</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("productDetail.cutRollsQuestion")}</Text>
                 {["standard", "none"].map((id) => (
                     <TouchableOpacity
                         key={id}
@@ -217,17 +229,17 @@ export default function ProductDetailScreen() {
                             {selectedOption === id && <View style={styles.selectedRb} />}
                         </View>
                         <Text style={styles.radioText}>
-                            {id === "standard" ? "Yes" : "No"}
+                            {id === "standard" ? t("productDetail.yes") : t("productDetail.no")}
                         </Text>
                     </TouchableOpacity>
                 ))}
 
                 {/* Remark */}
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Remark</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("productDetail.remark")}</Text>
                 <View style={styles.remarkRow}>
                     <TextInput
                         style={[styles.remarkInput, { height: 100, textAlignVertical: 'top' }]}
-                        placeholder="Enter your remark"
+                        placeholder={t("productDetail.remarkPlaceholder")}
                         value={remark}
                         onChangeText={setRemark}
                         multiline={true}
@@ -239,7 +251,7 @@ export default function ProductDetailScreen() {
             <AddItemsModal visible={Visible} onClose={() => setVisible(false)} />
             {/* Add to Cart */}
             <TouchableOpacity style={styles.cartBtn} onPress={() => setVisible(true)}>
-                <Text style={styles.cartText}>Add to Cart</Text>
+                <Text style={styles.cartText}>{t("productDetail.addToCart")}</Text>
             </TouchableOpacity>
 
             <Portal>
@@ -255,7 +267,7 @@ export default function ProductDetailScreen() {
                         // Step 1: Ask for number of cut rolls
                         <View>
                             <View style={styles.inchRow}>
-                                <Text style={styles.modalTitle}>How many cut rolls do you want?</Text>
+                                <Text style={styles.modalTitle}>{t("productDetail.cutRollsModal.step1Title")}</Text>
                                 <TouchableOpacity onPress={() => setCutRollsVisible(false)} style={styles.closeIcon}>
                                     <Icon name="close" size={24} color="#000" />
                                 </TouchableOpacity>
@@ -264,7 +276,7 @@ export default function ProductDetailScreen() {
                             <TextInput
                                 style={styles.inchInput2}
                                 keyboardType="numeric"
-                                placeholder="Enter number of cut rolls"
+                                placeholder={t("productDetail.cutRollsModal.step1Placeholder")}
                                 value={cutRollsCount}
                                 onChangeText={setCutRollsCount}
                             />
@@ -284,7 +296,7 @@ export default function ProductDetailScreen() {
                         // Step 2: Enter pieces per size
                         <View>
                             <View style={styles.inchRow}>
-                                <Text style={styles.modalTitle}>Enter Pieces for Each Size</Text>
+                                <Text style={styles.modalTitle}>{t("productDetail.cutRollsModal.step2Title")}</Text>
                                 <TouchableOpacity onPress={() => setCutRollsVisible(false)} style={styles.closeIcon}>
                                     <Icon name="close" size={24} color="#000" />
                                 </TouchableOpacity>
@@ -311,8 +323,8 @@ export default function ProductDetailScreen() {
 
                             <View>
                                 <View style={styles.inchRow}>
-                                    <Text style={styles.totalText}>Total: 33 Inches</Text>
-                                    <Text style={styles.totalText}>No. of Coils: {cutRollsCount}</Text>
+                                    <Text style={styles.totalText}>{t("productDetail.totalInches")}: 33 Inches</Text>
+                                    <Text style={styles.totalText}>{t("productDetail.noOfCoils")}: {cutRollsCount}</Text>
                                 </View>
                                 <TouchableOpacity
                                     onPress={handleSaveCutRolls}

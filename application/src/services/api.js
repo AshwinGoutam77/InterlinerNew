@@ -2,14 +2,13 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: "https://your-api-url.com/api", // replace with your backend
+    baseURL: "https://your-api-url.com/api",
     timeout: 10000,
     headers: { "Content-Type": "application/json" },
 });
 
-// Token interceptor (optional)
 apiClient.interceptors.request.use(async (config) => {
-    const token = ""; // get from AsyncStorage or Redux
+    const token = "";
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
 });

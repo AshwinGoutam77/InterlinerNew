@@ -114,7 +114,7 @@ export default function CartScreen() {
                         <Text style={styles.counterBtn}>+</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.removeBtn}>Remove</Text>
+                <Text style={styles.removeBtn}>{t("cartScreen.remove")}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -133,14 +133,14 @@ export default function CartScreen() {
             {/* Footer */}
             <View style={[styles.footer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                 <View style={styles.totalContainer}>
-                    <Text style={styles.totalLabel}>Total price</Text>
+                    <Text style={styles.totalLabel}>{t("cartScreen.totalPrice")}</Text>
                     <Text style={styles.totalPrice}>{currency} {total.toFixed(2)}</Text>
                 </View>
                 <TouchableOpacity
                     style={styles.checkoutBtn}
                     onPress={() => navigation.navigate('CheckoutScreen')}
                 >
-                    <Text style={styles.checkoutText}>Continue</Text>
+                    <Text style={styles.checkoutText}>{t("cartScreen.continue")}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
