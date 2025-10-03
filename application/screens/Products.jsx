@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -10,97 +10,130 @@ import {
     TouchableOpacity,
     Dimensions,
     I18nManager,
+    ActivityIndicator,
 } from 'react-native';
-
 const { width } = Dimensions.get('window');
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
-import { CurrencyContext } from '../context/CurrencyContext';
-import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
 import GlobalStyles from '../src/constants/globalStyles';
-
-const categories = [
-    { id: '1', label: 'Collar', icon: require('../../assets/images/shirt-collar.png') },
-    { id: '2', label: 'Pocket', icon: require('../../assets/images/shirt-collar.png') },
-    { id: '3', label: 'Faduka', icon: require('../../assets/images/shirt-cuffs.png') },
-    { id: '4', label: 'Chest pieces', icon: require('../../assets/images/shirt-collar.png') },
-    { id: '5', label: 'Pre-cut collars', icon: require('../../assets/images/shirt-collar.png') },
-];
-
-const products = [
-    { id: '1', title: 'PANTONE', name: '23666', price: '28', image: require('../../assets/images/product-1.png') },
-    { id: '2', title: 'PANTONE', name: '3223H', price: '12', image: require('../../assets/images/product-1.png') },
-    { id: '3', title: 'PANTONE', name: '2777', price: '20', image: require('../../assets/images/product-1.png') },
-    { id: '4', title: 'PANTONE', name: '3093', price: '15', image: require('../../assets/images/product-1.png') },
-    { id: '5', title: 'PANTONE', name: '23666', price: '28', image: require('../../assets/images/product-1.png') },
-    { id: '6', title: 'PANTONE', name: '3223H', price: '12', image: require('../../assets/images/product-1.png') },
-    { id: '7', title: 'PANTONE', name: '2777', price: '20', image: require('../../assets/images/product-1.png') },
-    { id: '8', title: 'PANTONE', name: '3093', price: '15', image: require('../../assets/images/product-1.png') },
-];
+import API from '../src/services/api';
 
 const ProductsPage = () => {
-    const currency = '$'
+    const route = useRoute();
+    const currency = '$';
     const navigation = useNavigation();
-    const { t } = useTranslation();
     const { isRTL } = useAppContext();
+    const { categoryId, subCategoryId, categoryName } = route.params;
+    const [categoryData, setCategoryData] = useState(null);
+    const [selectedChildId, setSelectedChildId] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await API.getCategoriesById(categoryId);
+                const data = res?.data?.data?.category;
+
+                if (res.data?.status && data) {
+                    setCategoryData(data);
+                    // console.log(data);
+                    setSelectedChildId(categoryName);
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, [categoryId, categoryName]);
+
+    useEffect(() => {
+        if (selectedChildId && categoryData) {
+            const selectedChild = categoryData.children.find(c => c.name === selectedChildId);
+            if (selectedChild) {
+                navigation.setParams({ headerTitle: selectedChild.name });
+            }
+        }
+    }, [selectedChildId, categoryData, navigation]);
 
     const renderCategory = ({ item }) => (
-        <TouchableOpacity style={styles.categoryItem}>
+        <TouchableOpacity
+            style={styles.categoryItem}
+            onPress={() => setSelectedChildId(item.name)}
+        >
             <Image
-                source={item.icon}
+                source={{ uri: item.photo }}
                 style={[
                     styles.categoryImage,
-                    { borderWidth: item?.id == 1 ? 2 : 0, borderColor: Colors.primary }
+                    { borderWidth: item.name === selectedChildId ? 3 : 0, borderColor: Colors.primary }
                 ]}
             />
             <Text
                 style={[
                     styles.categoryLabel,
-                    {
-                        color: item?.id == 1 ? Colors.primary : "#000000",
-                        textAlign: isRTL ? 'right' : 'left'
-                    }
+                    { color: item.name === selectedChildId ? Colors.primary : '#000', textAlign: isRTL ? 'right' : 'left' }
                 ]}
             >
-                {item.label}
+                {item.name}
             </Text>
         </TouchableOpacity>
     );
 
-    const renderProduct = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('ProductDetailScreen')}>
-            <View style={styles.productCard}>
-                <Image source={item.image} style={styles.productImage} />
-                <View style={[styles.productDescription]}>
-                    <Text style={styles.productName}>{item.name}</Text>
-                    {/* <Text style={styles.productSubName}>{item.name}</Text> */}
-                    <Text style={styles.productPrice}>{currency} {item.price}</Text>
-                </View>
-            </View>
-        </TouchableOpacity>
-    );
+    const renderProduct = ({ item }) => {
+        const photos = JSON.parse(item.photo ?? '[]');
+        return (
+            <TouchableOpacity onPress={() => navigation.navigate('ProductDetailScreen', { productId: item.encrypted_id })}>
+                <View style={styles.productCard}>
+                    <Image source={{ uri: photos[0] }} style={styles.productImage} />
+                    <View style={styles.productDescription}>
+                        <Text style={styles.productName}>{item.name}</Text>
+                        <View style={[styles.row]}>
+                            <Text style={[styles.productPrice, { textDecorationLine: "line-through", color: "#888", fontSize: 14 }]}>
+                                {currency}{item.price}
+                            </Text>
 
+                            <Text style={[styles.productPrice, { color: Colors.primary }]}>
+                                {currency}
+                                {item.discount_type === 1
+                                    ? (item.price - item.discount).toFixed(2)
+                                    : (item.price - (item.price * item.discount / 100)).toFixed(2)
+                                }
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+    const filteredProducts = categoryData?.children?.find(c => c.name === selectedChildId)?.groups ?? [];
+
+    if (loading) return <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fdfdfd" }}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+    </View>;
     return (
         <ScrollView style={[GlobalStyles.container, { paddingTop: 20 }]}>
             <FlatList
                 horizontal
-                inverted={I18nManager.isRTL}
-                data={categories}
+                inverted={isRTL}
+                data={categoryData?.children ?? []}
                 renderItem={renderCategory}
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={(item, index) => item.name ?? index.toString()}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.categoryList}
             />
 
             <FlatList
-                data={products}
+                data={filteredProducts}
                 renderItem={renderProduct}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item, index) => item.name ?? index.toString()}
                 numColumns={2}
                 columnWrapperStyle={[
                     styles.columnWrapper,
-                    { flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row' }
+                    { flexDirection: isRTL ? 'row-reverse' : 'row' }
                 ]}
                 contentContainerStyle={styles.productList}
                 scrollEnabled={false}
@@ -108,6 +141,8 @@ const ProductsPage = () => {
         </ScrollView>
     );
 };
+
+
 
 const styles = StyleSheet.create({
     backText: {
@@ -191,6 +226,11 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         color: Colors.black,
     },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10
+    }
 });
 
 export default ProductsPage;

@@ -77,15 +77,26 @@ export function HomeStack({ navigationOptions }) {
                 component={CategoryScreen}
                 options={{ header: getHeader("categoryScreen.title") }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="ProductsPage"
                 component={ProductsPage}
                 options={{ header: getHeader("products.title") }}
+            /> */}
+            <Stack.Screen
+                name="ProductsPage"
+                component={ProductsPage}
+                options={({ route }) => ({
+                    header: getHeader(route.params?.headerTitle ?? "")
+                })}
             />
+
             <Stack.Screen
                 name="ProductDetailScreen"
                 component={ProductDetailScreen}
-                options={{ header: getHeader("products.detail") }}
+                // options={{ header: getHeader("products.detail") }}
+                options={({ route }) => ({
+                    header: getHeader(route.params?.headerTitle ?? "")
+                })}
             />
             <Stack.Screen
                 name="CartScreen"

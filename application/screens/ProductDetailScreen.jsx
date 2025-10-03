@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -11,11 +11,12 @@ import {
     KeyboardAvoidingView,
     Keyboard,
     Platform,
-    I18nManager
+    I18nManager,
+    ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import { CurrencyContext } from '../context/CurrencyContext';
 import AddItemsModal from '../modals/AddItemsModal';
@@ -23,12 +24,15 @@ import { Modal, Portal, Button } from "react-native-paper";
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
 import GlobalStyles from '../src/constants/globalStyles';
+import API from '../src/services/api';
 
 const shades = ['White', 'Off White', 'Blue White', 'Cream'];
 const widths = ['36 Inch', '44 Inch', '60 Inch'];
 const lengths = ['25 Mtr', '50 Mtr', '100 Mtr'];
 
 export default function ProductDetailScreen() {
+    const route = useRoute();
+    const { productId } = route.params;
     const { t } = useTranslation();
     const { isRTL } = useAppContext();
     const navigation = useNavigation();
@@ -36,37 +40,48 @@ export default function ProductDetailScreen() {
     const [selectedShade, setSelectedShade] = useState('White');
     const [isCut, setIsCut] = useState(false);
     const [selectedWidth, setSelectedWidth] = useState('36 Inch');
-    const [selectedLength, setSelectedLength] = useState('50 Mtr');
+    const [selectedLength, setSelectedLength] = useState('');
     const [rolls, setRolls] = useState('2');
     const [remark, setRemark] = useState('');
     const [selectedProductCode, setSelectedProductCode] = useState('23666');
-    const [SelectCustomSize, setSelectCustomSize] = useState('12')
     const [selectedOption, setSelectedOption] = useState('none');
     const [Visible, setVisible] = useState(false)
-    // const [cutRollsVisible, setCutRollsVisible] = useState(false);
-    const [step, setStep] = useState(1); // step 1 = ask count, step 2 = enter details
+    const [step, setStep] = useState(1);
     const [cutRollsCount, setCutRollsCount] = useState('');
+    const [Loading, setLoading] = useState(true);
+    const [productData, setProductData] = useState('')
 
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const res = await API.getGroups(productId);
+                if (res.data?.status && res.data?.data?.group) {
+                    const group = res.data.data.group;
+                    console.log(res);
 
-    const options = [
-        { id: 'standard', label: 'yes' },
-        { id: 'none', label: 'No' },
-    ];
+                    setProductData(group);
 
-    const getShadeColor = (shade) => {
-        switch (shade) {
-            case 'White':
-                return '#F3F4F6';
-            case 'Off White':
-                return '#F9F7F1';
-            case 'Blue White':
-                return '#D6E9FF';
-            case 'Cream':
-                return '#F1E9D3';
-            default:
-                return '#eee';
+                    // Default selections
+                    setSelectedProductCode(group.name);
+                    if (group.children?.length > 0) {
+                        setSelectedShade(group.children[0].name);
+                    }
+                }
+            } catch (err) {
+                console.error("Error fetching product:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, [productId]);
+
+    useEffect(() => {
+        if (productId) {
+            navigation.setParams({ headerTitle: productData?.name });
         }
-    };
+    }, [productId, navigation, productData?.name]);
 
     const inchesList = ["1.5 Inch", "2 Inch", "2.5 Inch", "3 Inch", "3.5 Inch", "4 Inch", "4.5 Inch", "5 Inch", "5.5 Inch", "6 Inch", "6.5 Inch", "7 Inch", "7.5 Inch", "8 Inch"];
     const [cutRollsVisible, setCutRollsVisible] = useState(false);
@@ -80,6 +95,28 @@ export default function ProductDetailScreen() {
         setStep(1)
     };
 
+    if (Loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fdfdfd" }}>
+                <ActivityIndicator size="large" color={Colors.primary} />
+            </View>
+        );
+    }
+    if (!productData) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Text>No product data found</Text>
+            </View>
+        );
+    }
+
+    let photos = [];
+    try {
+        photos = JSON.parse(productData.photo || "[]");
+    } catch {
+        photos = [];
+    }
+
     return (
         <View style={[GlobalStyles.container, { paddingTop: 10 }]}>
             <ScrollView
@@ -89,8 +126,7 @@ export default function ProductDetailScreen() {
                 keyboardShouldPersistTaps="handled"
             >
                 {/* Product Code Dropdown */}
-                {/* <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Choose Product Code</Text> */}
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
+                <Text style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
                     {t("productDetail.chooseProductCode")}
                 </Text>
                 <View style={styles.pickerWrapper}>
@@ -100,72 +136,87 @@ export default function ProductDetailScreen() {
                         style={styles.picker}
                         dropdownIconColor="#666"
                     >
-                        <Picker.Item label="23666" value="23666" />
-                        <Picker.Item label="23667" value="23667" />
-                        <Picker.Item label="23668" value="23668" />
+                        <Picker.Item label={productData.name} value={productData.name} />
+                        {/* If product has variations, map them here */}
                     </Picker>
                 </View>
 
 
                 {/* Image */}
-                <Image
-                    source={require('../../assets/images/shirt-banner.png')}
-                    style={styles.image}
-                    resizeMode="cover"
-                />
-                {/* <TouchableOpacity style={styles.downloadBtn}>
-                    <Text style={styles.downloadText}>Download Specs</Text>
-                </TouchableOpacity> */}
+                {photos.length > 0 && (
+                    <Image
+                        source={{ uri: photos[0] }}
+                        style={styles.image}
+                        resizeMode="cover"
+                    />
+                )}
                 <TouchableOpacity style={styles.downloadBtn}>
                     <Text style={styles.downloadText}>{t("productDetail.downloadSpecs")}</Text>
                 </TouchableOpacity>
 
                 {/* Price */}
-                <View style={[styles.rowBetween, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                    <Text style={styles.code}>23666</Text>
-                    <Text style={styles.price}>{currency}28</Text>
+                <View style={[styles.rowBetween, { flexDirection: isRTL ? "row-reverse" : "row" }]}>
+                    <Text style={styles.code}>{productData.name}</Text>
+                    {/* <Text style={styles.price}>
+                        {currency}{productData.price}
+                    </Text> */}
+                    <View style={[styles.inchRow, { gap: 10 }]}>
+                        <Text style={[styles.price, { textDecorationLine: "line-through", color: "#888", fontSize: 14 }]}>
+                            {currency}{productData.price}
+                        </Text>
+                        <Text style={[styles.price, { color: Colors.primary }]}>
+                            {currency}
+                            {productData.discount_type === 1
+                                ? (productData.price - productData.discount).toFixed(2)
+                                : (productData.price - (productData.price * productData.discount / 100)).toFixed(2)
+                            }
+                        </Text>
+                    </View>
                 </View>
-                <View style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
-                    <Text style={[styles.labelText, { textAlign: isRTL ? 'right' : 'left' }]}>Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.Lorem Ipsum&nbsp;is simply dummy text of the printing and typesetting industry.</Text>
+                <View style={[styles.label, { textAlign: isRTL ? "right" : "left" }]}>
+                    <Text style={[styles.labelText, { textAlign: isRTL ? "right" : "left" }]}>
+                        {productData.description}
+                    </Text>
                 </View>
 
                 {/* Shade Selector */}
-                {/* <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Shade Selector</Text> */}
                 <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
                     {t("productDetail.shadeSelector")}
                 </Text>
                 <ScrollView
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={[styles.shadeRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
+                    contentContainerStyle={[styles.shadeRow, { flexDirection: isRTL ? "row-reverse" : "row" }]}
                 >
-                    {shades.map((shade) => (
+                    {productData.children?.map((child) => (
                         <TouchableOpacity
-                            key={shade}
+                            key={child.encrypted_id}
                             style={[
                                 styles.shadeBox,
-                                selectedShade === shade && styles.shadeBoxSelected,
+                                selectedShade === child.name && styles.shadeBoxSelected,
                             ]}
-                            onPress={() => setSelectedShade(shade)}
+                            onPress={() => setSelectedShade(child.name)}
                         >
-                            <View style={[
-                                styles.shadeSwatch,
-                                { backgroundColor: getShadeColor(shade) }
-                            ]} />
+                            <View
+                                style={[
+                                    styles.shadeSwatch,
+                                    { backgroundColor: child.hexcode || "#ccc" }
+                                ]}
+                            />
                             <Text
                                 style={[
                                     styles.shadeText,
-                                    selectedShade === shade && styles.shadeTextSelected,
+                                    selectedShade === child.name && styles.shadeTextSelected,
                                 ]}
                             >
-                                {shade}
+                                {child.name}
                             </Text>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
 
                 {/* Width Selector */}
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("productDetail.selectWidth")}</Text>
+                {/* <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("productDetail.selectWidth")}</Text>
                 <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     {widths.map((width) => (
                         <TouchableOpacity
@@ -181,7 +232,6 @@ export default function ProductDetailScreen() {
                     ))}
                 </View>
 
-                {/* Length Selector */}
                 <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("productDetail.selectLength")}</Text>
                 <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     {lengths.map((length) => (
@@ -199,10 +249,32 @@ export default function ProductDetailScreen() {
                             </Text>
                         </TouchableOpacity>
                     ))}
+                </View> */}
+
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Measurement</Text>
+                <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                    {productData.children.map((item) => (
+                        item?.items?.map((measurement, idx) => {
+                            return (
+                                <TouchableOpacity
+                                    key={idx}
+                                    style={[
+                                        styles.optionBox,
+                                        selectedLength === measurement?.name && styles.selectedOption,
+                                    ]}
+                                    onPress={() => setSelectedLength(measurement?.name)}
+                                >
+                                    <Text
+                                        style={[selectedLength === measurement?.name && styles.selectedOptionText,]}>
+                                        {measurement?.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            )
+                        })
+                    ))}
                 </View>
 
                 {/* Number of Rolls */}
-                {/* <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Enter Number of Uncut Rolls</Text> */}
                 <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
                     {t("productDetail.enterUncutRolls")}
                 </Text>

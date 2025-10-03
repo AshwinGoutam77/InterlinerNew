@@ -1,45 +1,76 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from "react";
 import {
     View,
     Text,
-    TextInput,
-    TouchableOpacity,
     StyleSheet,
     SafeAreaView,
     Image,
-    ImageBackground
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
-import Colors from '../src/constants/colors';
-import LinearGradient from 'react-native-linear-gradient';
-import { RoleContext } from '../context/RoleContext';
+    TextInput,
+    TouchableOpacity,
+    ImageBackground,
+    ActivityIndicator,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import LinearGradient from "react-native-linear-gradient";
+import Icon from "react-native-vector-icons/Ionicons";
+import Colors from "../src/constants/colors";
+import { RoleContext } from "../context/RoleContext";
+import API from "../src/services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
-    const { setRole } = useContext(RoleContext);
+    const { setRole, setToken } = useContext(RoleContext);
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [phone, setPhone] = useState("");
+    const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(""); // 👈 for inline error
 
-    const handleLogin = (userRole) => {
-        setRole(userRole); // save role globally
-        navigation.navigate('MainApp'); // navigate without passing role prop
+    const handleLogin = async (userRole) => {
+        // Reset previous error
+        setErrorMessage("");
+
+        if (!phone || !password) {
+            setErrorMessage("Please enter phone and password");
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            const response = await API.loginCustomer({
+                phone: phone,
+                password,
+            });
+
+            if (response.data?.status) {
+                const token = response?.data?.data?.token;
+                setToken(token);
+                await AsyncStorage.setItem("authToken", token);
+                setRole(userRole);
+                navigation.navigate("MainApp");
+            } else {
+                setErrorMessage("Invalid phone or password");
+            }
+        } catch (error) {
+            console.error("Login error:", error);
+            setErrorMessage(error.response?.data?.message || "Login failed, try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <ImageBackground
-            source={require('../../assets/images/login-banner.jpg')}
+            source={require("../../assets/images/login-banner.jpg")}
             style={styles.background}
             resizeMode="contain"
         >
             <LinearGradient
-                colors={[
-                    'rgba(255, 255, 255, 0.4)',
-                    'rgba(255, 255, 255, 0.15)',
-                ]}
+                colors={["rgba(255, 255, 255, 0.4)", "rgba(255, 255, 255, 0.15)"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 style={styles.container}
@@ -47,13 +78,13 @@ const LoginScreen = () => {
                 <SafeAreaView style={styles.container}>
                     <View style={styles.UpperLogoContainer}>
                         <Image
-                            source={require('../../assets/images/permisis-logo.png')}
+                            source={require("../../assets/images/permisis-logo.png")}
                             style={styles.logo}
                             resizeMode="contain"
                         />
                         <Text style={[styles.title, { marginTop: 20 }]}>Brought to you by</Text>
                         <Image
-                            source={require('../../assets/images/logo.png')}
+                            source={require("../../assets/images/logo.png")}
                             style={styles.MainLogo}
                             resizeMode="contain"
                         />
@@ -68,8 +99,9 @@ const LoginScreen = () => {
                             placeholder="Phone Number"
                             placeholderTextColor="#aaa"
                             style={styles.input}
-                            value={email}
-                            onChangeText={setEmail}
+                            value={phone}
+                            onChangeText={setPhone}
+                            keyboardType="phone-pad"
                         />
                     </View>
 
@@ -85,28 +117,47 @@ const LoginScreen = () => {
                             onChangeText={setPassword}
                         />
                         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                            <Icon name={showPassword ? "eye-off-outline" : "eye-outline"} size={20} color="#aaa" />
+                            <Icon
+                                name={showPassword ? "eye-off-outline" : "eye-outline"}
+                                size={20}
+                                color="#aaa"
+                            />
                         </TouchableOpacity>
                     </View>
 
+                    {/* 🔴 Inline Error Message */}
+                    {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
+
                     {/* Login Buttons */}
-                    <TouchableOpacity style={styles.signInBtn} onPress={() => handleLogin('customer')}>
-                        <Text style={styles.signInText}>Login as Customer</Text>
+                    <TouchableOpacity
+                        style={styles.signInBtn}
+                        onPress={() => handleLogin("customer")}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <ActivityIndicator color="#fff" />
+                        ) : (
+                            <Text style={styles.signInText}>Login as Customer</Text>
+                        )}
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.signInBtn]} onPress={() => handleLogin('sales')}>
+                    <TouchableOpacity
+                        style={[styles.signInBtn]}
+                        onPress={() => handleLogin("sales")}
+                        disabled={loading}
+                    >
                         <Text style={styles.signInText}>Login as Sales</Text>
                     </TouchableOpacity>
 
                     {/* Forgot Password */}
-                    <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                    <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
                         <Text style={styles.forgot}>Forgot the password?</Text>
                     </TouchableOpacity>
 
                     {/* Signup Prompt */}
                     <View style={styles.footer}>
                         <Text style={styles.footerText}>Don’t have an account? </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
                             <Text style={styles.signUpText}>Sign up</Text>
                         </TouchableOpacity>
                     </View>
@@ -264,5 +315,14 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: '#000',
         fontWeight: '600',
+    },
+    errorText: {
+        color: "red",
+        fontSize: 14,
+        marginTop: 0,
+        marginVertical: 10,
+        marginHorizontal: 5,
+        textAlign: "center",
+        width: "100%",
     },
 });

@@ -1,5 +1,4 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, { useContext } from 'react';
+import React, { useEffect, useState, useContext } from "react";
 import {
     View,
     Text,
@@ -8,131 +7,16 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useTranslation } from 'react-i18next';
-import { CurrencyContext } from '../context/CurrencyContext';
-import { useAppContext } from '../context/RTLContext';
-import { RoleContext } from '../context/RoleContext';
-import CustomerFilter from '../components/CustomerFilter';
-import GlobalStyles from '../src/constants/globalStyles';
-// import CustomerFilter from '../components/CustomerFilter';
-
-const data = [
-    {
-        title: 'Shirts',
-        banner: require('../../assets/images/shirt-banner.png'),
-        items: [
-            {
-                label: 'Shirt collar',
-                icon: require('../../assets/images/shirt-collar.png'),
-            },
-            {
-                label: 'Shirt cuffs',
-                icon: require('../../assets/images/shirt-cuffs.png'),
-            },
-            {
-                label: 'Shirt placket',
-                icon: require('../../assets/images/shirt-placket.png'),
-            },
-        ],
-    },
-    {
-        title: 'Kandura',
-        banner: require('../../assets/images/kandura.png'),
-        items: [
-            {
-                label: 'collar',
-                icon: require('../../assets/images/shirt-collar.png'),
-            },
-            {
-                label: 'cuffs',
-                icon: require('../../assets/images/shirt-cuffs.png'),
-            },
-            {
-                label: 'placket',
-                icon: require('../../assets/images/shirt-placket.png'),
-            },
-            {
-                label: 'pocket',
-                icon: require('../../assets/images/shirt-placket.png'),
-            },
-            {
-                label: 'faruka',
-                icon: require('../../assets/images/shirt-placket.png'),
-            },
-        ],
-    },
-    {
-        title: 'Trousers',
-        banner: require('../../assets/images/kandura.png'),
-        items: [
-            {
-                label: 'waist',
-                icon: require('../../assets/images/shirt-collar.png'),
-            },
-            {
-                label: 'pocketing',
-                icon: require('../../assets/images/shirt-cuffs.png'),
-            },
-        ],
-    },
-    {
-        title: 'Jackets Blazer',
-        banner: require('../../assets/images/jackets.png'),
-        items: [
-            {
-                label: 'Articles',
-                icon: require('../../assets/images/shirt-collar.png'),
-            },
-            {
-                label: 'essentials',
-                icon: require('../../assets/images/shirt-cuffs.png'),
-            },
-        ],
-    },
-    {
-        title: 'Women’s Clothes',
-        banner: require('../../assets/images/women-clothing.png'),
-        items: [
-            {
-                label: 'Dresses',
-                icon: require('../../assets/images/shirt-collar.png'),
-            },
-            {
-                label: 'Shirt',
-                icon: require('../../assets/images/shirt-cuffs.png'),
-            },
-            {
-                label: 'Jackets',
-                icon: require('../../assets/images/shirt-placket.png'),
-            },
-            {
-                label: 'Skirts ',
-                icon: require('../../assets/images/shirt-placket.png'),
-            },
-        ],
-    },
-    {
-        title: 'Non-woven',
-        banner: require('../../assets/images/non-woven.jpg'),
-        items: [
-            {
-                label: 'T-Shirts',
-                icon: require('../../assets/images/shirt-collar.png'),
-            },
-            {
-                label: 'Embroidery Backing',
-                icon: require('../../assets/images/shirt-cuffs.png'),
-            },
-            {
-                label: 'Leather Jackets',
-                icon: require('../../assets/images/shirt-placket.png'),
-            },
-        ],
-    },
-];
+    ActivityIndicator,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { useTranslation } from "react-i18next";
+import { useAppContext } from "../context/RTLContext";
+import { RoleContext } from "../context/RoleContext";
+import CustomerFilter from "../components/CustomerFilter";
+import API from "../src/services/api";
+import Colors from "../src/constants/colors";
 
 const CategoryScreen = () => {
     const { t } = useTranslation();
@@ -140,68 +24,109 @@ const CategoryScreen = () => {
     const navigation = useNavigation();
     const { role } = useContext(RoleContext);
 
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await API.getCategories();
+                console.log(res?.data?.data?.categories);
+
+                if (res.data?.status) {
+                    setCategories(res?.data?.data?.categories);
+                } else {
+                    setCategories([]);
+                }
+            } catch (err) {
+                console.error("Error fetching categories:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
     return (
         <ScrollView style={styles.container}>
-            {role == 'sales' && <CustomerFilter show />}
-            <View style={[
-                styles.searchBox,
-                { flexDirection: isRTL ? 'row-reverse' : 'row' }
-            ]}>
-                <Icon name='search' size={24} color='#999' />
+            {role === "sales" && <CustomerFilter show />}
+            <View
+                style={[
+                    styles.searchBox,
+                    { flexDirection: isRTL ? "row-reverse" : "row" },
+                ]}
+            >
+                <Icon name="search" size={24} color="#999" />
                 <TextInput
-                    placeholder={t('category.search_placeholder')}
-                    style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
+                    placeholder={t("category.search_placeholder")}
+                    style={[styles.input, { textAlign: isRTL ? "right" : "left" }]}
                     placeholderTextColor="#999"
                 />
             </View>
 
-            {data.map((section, idx) => (
-                <View key={idx} style={styles.section}>
-                    <Text style={[
-                        styles.sectionTitle,
-                        { textAlign: isRTL ? 'right' : 'left' }
-                    ]}>
-                        {t(`category.categories.${section.title}`)}
-                    </Text>
-
-                    <View style={styles.categorySection}>
-                        <Image
-                            source={section.banner}
-                            style={styles.banner}
-                            resizeMode="cover"
-                        />
-
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={[
-                                styles.actionRow,
-                                { flexDirection: isRTL ? 'row-reverse' : 'row' }
+            {loading ? (
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fdfdfd" }}>
+                    <ActivityIndicator size="large" color={Colors.primary} />
+                </View>
+            ) : (
+                categories?.map((section, idx) => (
+                    <View key={idx} style={styles.section}>
+                        <Text
+                            style={[
+                                styles.sectionTitle,
+                                { textAlign: isRTL ? "right" : "left" },
                             ]}
                         >
-                            {section.items.map((item, i) => (
-                                <TouchableOpacity
-                                    key={i}
-                                    style={styles.actionItem}
-                                    onPress={() => navigation.navigate('ProductsPage')}
-                                >
-                                    <Image
-                                        source={item.icon}
-                                        style={styles.icon}
-                                    />
-                                    <Text style={[
-                                        styles.label,
-                                        { textAlign: isRTL ? 'right' : 'center' }
-                                    ]}>
-                                        {t(`category.categories.${item.label}`)}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))}
-                        </ScrollView>
+                            {section.name}
+                        </Text>
+
+                        <View style={styles.categorySection}>
+                            <Image
+                                source={{ uri: section.photo }}
+                                style={styles.banner}
+                                resizeMode="cover"
+                            />
+
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={[
+                                    styles.actionRow,
+                                    { flexDirection: isRTL ? "row-reverse" : "row" },
+                                ]}
+                            >
+                                {section.children?.map((item, i) => (
+                                    <TouchableOpacity
+                                        key={i}
+                                        style={styles.actionItem}
+                                        onPress={() =>
+                                            navigation.navigate("ProductsPage", {
+                                                categoryId: section.encrypted_id,
+                                                subCategoryId: item.encrypted_id,
+                                                categoryName: item.name,
+                                            })
+                                        }
+                                    >
+                                        <Image source={{ uri: item.photo }} style={styles.icon} />
+                                        <Text
+                                            style={[
+                                                styles.label,
+                                                { textAlign: isRTL ? "right" : "center" },
+                                            ]}
+                                        >
+                                            {item.name}
+                                        </Text>
+                                    </TouchableOpacity>
+                                ))}
+
+                            </ScrollView>
+                        </View>
                     </View>
-                </View>
-            ))}
-        </ScrollView>
+                ))
+            )
+            }
+        </ScrollView >
     );
 };
 
