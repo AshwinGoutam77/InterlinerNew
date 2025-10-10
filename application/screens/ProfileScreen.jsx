@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     Image,
     ScrollView,
+    Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useAppContext } from '../context/RTLContext';
@@ -13,12 +14,36 @@ import { useNavigation } from '@react-navigation/native';
 import Colors from '../src/constants/colors';
 import { useTranslation } from 'react-i18next';
 import GlobalStyles from '../src/constants/globalStyles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfilePage() {
     const { t } = useTranslation();
     const { isRTL, language } = useAppContext();
     const navigation = useNavigation();
-    const currency = '$'
+    const currency = '$';
+
+    const handleLogout = async () => {
+        Alert.alert(
+            t('Logout'),
+            t('Are you sure you want to log out?'),
+            [
+                { text: t('Cancel'), style: 'cancel' },
+                {
+                    text: t('Logout'),
+                    onPress: async () => {
+                        await AsyncStorage.removeItem('authToken'); // remove token
+                        // await AsyncStorage.removeItem('userData');
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'Login' }],
+                        });
+                    },
+                },
+            ],
+            { cancelable: true }
+        );
+    };
+
     return (
         <View style={GlobalStyles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -38,27 +63,27 @@ export default function ProfilePage() {
                 </View>
 
                 <View>
-                    {renderOption('edit', t('profile.editProfile'), 'EditProfile', null, isRTL, navigation)}
-                    {renderOption('public', t('profile.language'), 'LanguageScreen', language, isRTL, navigation)}
-                    {renderOption('money', t('profile.currency'), 'CurrencyScreen', currency, isRTL, navigation)}
-                    {renderOption('pin', t('profile.address'), 'ShippingScreen', null, isRTL, navigation)}
-                    {renderOption('notifications', t('profile.notification'), 'NotificationScreen', null, isRTL, navigation)}
-                    {renderOption('lock', t('profile.privacy'), 'PrivacyScreen', null, isRTL, navigation)}
-                    {renderOption('logout', t('profile.logout'), 'Login', null, isRTL, navigation)}
+                    {renderOption('edit', t('profile.editProfile'), () => navigation.navigate('EditProfile'), null, isRTL)}
+                    {renderOption('public', t('profile.language'), () => navigation.navigate('LanguageScreen'), language, isRTL)}
+                    {renderOption('money', t('profile.currency'), () => navigation.navigate('CurrencyScreen'), currency, isRTL)}
+                    {renderOption('pin', t('profile.address'), () => navigation.navigate('ShippingScreen'), null, isRTL)}
+                    {renderOption('notifications', t('profile.notification'), () => navigation.navigate('NotificationScreen'), null, isRTL)}
+                    {renderOption('lock', t('profile.privacy'), () => navigation.navigate('PrivacyScreen'), null, isRTL)}
+                    {renderOption('logout', t('profile.logout'), handleLogout, null, isRTL)}
                 </View>
-            </ScrollView >
-        </View >
+            </ScrollView>
+        </View>
     );
 }
 
-function renderOption(icon, title, link, value = null, isRTL = false, navigation) {
+function renderOption(icon, title, onPress, value = null, isRTL = false) {
     return (
         <TouchableOpacity
             style={[
                 styles.option,
                 isRTL && { flexDirection: 'row-reverse' }
             ]}
-            onPress={() => navigation.navigate(link)}
+            onPress={onPress}
         >
             <View style={[styles.left, isRTL && { flexDirection: 'row-reverse' }]}>
                 <Icon
@@ -76,7 +101,6 @@ function renderOption(icon, title, link, value = null, isRTL = false, navigation
         </TouchableOpacity>
     );
 }
-
 
 
 const styles = StyleSheet.create({

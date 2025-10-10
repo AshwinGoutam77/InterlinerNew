@@ -9,46 +9,43 @@ import {
     Image,
     TouchableOpacity,
     Dimensions,
-    I18nManager,
     ActivityIndicator,
+    RefreshControl,
+    I18nManager,
 } from 'react-native';
-const { width } = Dimensions.get('window');
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
 import Colors from '../src/constants/colors';
 import { useAppContext } from '../context/RTLContext';
 import GlobalStyles from '../src/constants/globalStyles';
 import API from '../src/services/api';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const { width } = Dimensions.get('window');
 
 const ProductsPage = () => {
     const route = useRoute();
-    const currency = '$';
     const navigation = useNavigation();
     const { isRTL } = useAppContext();
-    const { categoryId, subCategoryId, categoryName } = route.params;
-    const [categoryData, setCategoryData] = useState(null);
-    const [selectedChildId, setSelectedChildId] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const { categoryId, categoryName } = route.params;
+    const [selectedChildId, setSelectedChildId] = useState(categoryName);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const res = await API.getCategoriesById(categoryId);
-                const data = res?.data?.data?.category;
-
-                if (res.data?.status && data) {
-                    setCategoryData(data);
-                    // console.log(data);
-                    setSelectedChildId(categoryName);
-                }
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProducts();
-    }, [categoryId, categoryName]);
+    const {
+        data: categoryData,
+        isLoading,
+        refetch,
+        isRefetching,
+    } = useQuery({
+        queryKey: ['category', categoryId],
+        queryFn: async () => {
+            const res = await API.getCategoriesById(categoryId);
+            return res.data?.data?.category;
+        },
+        staleTime: 1000 * 60 * 5, // 5 min fresh cache
+        gcTime: 1000 * 60 * 10,   // (replaces cacheTime) - 10 min in memory
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+    });
 
     useEffect(() => {
         if (selectedChildId && categoryData) {
@@ -59,6 +56,16 @@ const ProductsPage = () => {
         }
     }, [selectedChildId, categoryData, navigation]);
 
+    if (isLoading)
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fdfdfd' }}>
+                <ActivityIndicator size="large" color={Colors.primary} />
+            </View>
+        );
+
+    const filteredProducts =
+        categoryData?.children?.find((c) => c.name === selectedChildId)?.groups ?? [];
+
     const renderCategory = ({ item }) => (
         <TouchableOpacity
             style={styles.categoryItem}
@@ -68,13 +75,19 @@ const ProductsPage = () => {
                 source={{ uri: item.photo }}
                 style={[
                     styles.categoryImage,
-                    { borderWidth: item.name === selectedChildId ? 3 : 0, borderColor: Colors.primary }
+                    {
+                        borderWidth: item.name === selectedChildId ? 3 : 0,
+                        borderColor: Colors.primary,
+                    },
                 ]}
             />
             <Text
                 style={[
                     styles.categoryLabel,
-                    { color: item.name === selectedChildId ? Colors.primary : '#000', textAlign: isRTL ? 'right' : 'left' }
+                    {
+                        color: item.name === selectedChildId ? Colors.primary : '#000',
+                        textAlign: isRTL ? 'right' : 'left',
+                    },
                 ]}
             >
                 {item.name}
@@ -82,40 +95,24 @@ const ProductsPage = () => {
         </TouchableOpacity>
     );
 
-    const renderProduct = ({ item }) => {
-        const photos = JSON.parse(item.photo ?? '[]');
-        return (
-            <TouchableOpacity onPress={() => navigation.navigate('ProductDetailScreen', { productId: item.encrypted_id })}>
-                <View style={styles.productCard}>
-                    <Image source={{ uri: photos[0] }} style={styles.productImage} />
-                    <View style={styles.productDescription}>
-                        <Text style={styles.productName}>{item.name}</Text>
-                        <View style={[styles.row]}>
-                            <Text style={[styles.productPrice, { textDecorationLine: "line-through", color: "#888", fontSize: 14 }]}>
-                                {currency}{item.price}
-                            </Text>
-
-                            <Text style={[styles.productPrice, { color: Colors.primary }]}>
-                                {currency}
-                                {item.discount_type === 1
-                                    ? (item.price - item.discount).toFixed(2)
-                                    : (item.price - (item.price * item.discount / 100)).toFixed(2)
-                                }
-                            </Text>
-                        </View>
-                    </View>
+    const renderProduct = ({ item }) => (
+        <TouchableOpacity
+            onPress={() => navigation.navigate('ProductDetailScreen', { productId: item.encrypted_id })}
+        >
+            <View style={styles.productCard}>
+                <View style={styles.productDescription}>
+                    <Text style={styles.productName}>{item.name}</Text>
+                    <Icon name="chevron-right" size={28} color="#ffffff" />
                 </View>
-            </TouchableOpacity>
-        );
-    };
+            </View>
+        </TouchableOpacity>
+    );
 
-    const filteredProducts = categoryData?.children?.find(c => c.name === selectedChildId)?.groups ?? [];
-
-    if (loading) return <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fdfdfd" }}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-    </View>;
     return (
-        <ScrollView style={[GlobalStyles.container, { paddingTop: 20 }]}>
+        <ScrollView
+            style={[GlobalStyles.container, { paddingTop: 20 }]}
+            refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
+        >
             <FlatList
                 horizontal
                 inverted={isRTL}
@@ -133,7 +130,7 @@ const ProductsPage = () => {
                 numColumns={2}
                 columnWrapperStyle={[
                     styles.columnWrapper,
-                    { flexDirection: isRTL ? 'row-reverse' : 'row' }
+                    { flexDirection: isRTL ? 'row-reverse' : 'row' },
                 ]}
                 contentContainerStyle={styles.productList}
                 scrollEnabled={false}
@@ -141,7 +138,6 @@ const ProductsPage = () => {
         </ScrollView>
     );
 };
-
 
 
 const styles = StyleSheet.create({
@@ -188,7 +184,7 @@ const styles = StyleSheet.create({
     },
     productCard: {
         width: (width - 50) / 2,
-        backgroundColor: '#fff',
+        backgroundColor: Colors.primary,
         borderRadius: 0,
         padding: 10,
         paddingVertical: 12,
@@ -205,7 +201,7 @@ const styles = StyleSheet.create({
     },
     productName: {
         fontSize: 16,
-        color: '#000',
+        color: '#ffffffff',
         fontWeight: '600',
         textAlign: I18nManager.isRTL ? 'right' : 'left'
     },

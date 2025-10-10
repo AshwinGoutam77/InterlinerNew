@@ -40,6 +40,9 @@
     "help": {
         "title": "Help Center"
     },
+    "reports": {
+        "title": "Reports"
+    },
     "profileScreen": {
         "title": "Profile",
         "editProfile": "Edit Profile",

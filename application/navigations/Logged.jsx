@@ -1,17 +1,17 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from 'react-native-vector-icons/Ionicons';
 import CustomHeader from "../components/header";
-import { Alert, I18nManager, Linking, Pressable, Text, TouchableWithoutFeedback, View } from "react-native";
+import { ActivityIndicator, Alert, I18nManager, Linking, Pressable, Text, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DashboardScreen from "../screens/Dashboard";
 import CategoryScreen from "../screens/CategoryScreen";
 import ProductsPage from "../screens/Products";
 import ProductDetailScreen from "../screens/ProductDetailScreen";
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native';
 import CartScreen from "../screens/Cart";
 import Checkout from "../screens/Checkout";
 import ShippingScreen from "../screens/ShippingScreen";
@@ -37,6 +37,9 @@ import RepeatOrderScreen from "../screens/RepeatOrderScreen";
 import { RoleContext } from "../context/RoleContext";
 import ReportsScreen from "../screens/ReportsScreen";
 import { useTranslation } from "react-i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getToken } from "../context/authToken";
+import { useCart } from "../context/CartContext";
 
 var styles = require("../../assets/files/Styles");
 
@@ -365,10 +368,9 @@ function PaymentTab() {
         </Stack.Navigator>
     )
 }
+const cartItemCount = 0;
 
-const cartItemCount = 3;
-
-const tabBarIcon = (route) => ({ color, size, focused }) => {
+const tabBarIcon = (route, cartCount) => ({ color, size, focused }) => {
     let iconName;
 
     switch (route.name) {
@@ -398,7 +400,7 @@ const tabBarIcon = (route) => ({ color, size, focused }) => {
     return (
         <View style={{ position: 'relative' }}>
             <Icon name={iconName} size={size} color={color} />
-            {route.name === 'cart' && cartItemCount > 0 && (
+            {route.name === 'cart' && cartCount > 0 && (
                 <View
                     style={{
                         position: 'absolute',
@@ -413,7 +415,7 @@ const tabBarIcon = (route) => ({ color, size, focused }) => {
                     }}
                 >
                     <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>
-                        {cartItemCount}
+                        {cartCount}
                     </Text>
                 </View>
             )}
@@ -425,6 +427,44 @@ const tabBarIcon = (route) => ({ color, size, focused }) => {
 export default function Logged() {
     const insets = useSafeAreaInsets();
     const { role } = useContext(RoleContext);
+    const navigation = useNavigation();
+    const [loading, setLoading] = useState(true);
+    const { cartCount } = useCart();
+
+    useEffect(() => {
+        const checkToken = async () => {
+            try {
+                const token = await getToken();
+                console.log('hey-tokens', token);
+
+                if (!token) {
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: "Login" }],
+                    });
+                    return;
+                }
+                setLoading(false);
+            } catch (error) {
+                console.log("Token check failed:", error);
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: "Login" }],
+                });
+            }
+        };
+
+        checkToken();
+    }, [navigation]);
+
+    // if (loading) {
+    //     return (
+    //         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    //             <ActivityIndicator size="large" color={Colors.primary} />
+    //         </View>
+    //     );
+    // }
+
 
     const getTabBarVisibility = (route, tabName) => {
         const routeName = getFocusedRouteNameFromRoute(route) ?? tabName;
@@ -460,7 +500,7 @@ export default function Logged() {
                     display: getTabBarVisibility(route, route.name),
                     flexDirection: 'row',
                 },
-                tabBarIcon: tabBarIcon(route),
+                tabBarIcon: tabBarIcon(route, cartCount),
                 tabBarButton: (props) => (
                     <Pressable
                         onPress={props.onPress}
@@ -494,7 +534,8 @@ export default function Logged() {
                 }}
             />
             <Tab.Screen name="helpCenter" component={PaymentTab} />
-            {role == 'customer' && <Tab.Screen name="cart" component={CartTab} />}
+            {/* {role == 'customer' && <Tab.Screen name="cart" component={CartTab} />} */}
+            <Tab.Screen name="cart" component={CartTab} />
             <Tab.Screen name="profile" component={ProfileTab} />
         </Tab.Navigator>
     );

@@ -17,6 +17,7 @@ import { RoleContext } from "../context/RoleContext";
 import CustomerFilter from "../components/CustomerFilter";
 import API from "../src/services/api";
 import Colors from "../src/constants/colors";
+import { useQuery } from "@tanstack/react-query";
 
 const CategoryScreen = () => {
     const { t } = useTranslation();
@@ -24,29 +25,47 @@ const CategoryScreen = () => {
     const navigation = useNavigation();
     const { role } = useContext(RoleContext);
 
-    const [categories, setCategories] = useState([]);
+    // const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const res = await API.getCategories();
-                console.log(res?.data?.data?.categories);
+    // useEffect(() => {
+    //     const fetchCategories = async () => {
+    //         try {
+    //             const res = await API.getCategories();
+    //             console.log(res?.data?.data?.categories);
 
-                if (res.data?.status) {
-                    setCategories(res?.data?.data?.categories);
-                } else {
-                    setCategories([]);
-                }
-            } catch (err) {
-                console.error("Error fetching categories:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
+    //             if (res.data?.status) {
+    //                 setCategories(res?.data?.data?.categories);
+    //             } else {
+    //                 setCategories([]);
+    //             }
+    //         } catch (err) {
+    //             console.error("Error fetching categories:", err);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
 
-        fetchCategories();
-    }, []);
+    //     fetchCategories();
+    // }, []);
+
+
+    const {
+        data: categories,
+        isLoading,
+        refetch,
+        isRefetching,
+    } = useQuery({
+        queryKey: ['categories'],
+        queryFn: async () => {
+            const res = await API.getCategories();
+            return res.data?.data?.categories;
+        },
+        staleTime: 1000 * 60 * 5, // 5 min fresh cache
+        gcTime: 1000 * 60 * 10,   // (replaces cacheTime) - 10 min in memory
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+    });
 
     return (
         <ScrollView style={styles.container}>
@@ -65,7 +84,7 @@ const CategoryScreen = () => {
                 />
             </View>
 
-            {loading ? (
+            {isLoading ? (
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fdfdfd" }}>
                     <ActivityIndicator size="large" color={Colors.primary} />
                 </View>

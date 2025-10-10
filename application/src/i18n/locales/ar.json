@@ -40,6 +40,9 @@
     "help": {
         "title": "مركز المساعدة"
     },
+    "reports": {
+        "title": "التقارير"
+    },
     "profileScreen": {
         "title": "الملف الشخصي",
         "editProfile": "تعديل الملف الشخصي",

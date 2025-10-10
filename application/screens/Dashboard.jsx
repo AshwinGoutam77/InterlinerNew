@@ -122,7 +122,7 @@ const DashboardScreen = () => {
                 >
                     {quickActions.map((action, index) => {
                         if (
-                            (action.key === "incentive" && role !== "sales") ||
+                            (action.key === "incentive" && role == "sales") ||
                             (action.key === "creditInfo" && role === "sales")
                         ) {
                             return null;

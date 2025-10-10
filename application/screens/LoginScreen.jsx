@@ -27,10 +27,9 @@ const LoginScreen = () => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(""); // 👈 for inline error
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleLogin = async (userRole) => {
-        // Reset previous error
         setErrorMessage("");
 
         if (!phone || !password) {
@@ -45,6 +44,8 @@ const LoginScreen = () => {
                 phone: phone,
                 password,
             });
+            console.log(response);
+            
 
             if (response.data?.status) {
                 const token = response?.data?.data?.token;
@@ -125,7 +126,7 @@ const LoginScreen = () => {
                         </TouchableOpacity>
                     </View>
 
-                    {/* 🔴 Inline Error Message */}
+                    {/* Error Message */}
                     {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
 
                     {/* Login Buttons */}
@@ -137,17 +138,17 @@ const LoginScreen = () => {
                         {loading ? (
                             <ActivityIndicator color="#fff" />
                         ) : (
-                            <Text style={styles.signInText}>Login as Customer</Text>
+                            <Text style={styles.signInText}>Login</Text>
                         )}
                     </TouchableOpacity>
 
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={[styles.signInBtn]}
                         onPress={() => handleLogin("sales")}
                         disabled={loading}
                     >
                         <Text style={styles.signInText}>Login as Sales</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     {/* Forgot Password */}
                     <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>

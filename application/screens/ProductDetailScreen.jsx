@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useContext, useEffect, useState } from 'react';
 import {
     View,
@@ -12,7 +13,8 @@ import {
     Keyboard,
     Platform,
     I18nManager,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
@@ -25,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../context/RTLContext';
 import GlobalStyles from '../src/constants/globalStyles';
 import API from '../src/services/api';
+import { useQuery } from '@tanstack/react-query';
 
 const shades = ['White', 'Off White', 'Blue White', 'Cream'];
 const widths = ['36 Inch', '44 Inch', '60 Inch'];
@@ -40,7 +43,7 @@ export default function ProductDetailScreen() {
     const [selectedShade, setSelectedShade] = useState('White');
     const [isCut, setIsCut] = useState(false);
     const [selectedWidth, setSelectedWidth] = useState('36 Inch');
-    const [selectedLength, setSelectedLength] = useState('');
+    const [selectedLength, setSelectedLength] = useState('25 Mtr');
     const [rolls, setRolls] = useState('2');
     const [remark, setRemark] = useState('');
     const [selectedProductCode, setSelectedProductCode] = useState('23666');
@@ -49,33 +52,36 @@ export default function ProductDetailScreen() {
     const [step, setStep] = useState(1);
     const [cutRollsCount, setCutRollsCount] = useState('');
     const [Loading, setLoading] = useState(true);
-    const [productData, setProductData] = useState('')
+    // const [productData, setProductData] = useState('')
+    const [Product_Child, setProduct_Child] = useState('')
+    const [ProductId, setProductId] = useState('')
+    const [ShadeId, setShadeId] = useState('')
+
+    const { data: productData, isLoading, error } = useQuery({
+        queryKey: ['product', productId],
+        queryFn: async () => {
+            const res = await API.getGroups(productId);
+            return res.data?.data?.group;
+        },
+        staleTime: 1000 * 60 * 5, // 5 minutes cache
+        refetchOnWindowFocus: false,
+    });
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const res = await API.getGroups(productId);
-                if (res.data?.status && res.data?.data?.group) {
-                    const group = res.data.data.group;
-                    console.log(res);
+        console.log(productData);
 
-                    setProductData(group);
-
-                    // Default selections
-                    setSelectedProductCode(group.name);
-                    if (group.children?.length > 0) {
-                        setSelectedShade(group.children[0].name);
-                    }
-                }
-            } catch (err) {
-                console.error("Error fetching product:", err);
-            } finally {
-                setLoading(false);
+        if (productData) {
+            setSelectedProductCode(productData.name);
+            if (productData.children?.length > 0) {
+                setSelectedShade(productData.children[0].name);
+                setProduct_Child(productData.children[0].items);
+                setShadeId(productData.children[0].encrypted_id)
             }
-        };
+            navigation.setParams({ headerTitle: productData.name });
+            setLoading(false);
+        }
+    }, [productData, navigation]);
 
-        fetchProducts();
-    }, [productId]);
 
     useEffect(() => {
         if (productId) {
@@ -95,6 +101,90 @@ export default function ProductDetailScreen() {
         setStep(1)
     };
 
+    const handleProduct = (name, id) => {
+        // console.log(name, id);
+        // setSelectedLength(name);
+        setProductId(id)
+        setShadeId(id)
+    }
+
+    const handleAddToCart = async () => {
+        try {
+            const data = {
+                item_id: ShadeId,
+                qty: '1',
+                // shade: selectedShade,
+                // width: selectedWidth,
+                // length: selectedLength,
+                // rolls: rolls,
+                // remark: remark,
+                // is_cut: selectedOption === 'standard' ? 1 : 0,
+            };
+            console.log('data', data);
+            const response = await API.addCartItem(data);
+            console.log(response);
+            if (response.data?.status) {
+                setVisible(true);
+            } else {
+                Alert(response.data?.message || 'Failed to add item.');
+            }
+        } catch (error) {
+            console.error('Add to cart error:', error);
+            Alert('Something went wrong!');
+        }
+    };
+    
+    // const handleAddToCart = async () => {
+    //     try {
+    //         // 1️⃣ First, check product availability
+    //         const checkData = {
+    //             is_cut: selectedOption === "standard" ? 1 : 0,
+    //             width: selectedWidth || "",
+    //             length: selectedLength || "",
+    //             child_group_id: ShadeId || "",
+    //         };
+    //         console.log("Checking product with data:", checkData)
+
+    //         const checkResponse = await API.getProduct(ShadeId, checkData);
+    //         console.log("Product check response:", checkResponse.data);
+
+    //         if (checkResponse.data?.status) {
+    //             const data = {
+    //                 item_id: ShadeId,
+    //                 qty: "1",
+    //                 // shade: selectedShade,
+    //                 // width: selectedWidth,
+    //                 // length: selectedLength,
+    //                 // rolls: rolls,
+    //                 // remark: remark,
+    //                 // is_cut: selectedOption === 'standard' ? 1 : 0,
+    //             };
+
+    //             const response = await API.addCartItem(data);
+    //             console.log("Add to cart response:", response.data);
+
+    //             if (response.data?.status) {
+    //                 setVisible(true); // success modal
+    //             } else {
+    //                 Alert.alert("Error", response.data?.message || "Failed to add item.");
+    //             }
+    //         } else {
+    //             // 3️⃣ Product not available
+    //             Alert.alert("Unavailable", checkResponse.data?.message || "Product not available.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Add to cart error:", error);
+    //         Alert.alert("Error", "Something went wrong!");
+    //     }
+    // };
+
+    if (error) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text>Failed to load product data</Text>
+            </View>
+        );
+    }
     if (Loading) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fdfdfd" }}>
@@ -180,43 +270,50 @@ export default function ProductDetailScreen() {
                 </View>
 
                 {/* Shade Selector */}
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
-                    {t("productDetail.shadeSelector")}
-                </Text>
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={[styles.shadeRow, { flexDirection: isRTL ? "row-reverse" : "row" }]}
-                >
-                    {productData.children?.map((child) => (
-                        <TouchableOpacity
-                            key={child.encrypted_id}
-                            style={[
-                                styles.shadeBox,
-                                selectedShade === child.name && styles.shadeBoxSelected,
-                            ]}
-                            onPress={() => setSelectedShade(child.name)}
+                {productData.children?.length &&
+                    <View> <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
+                        {t("productDetail.shadeSelector")}
+                    </Text>
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={[styles.shadeRow, { flexDirection: isRTL ? "row-reverse" : "row" }]}
                         >
-                            <View
-                                style={[
-                                    styles.shadeSwatch,
-                                    { backgroundColor: child.hexcode || "#ccc" }
-                                ]}
-                            />
-                            <Text
-                                style={[
-                                    styles.shadeText,
-                                    selectedShade === child.name && styles.shadeTextSelected,
-                                ]}
-                            >
-                                {child.name}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
+                            {productData.children && productData.children?.map((child) => (
+                                <TouchableOpacity
+                                    key={child.encrypted_id}
+                                    style={[
+                                        styles.shadeBox,
+                                        selectedShade === child.name && styles.shadeBoxSelected,
+                                    ]}
+                                    onPress={() => {
+                                        setSelectedShade(child.name);
+                                        setProduct_Child(child?.items);
+                                        handleProduct(child?.name, child?.encrypted_id)
+                                    }}
+                                >
+                                    <View
+                                        style={[
+                                            styles.shadeSwatch,
+                                            { backgroundColor: child.hexcode || "#ccc" }
+                                        ]}
+                                    />
+                                    <Text
+                                        style={[
+                                            styles.shadeText,
+                                            selectedShade === child.name && styles.shadeTextSelected,
+                                        ]}
+                                    >
+                                        {child.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                    </View>
+                }
 
                 {/* Width Selector */}
-                {/* <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("productDetail.selectWidth")}</Text>
+                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("productDetail.selectWidth")}</Text>
                 <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     {widths.map((width) => (
                         <TouchableOpacity
@@ -249,30 +346,29 @@ export default function ProductDetailScreen() {
                             </Text>
                         </TouchableOpacity>
                     ))}
-                </View> */}
-
-                <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Measurement</Text>
-                <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-                    {productData.children.map((item) => (
-                        item?.items?.map((measurement, idx) => {
-                            return (
-                                <TouchableOpacity
-                                    key={idx}
-                                    style={[
-                                        styles.optionBox,
-                                        selectedLength === measurement?.name && styles.selectedOption,
-                                    ]}
-                                    onPress={() => setSelectedLength(measurement?.name)}
-                                >
-                                    <Text
-                                        style={[selectedLength === measurement?.name && styles.selectedOptionText,]}>
-                                        {measurement?.name}
-                                    </Text>
-                                </TouchableOpacity>
-                            )
-                        })
-                    ))}
                 </View>
+
+                {/* <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>Select Measurement</Text>
+                <View style={[styles.optionsRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                    {Product_Child && Product_Child?.map((measurement, idx) => {
+                        return (
+                            <TouchableOpacity
+                                key={idx}
+                                style={[
+                                    styles.optionBox,
+                                    selectedLength === measurement?.name && styles.selectedOption,
+                                ]}
+                                // onPress={() => setSelectedLength(measurement?.name)}
+                                onPress={() => handleProduct(measurement?.name, measurement?.encrypted_id)}
+                            >
+                                <Text
+                                    style={[selectedLength === measurement?.name && styles.selectedOptionText,]}>
+                                    {measurement?.name}
+                                </Text>
+                            </TouchableOpacity>
+                        );
+                    })}
+                </View> */}
 
                 {/* Number of Rolls */}
                 <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
@@ -322,7 +418,7 @@ export default function ProductDetailScreen() {
 
             <AddItemsModal visible={Visible} onClose={() => setVisible(false)} />
             {/* Add to Cart */}
-            <TouchableOpacity style={styles.cartBtn} onPress={() => setVisible(true)}>
+            <TouchableOpacity style={styles.cartBtn} onPress={handleAddToCart}>
                 <Text style={styles.cartText}>{t("productDetail.addToCart")}</Text>
             </TouchableOpacity>
 
